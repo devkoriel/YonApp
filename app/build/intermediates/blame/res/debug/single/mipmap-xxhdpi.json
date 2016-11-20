@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/mipmap-xxhdpi/splash_icon_black.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/mipmap-xxhdpi/splash_icon_black.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/mipmap-xxhdpi/ic_launcher.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/mipmap-xxhdpi/splash_icon.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/mipmap-xxhdpi/splash_icon.png"
+    }
+]

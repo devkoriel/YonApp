@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="default_preview">
+        <item>#df5a55</item>
+        <item>#f9bb72</item>
+        <item>#76afcf</item>
+        <item>#dd6495</item>
+        <item>#72d3b4</item>
+    </string-array>
+    <declare-styleable name="NavigationTabBar"><attr format="boolean" name="ntb_titled"/><attr format="boolean" name="ntb_badged"/><attr format="boolean" name="ntb_scaled"/><attr format="boolean" name="ntb_tinted"/><attr format="boolean" name="ntb_swiped"/><attr format="boolean" name="ntb_badge_use_typeface"/><attr format="dimension" name="ntb_title_size"/><attr format="enum" name="ntb_title_mode"><enum name="all" value="0"/><enum name="active" value="1"/></attr><attr format="dimension" name="ntb_badge_size"/><attr format="enum" name="ntb_badge_position"><enum name="left" value="0"/><enum name="center" value="1"/><enum name="right" value="2"/></attr><attr format="enum" name="ntb_badge_gravity"><enum name="top" value="0"/><enum name="bottom" value="1"/></attr><attr format="color" name="ntb_badge_bg_color"/><attr format="color" name="ntb_badge_title_color"/><attr format="string" name="ntb_typeface"/><attr format="dimension" name="ntb_corners_radius"/><attr format="float" name="ntb_icon_size_fraction"/><attr format="integer" name="ntb_animation_duration"/><attr format="color" name="ntb_inactive_color"/><attr format="color" name="ntb_active_color"/><attr format="color" name="ntb_bg_color"/><attr format="reference" name="ntb_preview_colors"/></declare-styleable>
+    <string name="app_name">Library</string>
+</resources>

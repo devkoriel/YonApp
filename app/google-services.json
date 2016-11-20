@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "1030033504381",
+    "firebase_url": "https://totemic-winter-147109.firebaseio.com",
+    "project_id": "totemic-winter-147109",
+    "storage_bucket": "totemic-winter-147109.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1030033504381:android:8ccce84f7a233f35",
+        "android_client_info": {
+          "package_name": "co.koriel.yonapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1030033504381-8ikh5e3gn4fk2j8iqbii8soku0e1c6fh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.koriel.yonapp",
+            "certificate_hash": "868FD376698C6D98AC537A3BF0E9044C72B730C3"
+          }
+        },
+        {
+          "client_id": "1030033504381-abfdq8rer3cqpethcoj5r5363v76enit.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.koriel.yonapp",
+            "certificate_hash": "7729D08CA8A2BBE3576645EB48F27AC51EA4A872"
+          }
+        },
+        {
+          "client_id": "1030033504381-ut7s3fsncqvruu3bk4p84s1ou5h6v1bi.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "1030033504381-ejja4cpmqgd852f91aedldkpl36pdk63.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_Gq7qcPPZCP8fok387gLRjB28XWWlmY4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1030033504381-ut7s3fsncqvruu3bk4p84s1ou5h6v1bi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

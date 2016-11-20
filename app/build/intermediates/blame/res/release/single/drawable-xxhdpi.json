@@ -1,0 +1,122 @@
+[
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_date_range_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_date_range_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_chat_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_chat_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/com_facebook_button_icon.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.6.0/res/drawable-xxhdpi/com_facebook_button_icon.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_sms_black_24dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_sms_black_24dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_refresh_white_36dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_refresh_white_36dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_share_white_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_share_white_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_settings_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_settings_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/messenger_bubble_large_white.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.6.0/res/drawable-xxhdpi/messenger_bubble_large_white.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_email_black_24dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_email_black_24dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_school_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_school_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_book_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_book_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/com_facebook_button_like_icon_selected.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.6.0/res/drawable-xxhdpi/com_facebook_button_like_icon_selected.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/messenger_bubble_small_white.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.6.0/res/drawable-xxhdpi/messenger_bubble_small_white.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_help_outline_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_help_outline_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/com_facebook_button_send_icon.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.6.0/res/drawable-xxhdpi/com_facebook_button_send_icon.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_done_white_36dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_done_white_36dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_share_white_24dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_share_white_24dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/messenger_bubble_small_blue.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.6.0/res/drawable-xxhdpi/messenger_bubble_small_blue.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_restaurant_menu_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_restaurant_menu_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_settings_white_24dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_settings_white_24dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/messenger_bubble_large_blue.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.6.0/res/drawable-xxhdpi/messenger_bubble_large_blue.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_refresh_white_24dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_refresh_white_24dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_settings_white_18dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_settings_white_18dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_exit_to_app_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_exit_to_app_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_directions_bus_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_directions_bus_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_call_black_24dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_call_black_24dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/messenger_button_send_round_shadow.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.6.0/res/drawable-xxhdpi/messenger_button_send_round_shadow.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_cloud_download_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_cloud_download_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_settings_white_36dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_settings_white_36dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/release/drawable-xxhdpi/ic_store_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxhdpi/ic_store_black_48dp.png"
+    }
+]

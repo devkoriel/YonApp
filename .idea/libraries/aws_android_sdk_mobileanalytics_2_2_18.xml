@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="aws-android-sdk-mobileanalytics-2.2.18">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-mobileanalytics/2.2.18/a06f95d65ef06a969735fc75c08f7551bb2d86af/aws-android-sdk-mobileanalytics-2.2.18.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-mobileanalytics/2.2.18/25559bf7cb238715fa1bbf7314769a611038f1a8/aws-android-sdk-mobileanalytics-2.2.18-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

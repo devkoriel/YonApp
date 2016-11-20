@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/menu/menu_oneline.xml",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/menu/menu_oneline.xml"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/menu/menu_main.xml",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/menu/menu_main.xml"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/menu/menu_oneline_comment.xml",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/menu/menu_oneline_comment.xml"
+    }
+]

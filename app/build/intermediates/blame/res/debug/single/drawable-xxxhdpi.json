@@ -1,0 +1,90 @@
+[
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_settings_white_36dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_settings_white_36dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_restaurant_menu_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_restaurant_menu_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_school_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_school_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_settings_white_18dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_settings_white_18dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_sms_black_24dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_sms_black_24dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_directions_bus_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_directions_bus_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_exit_to_app_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_exit_to_app_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_settings_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_settings_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_done_white_36dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_done_white_36dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_cloud_download_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_cloud_download_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_refresh_white_36dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_refresh_white_36dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_book_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_book_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_email_black_24dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_email_black_24dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_help_outline_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_help_outline_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_chat_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_chat_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_share_white_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_share_white_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_date_range_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_date_range_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_refresh_white_24dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_refresh_white_24dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_store_black_48dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_store_black_48dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_settings_white_24dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_settings_white_24dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_share_white_24dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_share_white_24dp.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable-xxxhdpi/ic_call_black_24dp.png",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable-xxxhdpi/ic_call_black_24dp.png"
+    }
+]

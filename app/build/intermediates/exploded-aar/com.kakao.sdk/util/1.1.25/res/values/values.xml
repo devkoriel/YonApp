@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="com_kakao_accounts_array">
+        <item>@string/com_kakao_kakaotalk_account</item>
+        <item>@string/com_kakao_other_kakaoaccount</item>
+        <item>@string/com_kakao_account_cancel</item>
+    </string-array>
+    <color name="com_kakao_account_button_background">#ffffff</color>
+    <color name="com_kakao_brown">#472a2b</color>
+    <color name="com_kakao_button_background_press">#ffeb00</color>
+    <color name="com_kakao_button_text_press">#000000</color>
+    <color name="com_kakao_cancel_button_background">#e5e5e5</color>
+    <dimen name="com_kakao_padding">10dp</dimen>
+    <dimen name="com_kakao_profile_property_margin">10dp</dimen>
+    <dimen name="com_kakao_profile_property_text">15sp</dimen>
+    <string name="com_kakao_account_cancel">Cancel</string>
+    <string name="com_kakao_account_cancel_tts">Cancel, Button</string>
+    <string name="com_kakao_cancel_button">Cancel</string>
+    <string name="com_kakao_confirm_logout">Are you sure to log out from this app?</string>
+    <string name="com_kakao_confirm_unlink">Are you sure to unlink from this app?</string>
+    <string name="com_kakao_kakaostory_account">with KakaoStory</string>
+    <string name="com_kakao_kakaostory_account_tts">with KakaoStory, Button</string>
+    <string name="com_kakao_kakaotalk_account">with KakaoTalk</string>
+    <string name="com_kakao_kakaotalk_account_tts">with KakaoTalk, Button</string>
+    <string name="com_kakao_login_button">Log in with KakaoAccount</string>
+    <string name="com_kakao_login_button_tts">Log in with KakaoAccount, Button</string>
+    <string name="com_kakao_logout_button">Log out</string>
+    <string name="com_kakao_ok_button">OK</string>
+    <string name="com_kakao_other_kakaoaccount">with another KakaoAccount</string>
+    <string name="com_kakao_other_kakaoaccount_tts">with another KakaoAccount, Button</string>
+    <string name="com_kakao_profile_nickname">Nickname</string>
+    <string name="com_kakao_profile_userId">Kakao User ID</string>
+    <string name="com_kakao_tokeninfo_button">Token Info</string>
+    <string name="com_kakao_unlink_button">Unlink</string>
+</resources>
