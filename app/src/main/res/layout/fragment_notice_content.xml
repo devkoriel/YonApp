@@ -48,7 +48,7 @@
             android:textSize="15sp"
             android:textColor="#000000"
             android:autoLink="web"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/notice_content" />
     </ScrollView>
 
@@ -61,7 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#000000"
-        android:textSize="10sp"
+        android:textSize="12sp"
         android:autoLink="web"
         android:id="@+id/notice_content_attachment" />
     </ScrollView>

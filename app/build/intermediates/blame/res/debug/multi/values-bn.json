@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-bn/values-bn.xml",
+        "outputFile": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/values-bn/values-bn.xml",
         "map": [
             {
                 "to": {
@@ -315,7 +315,7 @@
                     "endOffset": 1676
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-bn/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-bn/values.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 0,
@@ -334,7 +334,7 @@
                     "endOffset": 1867
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-bn/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-bn/values.xml",
                     "position": {
                         "startLine": 5,
                         "startColumn": 0,
@@ -353,7 +353,7 @@
                     "endOffset": 1997
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-bn/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-bn/values.xml",
                     "position": {
                         "startLine": 6,
                         "startColumn": 0,
@@ -372,7 +372,7 @@
                     "endOffset": 2110
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-bn/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-bn/values.xml",
                     "position": {
                         "startLine": 7,
                         "startColumn": 0,
@@ -391,7 +391,7 @@
                     "endOffset": 2306
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-bn/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-bn/values.xml",
                     "position": {
                         "startLine": 8,
                         "startColumn": 0,
@@ -410,7 +410,7 @@
                     "endOffset": 2430
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-bn/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-bn/values.xml",
                     "position": {
                         "startLine": 9,
                         "startColumn": 0,
@@ -429,7 +429,7 @@
                     "endOffset": 2563
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-bn/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-bn/values.xml",
                     "position": {
                         "startLine": 10,
                         "startColumn": 0,
@@ -448,7 +448,7 @@
                     "endOffset": 2774
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/9.8.00/res/values-bn/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/10.0.1/res/values-bn/values.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 0,
@@ -467,7 +467,7 @@
                     "endOffset": 2978
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-bn/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-bn/values.xml",
                     "position": {
                         "startLine": 11,
                         "startColumn": 0,
@@ -486,7 +486,7 @@
                     "endOffset": 3089
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-bn/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-bn/values.xml",
                     "position": {
                         "startLine": 12,
                         "startColumn": 0,
@@ -505,7 +505,7 @@
                     "endOffset": 3276
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-bn/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-bn/values.xml",
                     "position": {
                         "startLine": 13,
                         "startColumn": 0,
@@ -524,7 +524,7 @@
                     "endOffset": 3406
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-bn/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-bn/values.xml",
                     "position": {
                         "startLine": 14,
                         "startColumn": 0,
@@ -543,7 +543,7 @@
                     "endOffset": 3599
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-bn/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-bn/values.xml",
                     "position": {
                         "startLine": 15,
                         "startColumn": 0,
@@ -562,7 +562,7 @@
                     "endOffset": 3778
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-bn/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-bn/values.xml",
                     "position": {
                         "startLine": 16,
                         "startColumn": 0,
@@ -581,7 +581,7 @@
                     "endOffset": 3868
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-bn/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-bn/values.xml",
                     "position": {
                         "startLine": 17,
                         "startColumn": 0,
@@ -600,7 +600,7 @@
                     "endOffset": 3964
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-bn/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-bn/values.xml",
                     "position": {
                         "startLine": 18,
                         "startColumn": 0,
@@ -619,7 +619,7 @@
                     "endOffset": 4082
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-bn/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-bn/values.xml",
                     "position": {
                         "startLine": 19,
                         "startColumn": 0,

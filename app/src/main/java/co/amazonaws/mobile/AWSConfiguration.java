@@ -16,46 +16,50 @@ import com.amazonaws.regions.Regions;
  * be shared or posted to any public source code repository.
  */
 public class AWSConfiguration {
-
     // AWS MobileHub user agent string
     public static final String AWS_MOBILEHUB_USER_AGENT =
-        "MobileHub 9e460947-ccc3-445d-b5d9-5b897af8c887 aws-my-sample-app-android-v0.9";
+            "MobileHub 9e460947-ccc3-445d-b5d9-5b897af8c887 aws-my-sample-app-android-v0.13";
     // AMAZON COGNITO
     public static final Regions AMAZON_COGNITO_REGION =
-      Regions.fromName("ap-northeast-1");
+            Regions.fromName("ap-northeast-1");
     public static final String  AMAZON_COGNITO_IDENTITY_POOL_ID =
-        "ap-northeast-1:e372d642-deca-41c4-884f-e86e4b6212e3";
+            "ap-northeast-1:e372d642-deca-41c4-884f-e86e4b6212e3";
     // AMAZON MOBILE ANALYTICS
     public static final String  AMAZON_MOBILE_ANALYTICS_APP_ID =
-        "2b4f4ec47a9842e9997278ec83d011f2";
+            "2b4f4ec47a9842e9997278ec83d011f2";
     // Amazon Mobile Analytics region
     public static final Regions AMAZON_MOBILE_ANALYTICS_REGION = Regions.US_EAST_1;
     // Google Client ID for Web application
     public static final String GOOGLE_CLIENT_ID =
-        "1030033504381-ejja4cpmqgd852f91aedldkpl36pdk63.apps.googleusercontent.com";
+            "1030033504381-ejja4cpmqgd852f91aedldkpl36pdk63.apps.googleusercontent.com";
     // GOOGLE CLOUD MESSAGING SENDER ID
     public static final String GOOGLE_CLOUD_MESSAGING_SENDER_ID =
-        "1030033504381";
-
+            "1030033504381";
     // SNS PLATFORM APPLICATION ARN
     public static final String AMAZON_SNS_PLATFORM_APPLICATION_ARN =
-        "arn:aws:sns:ap-northeast-1:804202321433:app/GCM/yonapp_MOBILEHUB_329555121";
+            "arn:aws:sns:ap-northeast-1:804202321433:app/GCM/yonapp_MOBILEHUB_329555121";
     public static final Regions AMAZON_SNS_REGION =
-         Regions.fromName("ap-northeast-1");
+            Regions.fromName("ap-northeast-1");
     // SNS DEFAULT TOPIC ARN
     public static final String AMAZON_SNS_DEFAULT_TOPIC_ARN =
-        "arn:aws:sns:ap-northeast-1:804202321433:yonapp_alldevices_MOBILEHUB_329555121";
+            "arn:aws:sns:ap-northeast-1:804202321433:yonapp_alldevices_MOBILEHUB_329555121";
     // SNS PLATFORM TOPIC ARNS
     public static final String[] AMAZON_SNS_TOPIC_ARNS =
-        {};
+            {};
     public static final String AMAZON_CONTENT_DELIVERY_S3_BUCKET =
-        "yonapp-contentdelivery-mobilehub-329555121";
+            "yonapp-contentdelivery-mobilehub-329555121";
     public static final Regions AMAZON_CONTENT_DELIVERY_S3_REGION =
-       Regions.fromName("ap-northeast-1");
+            Regions.fromName("ap-northeast-1");
     public static final String AMAZON_CLOUD_FRONT_DISTRIBUTION_DOMAIN =
-        "d3h9ojcvy3lebg.cloudfront.net";
+            "d3h9ojcvy3lebg.cloudfront.net";
+    // S3 BUCKET
+    public static final String AMAZON_S3_USER_FILES_BUCKET =
+            "yonapp-userfiles-mobilehub-329555121";
+    // S3 BUCKET REGION
+    public static final Regions AMAZON_S3_USER_FILES_BUCKET_REGION =
+            Regions.fromName("ap-northeast-1");
     public static final Regions AMAZON_CLOUD_LOGIC_REGION =
-       Regions.fromName("ap-northeast-1");
+            Regions.fromName("ap-northeast-1");
     public static final Regions AMAZON_DYNAMODB_REGION =
-       Regions.fromName("ap-northeast-1");
+            Regions.fromName("ap-northeast-1");
 }

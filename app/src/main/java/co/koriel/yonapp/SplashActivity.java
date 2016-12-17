@@ -20,8 +20,6 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedScanList;
 
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
@@ -47,8 +45,6 @@ public class SplashActivity extends Activity {
     private final CountDownLatch timeoutLatch = new CountDownLatch(1);
     private SignInManager signInManager;
 
-    private DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
-    private PaginatedScanList<BlackListDO> blackList;
     private DynamoDBMapper dynamoDBMapper;
 
     /**
@@ -59,55 +55,58 @@ public class SplashActivity extends Activity {
         public void onSuccess(final IdentityProvider provider) {
             dynamoDBMapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
 
-                if(isBlackList(DataBase.userInfo.getStudentId())) {
-                    Toast.makeText(SplashActivity.this, "차단된 사용자입니다.", Toast.LENGTH_LONG).show();
-                    goSignIn();
-                } else {
+            Crypto.androidId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
-                    Crypto.androidId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+            // The sign-in manager is no longer needed once signed in.
+            SignInManager.dispose();
 
-                    // The sign-in manager is no longer needed once signed in.
-                    SignInManager.dispose();
+            new Thread() {
+                public void run() {
+                    DataBase.userInfo.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+                     if (DataBase.userInfo.getStudentId() == null || DataBase.userInfo.getStudentPasswd() == null) {
+                         DataBase.userInfo = dynamoDBMapper.load(UserInfoDO.class, AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+                         try {
+                             Crypto.decryptPbkdf2(DataBase.userInfo.getStudentPasswd());
+                         } catch (Exception e) {
+                             AWSMobileClient.defaultMobileClient().getIdentityManager().signOut();
+                             goSignIn();
+                             runOnUiThread(new Runnable() {
+                                 public void run() {
+                                     Toast.makeText(SplashActivity.this, R.string.please_login_again, Toast.LENGTH_SHORT).show();
+                                 }
+                             });
+                             interrupt();
+                         }
+                     }
 
-                    new Thread() {
-                        public void run() {
-                            DataBase.userInfo.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+                    if (!isInterrupted()) {
+                        BlackListDO blackList = dynamoDBMapper.load(BlackListDO.class, DataBase.userInfo.getStudentId());
 
-                            if (DataBase.userInfo.getStudentId() == null || DataBase.userInfo.getStudentPasswd() == null) {
-                                DataBase.userInfo = dynamoDBMapper.load(UserInfoDO.class, AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
-                                try {
-                                    Crypto.decryptPbkdf2(DataBase.userInfo.getStudentPasswd());
-                                } catch (Exception e) {
-                                    AWSMobileClient.defaultMobileClient().getIdentityManager().signOut();
-                                    goSignIn();
-                                    runOnUiThread(new Runnable() {
+                        if (blackList != null) {
+                            dynamoDBMapper.delete(DataBase.userInfo);
+                            AWSMobileClient.defaultMobileClient().getIdentityManager().signOut();
+                            goSignIn();
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(SplashActivity.this, R.string.blocked_user, Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        } else {
+                            dynamoDBMapper.save(DataBase.userInfo);
+                            AWSMobileClient.defaultMobileClient()
+                                    .getIdentityManager()
+                                    .loadUserInfoAndImage(provider, new Runnable() {
+                                        @Override
                                         public void run() {
-                                            Toast.makeText(SplashActivity.this, "다시 로그인해주세요", Toast.LENGTH_SHORT).show();
+                                            goMain();
                                         }
                                     });
-                                    interrupt();
-                                }
-                            }
-                            if (!isInterrupted()) {
-                                dynamoDBMapper.save(DataBase.userInfo);
-                                runOnUiThread(new Runnable() {
-                                    public void run() {
-                                        Toast.makeText(SplashActivity.this, String.format("%s로 로그인에 성공했습니다.",
-                                                provider.getDisplayName()), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                AWSMobileClient.defaultMobileClient()
-                                        .getIdentityManager()
-                                        .loadUserInfoAndImage(provider, new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                goMain();
-                                            }
-                                        });
-                            }
                         }
-                    }.start();
+                    }
                 }
+            }.start();
         }
 
         @Override
@@ -117,8 +116,7 @@ public class SplashActivity extends Activity {
         @Override
         public void onError(final IdentityProvider provider, Exception ex) {
 
-            Toast.makeText(SplashActivity.this, String.format("%s로 로그인에 실패했습니다.",
-                provider.getDisplayName()), Toast.LENGTH_LONG).show();
+            Toast.makeText(SplashActivity.this, R.string.login_fail, Toast.LENGTH_LONG).show();
             goSignIn();
 
         }
@@ -231,37 +229,5 @@ public class SplashActivity extends Activity {
 
         // pause/resume Mobile Analytics collection
         AWSMobileClient.defaultMobileClient().handleOnPause();
-    }
-
-    public boolean isBlackList(String studentId) {
-
-        dynamoDBMapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-
-        Thread checkBlackListThread = new Thread() {
-            public void run() {
-                blackList = dynamoDBMapper.scan(BlackListDO.class, scanExpression);
-            }
-        };
-
-        checkBlackListThread.start();
-        try {
-            checkBlackListThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        for(int i = 0; i < blackList.size(); i++) {
-            if(studentId.equals(blackList.get(i).getStudentId())) {
-                new Thread() {
-                    public void run () {
-                        dynamoDBMapper.delete(DataBase.userInfo);
-                        AWSMobileClient.defaultMobileClient().getIdentityManager().signOut();
-                    }
-                }.start();
-                return true;
-            }
-        }
-
-        return false;
     }
 }

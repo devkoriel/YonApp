@@ -6,24 +6,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
+    <item android:id="@+id/action_write"
+        android:icon="@drawable/ic_create_white_24dp"
+        android:orderInCategory="100"
+        android:title="@string/write"
+        app:showAsAction="ifRoom">
+    </item>
+
     <item android:id="@+id/action_share"
         android:icon="@drawable/ic_share_white_24dp"
-        android:orderInCategory="100"
-        android:title="공유하기"
+        android:orderInCategory="200"
+        android:title="@string/share"
+        app:showAsAction="ifRoom">
+    </item>
+
+    <item android:id="@+id/action_capture"
+        android:orderInCategory="300"
+        android:icon="@drawable/ic_photo_camera_white_24dp"
+        android:title="@string/capture"
         app:showAsAction="ifRoom">
     </item>
 
     <item android:id="@+id/action_sync"
-        android:orderInCategory="200"
+        android:orderInCategory="400"
         android:icon="@drawable/ic_refresh_white_24dp"
-        android:title="새로고침"
-        app:showAsAction="ifRoom">
-    </item>
-    <item
-        android:id="@+id/action_settings"
-        android:icon="@drawable/ic_settings_white_24dp"
-        android:orderInCategory="300"
-        android:title="환경설정"
+        android:title="@string/refresh"
         app:showAsAction="ifRoom">
     </item>
 </menu>

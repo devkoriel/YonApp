@@ -98,9 +98,9 @@ public class LibraryFragment extends FragmentBase {
         });
 
         adapter = new SeparatedListAdapter(getContext());
-        adapter.addSection("중앙도서관", new SimpleAdapter(getContext(), central, R.layout.list_complex,
+        adapter.addSection(getResources().getString(R.string.central_library), new SimpleAdapter(getContext(), central, R.layout.list_complex,
                 new String[] { ITEM_TITLE, ITEM_CAPTION }, new int[] { R.id.list_complex_title, R.id.list_complex_caption }));
-        adapter.addSection("연세 • 삼성 학술정보관", new SimpleAdapter(getContext(), samsung, R.layout.list_complex,
+        adapter.addSection(getResources().getString(R.string.samsung_library), new SimpleAdapter(getContext(), samsung, R.layout.list_complex,
                 new String[] { ITEM_TITLE, ITEM_CAPTION }, new int[] { R.id.list_complex_title, R.id.list_complex_caption }));
 
         libraryListView = (ListView) view.findViewById(R.id.library_list);
@@ -145,7 +145,7 @@ public class LibraryFragment extends FragmentBase {
         protected void onPreExecute() {
             if(!NetworkUtil.isNetworkConnected(getActivity())) {
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(getActivity(), "인터넷에 연결해주세요", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
                 cancel(true);
             }
 

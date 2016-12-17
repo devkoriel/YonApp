@@ -3,11 +3,14 @@ package co.amazonaws.models.nosql;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBAttribute;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBIndexHashKey;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBIndexRangeKey;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
+
+import java.io.Serializable;
 
 @DynamoDBTable(tableName = "yonapp-mobilehub-329555121-Oneline-Board-Comment")
 
-public class OnelineBoardCommentDO {
+public class OnelineBoardCommentDO implements Serializable {
     private String _CommentDateAndId;
     private String _ContentDateAndId;
     private String _Comment;
@@ -15,10 +18,10 @@ public class OnelineBoardCommentDO {
     private String _writerGcmTokenKey;
     private String _Content;
     private String _ContentTimestamp;
+    private boolean isNickStatic;
     private long _Timestamp;
 
     @DynamoDBHashKey(attributeName = "CommentDateAndId")
-    @DynamoDBIndexHashKey(attributeName = "CommentDateAndId", globalSecondaryIndexName = "DateSorted")
     public String getCommentDateAndId() {
         return _CommentDateAndId;
     }
@@ -27,6 +30,7 @@ public class OnelineBoardCommentDO {
     }
 
     @DynamoDBAttribute(attributeName = "_ContentDateAndId")
+    @DynamoDBIndexHashKey(attributeName = "_ContentDateAndId", globalSecondaryIndexName = "_ContentDateAndId-index")
     public String getContentDateAndId() { return _ContentDateAndId; }
     public void setContentDateAndId(final String _ContentDateAndId) {
         this._ContentDateAndId = _ContentDateAndId;
@@ -45,6 +49,7 @@ public class OnelineBoardCommentDO {
     }
 
     @DynamoDBAttribute(attributeName = "Timestamp")
+    @DynamoDBIndexRangeKey(attributeName = "Timestamp", globalSecondaryIndexName = "_ContentDateAndId-index")
     public long getTimestamp() { return _Timestamp; }
     public void setTimestamp(final long _Timestamp) {
         this._Timestamp = _Timestamp;
@@ -70,5 +75,14 @@ public class OnelineBoardCommentDO {
     }
     public void setContentTimestamp(final String _ContentTimestamp) {
         this._ContentTimestamp = _ContentTimestamp;
+    }
+
+    @DynamoDBAttribute(attributeName = "isNickStatic")
+    public boolean isNickStatic() {
+        return isNickStatic;
+    }
+
+    public void setNickStatic(boolean nickStatic) {
+        isNickStatic = nickStatic;
     }
 }

@@ -6,15 +6,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -28,11 +27,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedScanList;
-import com.flyco.dialog.listener.OnBtnClickL;
-import com.flyco.dialog.widget.NormalDialog;
 
 import co.amazonaws.mobile.AWSMobileClient;
 import co.amazonaws.mobile.user.IdentityManager;
@@ -46,7 +43,6 @@ import co.koriel.yonapp.util.Crypto;
 import co.koriel.yonapp.util.NetworkUtil;
 import co.koriel.yonapp.util.NonLeakingWebView;
 import co.koriel.yonapp.util.YscecHelper;
-import dmax.dialog.SpotsDialog;
 
 public class SignInActivity extends Activity implements View.OnClickListener{
     private final static String LOG_TAG = SignInActivity.class.getSimpleName();
@@ -60,14 +56,13 @@ public class SignInActivity extends Activity implements View.OnClickListener{
 
     private NonLeakingWebView signinWebView;
 
-    private AlertDialog pDialog;
+    private MaterialDialog pDialog;
 
     public EditText studentIdEditText;
     public EditText studentPasswdEditText;
 
-    private DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
-    private PaginatedScanList<BlackListDO> blackList;
     private DynamoDBMapper dynamoDBMapper;
+    private BlackListDO blackList;
 
     private int sLength;
 
@@ -83,9 +78,9 @@ public class SignInActivity extends Activity implements View.OnClickListener{
         @Override
         public void onSuccess(final IdentityProvider provider) {
 
-            if(checkBlackList(DataBase.userInfo.getStudentId())) {
+            if(isBlackList(DataBase.userInfo.getStudentId())) {
                 AWSMobileClient.defaultMobileClient().getIdentityManager().signOut();
-                Toast.makeText(SignInActivity.this, "차단된 사용자입니다", Toast.LENGTH_LONG).show();
+                Toast.makeText(SignInActivity.this, R.string.blocked_user, Toast.LENGTH_LONG).show();
             } else {
 
                 Log.d(LOG_TAG, String.format("User sign-in with %s succeeded",
@@ -93,9 +88,6 @@ public class SignInActivity extends Activity implements View.OnClickListener{
 
                 // The sign-in manager is no longer needed once signed in.
                 SignInManager.dispose();
-
-                Toast.makeText(SignInActivity.this, String.format("%s로 로그인에 성공했습니다.",
-                        provider.getDisplayName()), Toast.LENGTH_LONG).show();
 
                 // Load user name and image.
                 AWSMobileClient.defaultMobileClient()
@@ -129,8 +121,7 @@ public class SignInActivity extends Activity implements View.OnClickListener{
             Log.d(LOG_TAG, String.format("User sign-in with %s canceled.",
                 provider.getDisplayName()));
 
-            Toast.makeText(SignInActivity.this, String.format("%s로 로그인이 취소되었습니다.",
-                provider.getDisplayName()), Toast.LENGTH_LONG).show();
+            Toast.makeText(SignInActivity.this, R.string.login_cancel, Toast.LENGTH_LONG).show();
         }
 
         /**
@@ -144,10 +135,10 @@ public class SignInActivity extends Activity implements View.OnClickListener{
                 provider.getDisplayName(), ex.getMessage()), ex);
 
             final AlertDialog.Builder errorDialogBuilder = new AlertDialog.Builder(SignInActivity.this);
-            errorDialogBuilder.setTitle("Sign-In Error");
+            errorDialogBuilder.setTitle(R.string.login_error);
             errorDialogBuilder.setMessage(
-                String.format("%s로 로그인에 실패했습니다.\n%s", provider.getDisplayName(), ex.getMessage()));
-            errorDialogBuilder.setNeutralButton("Ok", null);
+                String.format(getResources().getString(R.string.login_fail) + "\n%s", ex.getMessage()));
+            errorDialogBuilder.setNeutralButton(R.string.dialog_ok, null);
             errorDialogBuilder.show();
         }
     }
@@ -293,21 +284,25 @@ public class SignInActivity extends Activity implements View.OnClickListener{
 
     public boolean yscecAuthenticate() {
         if (!NetworkUtil.isNetworkConnected(this)) {
-            Toast.makeText(SignInActivity.this, "인터넷에 연결해주세요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignInActivity.this, R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
             return false;
         } else if (studentIdEditText.getText().toString().matches("") && studentPasswdEditText.getText().toString().matches("")) {
-            Toast.makeText(SignInActivity.this, "학번과 비밀번호를 입력해주세요", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignInActivity.this, R.string.please_enter_student_id_passwd, Toast.LENGTH_SHORT).show();
             return false;
         } else if (studentIdEditText.getText().toString().matches("")) {
-            Toast.makeText(SignInActivity.this, "학번을 입력해주세요", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignInActivity.this, R.string.please_enter_student_id, Toast.LENGTH_SHORT).show();
             return false;
         } else if (studentPasswdEditText.getText().toString().matches("")) {
-            Toast.makeText(SignInActivity.this, "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignInActivity.this, R.string.please_enter_student_passwd, Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        pDialog = new SpotsDialog(SignInActivity.this, R.style.CustomDialogAuth);
-        pDialog.show();
+        pDialog = new MaterialDialog.Builder(this)
+                .title(R.string.signin_auth)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .progressIndeterminateStyle(true)
+                .show();
 
         sLength = 0;
 
@@ -325,7 +320,7 @@ public class SignInActivity extends Activity implements View.OnClickListener{
             public void onPageFinished(final WebView view, String url) {
                 super.onPageFinished(view, url);
 
-                if(url.equals(YscecHelper.BaseUrl + YscecHelper.LoginUrl)) {
+                if(url.equals(YscecHelper.BaseUrlSecure + YscecHelper.LoginUrl)) {
                     if (sLength == 0) {
                         if (Build.VERSION.SDK_INT >= 19) {
                             view.evaluateJavascript(js, new ValueCallback<String>() {
@@ -338,7 +333,7 @@ public class SignInActivity extends Activity implements View.OnClickListener{
                             view.loadUrl(js);
                         }
                     }
-                } else if (url.equals(YscecHelper.BaseUrl + YscecHelper.BoardUrl)) {
+                } else if (url.equals(YscecHelper.BaseUrl + YscecHelper.AuthUrl)) {
                     new Thread() {
                         public void run() {
                             YscecHelper.isAuthenticated = true;
@@ -347,53 +342,33 @@ public class SignInActivity extends Activity implements View.OnClickListener{
                             DataBase.userInfo.setStudentId(studentIdEditText.getText().toString());
                             DataBase.userInfo.setStudentPasswd(encryptedPasswd);
 
-                            // Login with Google Account Recommended
-                            final Activity thisActivity = SignInActivity.this;
-                            if (ContextCompat.checkSelfPermission(thisActivity,
-                                    Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
-                                ActivityCompat.requestPermissions(SignInActivity.this,
-                                        new String[]{Manifest.permission.GET_ACCOUNTS},
-                                        GET_ACCOUNTS_PERMISSION_REQUEST_CODE);
-                                return;
-                            }
-
                             try {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         pDialog.dismiss();
 
-                                        final NormalDialog dialog = new NormalDialog(SignInActivity.this);
-                                        dialog.style(NormalDialog.STYLE_TWO)
-                                                .bgColor(Color.parseColor("#383838"))//
-                                                .cornerRadius(5)//
-                                                .btnText("취소", "확인")
-                                                .title("포탈 인증 성공!")
-                                                .content("아래 확인 버튼을 눌러 계속 진행하세요.")//
-                                                .contentGravity(Gravity.CENTER)//
-                                                .contentTextColor(Color.parseColor("#ffffff"))//
-                                                .dividerColor(Color.parseColor("#222222"))//
-                                                .btnTextSize(15.5f, 15.5f)//
-                                                .btnTextColor(Color.parseColor("#ffffff"), Color.parseColor("#ffffff"))//
-                                                .btnPressColor(Color.parseColor("#2B2B2B"))//
-                                                .widthScale(0.85f)//
+                                        final MaterialDialog dialog = new MaterialDialog.Builder(SignInActivity.this)
+                                                .title(R.string.auth_success)
+                                                .content(R.string.auth_continue)
+                                                .positiveText(R.string.dialog_ok)
+                                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                                    @Override
+                                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                        dialog.dismiss();
+
+                                                        final Activity thisActivity = SignInActivity.this;
+                                                        if (ContextCompat.checkSelfPermission(thisActivity,
+                                                                Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
+                                                            ActivityCompat.requestPermissions(SignInActivity.this,
+                                                                    new String[]{Manifest.permission.GET_ACCOUNTS},
+                                                                    GET_ACCOUNTS_PERMISSION_REQUEST_CODE);
+                                                        } else {
+                                                            googleOnClickListener.onClick(view);
+                                                        }
+                                                    }
+                                                })
                                                 .show();
-
-                                        dialog.setOnBtnClickL(
-                                                new OnBtnClickL() {
-                                                    @Override
-                                                    public void onBtnClick() {
-                                                        dialog.dismiss();
-                                                    }
-                                                },
-                                                new OnBtnClickL() {
-                                                    @Override
-                                                    public void onBtnClick() {
-                                                        dialog.dismiss();
-
-                                                        googleOnClickListener.onClick(view);
-                                                    }
-                                                });
                                     }
                                 });
                             } catch (NullPointerException e) {
@@ -405,7 +380,7 @@ public class SignInActivity extends Activity implements View.OnClickListener{
             }
         });
 
-        signinWebView.loadUrl(YscecHelper.BaseUrl + YscecHelper.BoardUrl);
+        signinWebView.loadUrl(YscecHelper.BaseUrl + YscecHelper.AuthUrl);
 
         return YscecHelper.isAuthenticated;
     }
@@ -419,30 +394,17 @@ public class SignInActivity extends Activity implements View.OnClickListener{
                 public void run() {
                     pDialog.dismiss();
 
-                    final NormalDialog dialog = new NormalDialog(SignInActivity.this);
-                    dialog.style(NormalDialog.STYLE_TWO)
-                            .bgColor(Color.parseColor("#383838"))//
-                            .cornerRadius(5)//
-                            .btnNum(1)
-                            .btnText("확인")
-                            .title("포탈 인증 실패 ㅠㅠ")
-                            .content("학번과 비밀번호를 올바르게 적었는 지 확인해보세요.")//
-                            .contentGravity(Gravity.CENTER)//
-                            .contentTextColor(Color.parseColor("#ffffff"))//
-                            .dividerColor(Color.parseColor("#222222"))//
-                            .btnTextSize(15.5f)//
-                            .btnTextColor(Color.parseColor("#ffffff"))//
-                            .btnPressColor(Color.parseColor("#2B2B2B"))//
-                            .widthScale(0.85f)//
-                            .show();
-
-                    dialog.setOnBtnClickL(
-                            new OnBtnClickL() {
+                    final MaterialDialog dialog = new MaterialDialog.Builder(SignInActivity.this)
+                            .title(R.string.auth_fail)
+                            .content(R.string.auth_check)
+                            .positiveText(R.string.dialog_ok)
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
-                                public void onBtnClick() {
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     dialog.dismiss();
                                 }
-                            });
+                            })
+                            .show();
                 }
             });
 
@@ -450,30 +412,27 @@ public class SignInActivity extends Activity implements View.OnClickListener{
         }
     }
 
-    public boolean checkBlackList(String studentId) {
-
+    public boolean isBlackList(final String studentId) {
         dynamoDBMapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
 
-        Thread checkBlackListThread = new Thread() {
+        Thread thread = new Thread() {
             public void run() {
-                blackList = dynamoDBMapper.scan(BlackListDO.class, scanExpression);
+                blackList = dynamoDBMapper.load(BlackListDO.class, studentId);
             }
         };
 
-        checkBlackListThread.start();
+        thread.start();
         try {
-            checkBlackListThread.join();
+            thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        for(int i = 0; i < blackList.size(); i++) {
-            if(studentId.equals(blackList.get(i).getStudentId())) {
-                return true;
-            }
+        if (blackList != null) {
+            return true;
+        } else {
+            return false;
         }
-
-        return false;
     }
 
     @Override

@@ -25,14 +25,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.8"
-                android:layout_margin="10dp"
                 app:srcCompat="@drawable/ic_chat_black_48dp"
                 android:background="@null"
                 android:scaleType="centerInside"
                 android:id="@+id/one_line_board_button" />
 
             <TextView
-                android:text="한줄 게시판"
+                android:text="@string/home_menu_oneline"
                 android:layout_weight="0.2"
                 android:textSize="@dimen/fragment_home_text"
                 android:layout_width="match_parent"
@@ -50,7 +49,6 @@
             <ImageButton
                 android:layout_width="match_parent"
                 android:background="@null"
-                android:layout_margin="10dp"
                 android:layout_height="0dp"
                 android:layout_weight="0.8"
                 app:srcCompat="@drawable/ic_cloud_download_black_48dp"
@@ -58,7 +56,7 @@
                 android:id="@+id/solution_cloud_button" />
 
             <TextView
-                android:text="솔루션 클라우드"
+                android:text="@string/home_menu_solution_cloud"
                 android:layout_weight="0.2"
                 android:textSize="@dimen/fragment_home_text"
                 android:layout_width="match_parent"
@@ -76,7 +74,6 @@
             <ImageButton
                 android:layout_width="match_parent"
                 android:background="@null"
-                android:layout_margin="10dp"
                 android:layout_height="0dp"
                 android:layout_weight="0.8"
                 app:srcCompat="@drawable/ic_date_range_black_48dp"
@@ -84,7 +81,7 @@
                 android:id="@+id/school_calendar_button" />
 
             <TextView
-                android:text="학사일정"
+                android:text="@string/home_menu_school_schedule"
                 android:layout_weight="0.2"
                 android:textSize="@dimen/fragment_home_text"
                 android:layout_width="match_parent"
@@ -102,7 +99,6 @@
             <ImageButton
                 android:layout_width="match_parent"
                 android:background="@null"
-                android:layout_margin="10dp"
                 android:layout_height="0dp"
                 android:layout_weight="0.8"
                 app:srcCompat="@drawable/ic_book_black_48dp"
@@ -110,7 +106,7 @@
                 android:id="@+id/book_search_button" />
 
             <TextView
-                android:text="도서 검색"
+                android:text="@string/home_menu_book_search"
                 android:layout_weight="0.2"
                 android:textSize="@dimen/fragment_home_text"
                 android:layout_width="match_parent"
@@ -134,7 +130,6 @@
         <ImageButton
             android:layout_width="match_parent"
             android:background="@null"
-            android:layout_margin="10dp"
             android:layout_height="0dp"
             android:layout_weight="0.8"
             app:srcCompat="@drawable/ic_directions_bus_black_48dp"
@@ -142,7 +137,7 @@
             android:id="@+id/bus_button" />
 
         <TextView
-            android:text="셔틀버스"
+            android:text="@string/home_menu_shuttle"
             android:layout_weight="0.2"
             android:textSize="@dimen/fragment_home_text"
             android:layout_width="match_parent"
@@ -161,7 +156,6 @@
             <ImageButton
                 android:layout_width="match_parent"
                 android:background="@null"
-                android:layout_margin="10dp"
                 android:layout_height="0dp"
                 android:layout_weight="0.8"
                 app:srcCompat="@drawable/ic_store_black_48dp"
@@ -169,7 +163,7 @@
                 android:id="@+id/convenience_button" />
 
             <TextView
-                android:text="편의시설"
+                android:text="@string/home_menu_convenience"
                 android:layout_weight="0.2"
                 android:textSize="@dimen/fragment_home_text"
                 android:layout_width="match_parent"
@@ -187,7 +181,6 @@
             <ImageButton
                 android:layout_width="match_parent"
                 android:background="@null"
-                android:layout_margin="10dp"
                 android:layout_height="0dp"
                 android:layout_weight="0.8"
                 app:srcCompat="@drawable/ic_restaurant_menu_black_48dp"
@@ -195,7 +188,7 @@
                 android:id="@+id/menu_button" />
 
             <TextView
-                android:text="주간식단"
+                android:text="@string/home_menu_menu"
                 android:layout_weight="0.2"
                 android:textSize="@dimen/fragment_home_text"
                 android:layout_width="match_parent"
@@ -213,7 +206,6 @@
             <ImageButton
                 android:layout_width="match_parent"
                 android:background="@null"
-                android:layout_margin="10dp"
                 android:layout_height="0dp"
                 android:layout_weight="0.8"
                 app:srcCompat="@drawable/ic_school_black_48dp"
@@ -221,7 +213,7 @@
                 android:id="@+id/paper_button" />
 
             <TextView
-                android:text="학위논문 검색"
+                android:text="@string/home_menu_paper_search"
                 android:layout_weight="0.2"
                 android:textSize="@dimen/fragment_home_text"
                 android:layout_width="match_parent"
@@ -245,7 +237,6 @@
             <ImageButton
                 android:layout_width="match_parent"
                 android:background="@null"
-                android:layout_margin="10dp"
                 android:layout_height="0dp"
                 android:layout_weight="0.8"
                 app:srcCompat="@drawable/ic_exit_to_app_black_48dp"
@@ -253,7 +244,7 @@
                 android:id="@+id/logout_button" />
 
             <TextView
-                android:text="로그아웃"
+                android:text="@string/home_menu_logout"
                 android:layout_weight="0.2"
                 android:textSize="@dimen/fragment_home_text"
                 android:layout_width="match_parent"
@@ -271,15 +262,14 @@
             <ImageButton
                 android:layout_width="match_parent"
                 android:background="@null"
-                android:layout_margin="10dp"
                 android:layout_height="0dp"
                 android:layout_weight="0.8"
-                app:srcCompat="@drawable/ic_help_outline_black_48dp"
+                app:srcCompat="@drawable/ic_settings_black_48dp"
                 android:scaleType="centerInside"
-                android:id="@+id/about_button" />
+                android:id="@+id/settings_button" />
 
             <TextView
-                android:text="About"
+                android:text="@string/home_menu_settings"
                 android:layout_weight="0.2"
                 android:textSize="@dimen/fragment_home_text"
                 android:layout_width="match_parent"
@@ -294,6 +284,24 @@
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <ImageButton
+                android:layout_width="match_parent"
+                android:background="@null"
+                android:layout_height="0dp"
+                android:layout_weight="0.8"
+                app:srcCompat="@drawable/ic_help_outline_black_48dp"
+                android:scaleType="centerInside"
+                android:id="@+id/about_button" />
+
+            <TextView
+                android:text="@string/home_menu_about"
+                android:layout_weight="0.2"
+                android:textSize="@dimen/fragment_home_text"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/textView11"
+                android:gravity="center_horizontal"
+                android:clickable="false"/>
         </LinearLayout>
         <LinearLayout
             android:orientation="vertical"

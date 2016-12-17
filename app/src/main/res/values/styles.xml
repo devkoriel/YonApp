@@ -2,15 +2,17 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorControlNormal">#c5c5c5</item>
-        <item name="colorControlActivated">#37474F</item>
-        <item name="colorControlHighlight">#37474F</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="colorAccent">@color/tab_indicator</item>
+        <item name="colorControlNormal">@color/top_bar_background</item>
+        <item name="colorControlActivated">@color/top_bar_background</item>
+        <item name="colorControlHighlight">@color/top_bar_background</item>
     </style>
 
-    <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
-    <item name="colorAccent">#37474F</item>
-    <item name="android:textColorPrimary">#424242</item>
-    <item name="android:background">#F5F5F5</item>
+    <style name="LibrarySearchTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorControlNormal">@color/main_background</item>
+        <item name="colorControlActivated">@color/main_background</item>
+        <item name="colorControlHighlight">@color/main_background</item>
     </style>
 
     <style name="TabLayoutStyle" parent="Base.Widget.Design.TabLayout">
@@ -30,22 +32,11 @@
     <style name="ButtonBarButton" />
 
     <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="colorControlNormal">@color/main_background</item>
+        <item name="colorControlActivated">@color/main_background</item>
+        <item name="colorControlHighlight">@color/main_background</item>
         <item name="android:editTextColor">@color/main_background</item>
         <item name="android:textColorHint">@color/main_background</item>
-    </style>
-
-    <style name="CustomDialogLoad" parent="android:Theme.DeviceDefault.Dialog">
-        <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
-        <item name="DialogTitleText">Loading…</item>
-        <item name="DialogSpotColor">@android:color/holo_orange_dark</item>
-        <item name="DialogSpotCount">5</item>
-    </style>
-
-    <style name="CustomDialogAuth" parent="android:Theme.DeviceDefault.Dialog">
-        <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
-        <item name="DialogTitleText">포탈 인증 중…</item>
-        <item name="DialogSpotColor">@android:color/holo_orange_dark</item>
-        <item name="DialogSpotCount">5</item>
     </style>
 
 </resources>

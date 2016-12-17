@@ -10,7 +10,7 @@ public class BlackListDO {
     private String _studentId;
 
     @DynamoDBHashKey(attributeName = "studentId")
-    @DynamoDBIndexHashKey(attributeName = "studentId", globalSecondaryIndexName = "DateSorted")
+    @DynamoDBIndexHashKey(attributeName = "studentId", globalSecondaryIndexName = "studentId-index")
     public String getStudentId() {
         return _studentId;
     }

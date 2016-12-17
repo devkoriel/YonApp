@@ -1,6 +1,6 @@
 [
     {
-        "outputFile": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-ko/values-ko.xml",
+        "outputFile": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/values-ko/values-ko.xml",
         "map": [
             {
                 "to": {
@@ -32,7 +32,7 @@
                     "endOffset": 435
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
@@ -51,7 +51,7 @@
                     "endOffset": 543
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 3,
                         "startColumn": 4,
@@ -70,7 +70,7 @@
                     "endOffset": 666
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,
@@ -89,7 +89,7 @@
                     "endOffset": 760
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 5,
                         "startColumn": 4,
@@ -108,7 +108,7 @@
                     "endOffset": 862
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 6,
                         "startColumn": 4,
@@ -127,7 +127,7 @@
                     "endOffset": 944
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 7,
                         "startColumn": 4,
@@ -146,7 +146,7 @@
                     "endOffset": 1042
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 8,
                         "startColumn": 4,
@@ -165,7 +165,7 @@
                     "endOffset": 1148
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 9,
                         "startColumn": 4,
@@ -184,7 +184,7 @@
                     "endOffset": 1227
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 10,
                         "startColumn": 4,
@@ -203,7 +203,7 @@
                     "endOffset": 1303
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 11,
                         "startColumn": 4,
@@ -222,7 +222,7 @@
                     "endOffset": 1383
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 12,
                         "startColumn": 4,
@@ -241,7 +241,7 @@
                     "endOffset": 1481
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 13,
                         "startColumn": 4,
@@ -260,7 +260,7 @@
                     "endOffset": 1576
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 14,
                         "startColumn": 4,
@@ -279,7 +279,7 @@
                     "endOffset": 1671
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 15,
                         "startColumn": 4,
@@ -298,7 +298,7 @@
                     "endOffset": 1771
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 16,
                         "startColumn": 4,
@@ -317,7 +317,7 @@
                     "endOffset": 1867
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 17,
                         "startColumn": 4,
@@ -336,7 +336,7 @@
                     "endOffset": 1966
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 18,
                         "startColumn": 4,
@@ -355,7 +355,7 @@
                     "endOffset": 2081
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 19,
                         "startColumn": 4,
@@ -374,7 +374,7 @@
                     "endOffset": 2175
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 20,
                         "startColumn": 4,
@@ -1077,7 +1077,7 @@
                     "endOffset": 4908
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-ko/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-ko/values.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 0,
@@ -1096,7 +1096,7 @@
                     "endOffset": 5079
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-ko/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-ko/values.xml",
                     "position": {
                         "startLine": 5,
                         "startColumn": 0,
@@ -1115,7 +1115,7 @@
                     "endOffset": 5197
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-ko/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-ko/values.xml",
                     "position": {
                         "startLine": 6,
                         "startColumn": 0,
@@ -1134,7 +1134,7 @@
                     "endOffset": 5301
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-ko/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-ko/values.xml",
                     "position": {
                         "startLine": 7,
                         "startColumn": 0,
@@ -1153,7 +1153,7 @@
                     "endOffset": 5475
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-ko/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-ko/values.xml",
                     "position": {
                         "startLine": 8,
                         "startColumn": 0,
@@ -1172,7 +1172,7 @@
                     "endOffset": 5594
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-ko/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-ko/values.xml",
                     "position": {
                         "startLine": 9,
                         "startColumn": 0,
@@ -1191,7 +1191,7 @@
                     "endOffset": 5718
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-ko/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-ko/values.xml",
                     "position": {
                         "startLine": 10,
                         "startColumn": 0,
@@ -1210,7 +1210,7 @@
                     "endOffset": 5898
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/9.8.00/res/values-ko/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/10.0.1/res/values-ko/values.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 0,
@@ -1229,7 +1229,7 @@
                     "endOffset": 6102
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-ko/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-ko/values.xml",
                     "position": {
                         "startLine": 11,
                         "startColumn": 0,
@@ -1248,7 +1248,7 @@
                     "endOffset": 6207
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-ko/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-ko/values.xml",
                     "position": {
                         "startLine": 12,
                         "startColumn": 0,
@@ -1267,7 +1267,7 @@
                     "endOffset": 6374
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-ko/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-ko/values.xml",
                     "position": {
                         "startLine": 13,
                         "startColumn": 0,
@@ -1286,7 +1286,7 @@
                     "endOffset": 6494
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-ko/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-ko/values.xml",
                     "position": {
                         "startLine": 14,
                         "startColumn": 0,
@@ -1305,7 +1305,7 @@
                     "endOffset": 6671
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-ko/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-ko/values.xml",
                     "position": {
                         "startLine": 15,
                         "startColumn": 0,
@@ -1324,7 +1324,7 @@
                     "endOffset": 6820
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-ko/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-ko/values.xml",
                     "position": {
                         "startLine": 16,
                         "startColumn": 0,
@@ -1343,7 +1343,7 @@
                     "endOffset": 6909
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-ko/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-ko/values.xml",
                     "position": {
                         "startLine": 17,
                         "startColumn": 0,
@@ -1362,7 +1362,7 @@
                     "endOffset": 6997
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-ko/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-ko/values.xml",
                     "position": {
                         "startLine": 18,
                         "startColumn": 0,
@@ -1381,7 +1381,7 @@
                     "endOffset": 7101
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/res/values-ko/values.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/values-ko/values.xml",
                     "position": {
                         "startLine": 19,
                         "startColumn": 0,
@@ -1415,17 +1415,36 @@
                     "startLine": 80,
                     "startColumn": 4,
                     "startOffset": 7165,
-                    "endColumn": 100,
-                    "endOffset": 7261
+                    "endColumn": 77,
+                    "endOffset": 7238
                 },
                 "from": {
-                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-ko/values-ko.xml",
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
                     "position": {
                         "startLine": 21,
                         "startColumn": 4,
                         "startOffset": 1890,
+                        "endColumn": 77,
+                        "endOffset": 1963
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 81,
+                    "startColumn": 4,
+                    "startOffset": 7243,
+                    "endColumn": 100,
+                    "endOffset": 7339
+                },
+                "from": {
+                    "file": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/values-ko/values-ko.xml",
+                    "position": {
+                        "startLine": 22,
+                        "startColumn": 4,
+                        "startOffset": 1968,
                         "endColumn": 100,
-                        "endOffset": 1986
+                        "endOffset": 2064
                     }
                 }
             }

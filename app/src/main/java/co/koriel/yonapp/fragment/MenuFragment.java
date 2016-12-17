@@ -1,6 +1,5 @@
 package co.koriel.yonapp.fragment;
 
-import android.app.AlertDialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,14 +11,15 @@ import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import co.koriel.yonapp.R;
 import co.koriel.yonapp.util.NonLeakingWebView;
-import dmax.dialog.SpotsDialog;
 
 public class MenuFragment extends FragmentBase {
 
     private WebView webView;
-    private AlertDialog pDialog;
+    private MaterialDialog pDialog;
 
     public MenuFragment() {
         // Required empty public constructor
@@ -36,10 +36,14 @@ public class MenuFragment extends FragmentBase {
         final View view = inflater.inflate(R.layout.fragment_menu, container, false);
 
         TextView toolbarTitle = (TextView) getActivity().findViewById(R.id.toolbarTitle);
-        toolbarTitle.setText("주간식단");
+        toolbarTitle.setText(R.string.home_menu_menu);
 
-        pDialog = new SpotsDialog(getContext(), R.style.CustomDialogLoad);
-        pDialog.show();
+        pDialog = new MaterialDialog.Builder(getContext())
+                .title(R.string.loading)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .progressIndeterminateStyle(false)
+                .show();
 
         try {
             new Thread() {

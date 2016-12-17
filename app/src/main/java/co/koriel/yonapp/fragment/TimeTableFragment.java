@@ -24,7 +24,6 @@ import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +37,7 @@ import co.koriel.yonapp.util.NetworkUtil;
 import co.koriel.yonapp.util.NonLeakingWebView;
 import co.koriel.yonapp.util.WebViewAllCapture;
 
-public class TimeTableFragment extends FragmentBase implements View.OnClickListener {
+public class TimeTableFragment extends FragmentBase {
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
 
     private NonLeakingWebView timeTableWebView;
@@ -64,6 +63,28 @@ public class TimeTableFragment extends FragmentBase implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_capture:
+                // Here, thisActivity is the current activity
+                if (ContextCompat.checkSelfPermission(getContext(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    // Should we show an explanation?
+                    if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                        // Show an expanation to the user *asynchronously* -- don't block
+                        // this thread waiting for the user's response! After the user
+                        // sees the explanation, try again to request the permission.
+                        Toast.makeText(getContext(), "외부 저장소 쓰기 권한이 필요합니다", Toast.LENGTH_SHORT).show();
+                    }
+
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+
+                } else {
+                    addImageToGallery(timeTableWebView, getContext());
+                }
+                break;
             case R.id.action_sync:
                 getTimetable(true);
                 break;
@@ -82,8 +103,6 @@ public class TimeTableFragment extends FragmentBase implements View.OnClickListe
         toolbarTitle.setText(R.string.app_name);
 
         relativeLayout = (RelativeLayout) view.findViewById(R.id.timetable_layout);
-        ImageButton menuCapture = (ImageButton) getActivity().findViewById(R.id.action_capture);
-        menuCapture.setOnClickListener(this);
 
         getTimetable(false);
 
@@ -178,7 +197,7 @@ public class TimeTableFragment extends FragmentBase implements View.OnClickListe
                                         public void onPageFinished(WebView view, String url) {
                                             super.onPageFinished(view, url);
 
-                                            if (url.equals("http://yscec.yonsei.ac.kr/login/index.php")) {
+                                            if (url.equals("https://yscec.yonsei.ac.kr/login/index.php")) {
                                                 if (Build.VERSION.SDK_INT >= 19) {
                                                     timeTableWebView.evaluateJavascript(js, new ValueCallback<String>() {
                                                         @Override
@@ -253,32 +272,6 @@ public class TimeTableFragment extends FragmentBase implements View.OnClickListe
         String path = getContext().getExternalCacheDir() + fileName;
         File file = new File(path);
         return file.exists();
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.action_capture) {
-            // Here, thisActivity is the current activity
-            if (ContextCompat.checkSelfPermission(getContext(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-
-                // Should we show an explanation?
-                if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-                    // Show an expanation to the user *asynchronously* -- don't block
-                    // this thread waiting for the user's response! After the user
-                    // sees the explanation, try again to request the permission.
-                    Toast.makeText(getContext(), "외부 저장소 쓰기 권한이 필요합니다", Toast.LENGTH_SHORT).show();
-                }
-
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-
-            } else {
-                addImageToGallery(timeTableWebView, getContext());
-            }
-        }
     }
 
     @Override

@@ -38,6 +38,7 @@ import co.koriel.yonapp.util.Crypto;
 import co.koriel.yonapp.util.NetworkUtil;
 import co.koriel.yonapp.util.NonLeakingWebView;
 import co.koriel.yonapp.util.SerializeObject;
+import co.koriel.yonapp.util.YscecHelper;
 
 public class NoticeFragment extends FragmentBase {
     private static final String NOTICE = "notice";
@@ -49,9 +50,10 @@ public class NoticeFragment extends FragmentBase {
 
     private NonLeakingWebView webView;
     private ListView noticeListView;
-    private ArrayList<HashMap<String, String>> arrayList;
-    private ArrayList<HashMap<String, String>> noticeListArray;
     private SimpleAdapter simpleAdapter;
+    private ArrayList<HashMap<String, String>> noticeScanList;
+    private ArrayList<HashMap<String, String>> noticeArrangedList;
+    private ArrayList<HashMap<String, String>> noticeList;
 
     private Elements noticeElements;
     private Elements linkElements;
@@ -80,15 +82,16 @@ public class NoticeFragment extends FragmentBase {
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(OnRefreshLayout);
 
-        arrayList = new ArrayList<> ();
-        noticeListArray = new ArrayList<>();
-        simpleAdapter = new SimpleAdapter(getContext(), arrayList, android.R.layout.simple_list_item_2, new String[]{"item1", "item2"}, new int[]{android.R.id.text1, android.R.id.text2}) {
+        noticeScanList = new ArrayList<>();
+        noticeArrangedList = new ArrayList<> ();
+        noticeList = new ArrayList<>();
+        simpleAdapter = new SimpleAdapter(getContext(), noticeList, android.R.layout.simple_list_item_2, new String[]{"item1", "item2"}, new int[]{android.R.id.text1, android.R.id.text2}) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 TextView text1 = (TextView) view.findViewById(android.R.id.text1);
                 TextView text2 = (TextView) view.findViewById(android.R.id.text2);
                 text1.setTextSize(15);
-                text2.setTextSize(10);
+                text2.setTextSize(12);
                 text2.setTextColor(Color.GRAY);
                 return view;
             }
@@ -99,21 +102,24 @@ public class NoticeFragment extends FragmentBase {
         noticeListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         noticeListView.setOnScrollListener(OnScrollChange);
 
-        String sNoticeList = SerializeObject.ReadSettings(getContext(), "notice_list.dat");
-        String sNotice = SerializeObject.ReadSettings(getContext(), "notice.dat");
-        if (sNoticeList != null && !sNoticeList.equalsIgnoreCase("") && sNotice != null && !sNotice.equalsIgnoreCase("")) {
-            Object objNL = SerializeObject.stringToObject(sNoticeList);
-            if (objNL instanceof ArrayList) {
-                noticeListArray.clear();
-                noticeListArray.addAll((ArrayList<HashMap<String, String>>) objNL);
+        String sNoticeScanList = SerializeObject.ReadSettings(getContext(), "nsl.dat");
+        String sNoticeArrangedList = SerializeObject.ReadSettings(getContext(), "nal.dat");
+        if (!sNoticeScanList.equalsIgnoreCase("") && !sNoticeArrangedList.equalsIgnoreCase("")) {
+            Object objNsl = SerializeObject.stringToObject(sNoticeScanList);
+            if (objNsl instanceof ArrayList) {
+                noticeScanList.clear();
+                noticeScanList.addAll((ArrayList<HashMap<String, String>>) objNsl);
             }
 
-            Object objN = SerializeObject.stringToObject(sNotice);
-            if (objN instanceof ArrayList) {
-                arrayList.clear();
-                arrayList.addAll((ArrayList<HashMap<String, String>>) objN);
-                simpleAdapter.notifyDataSetChanged();
+            Object objNal = SerializeObject.stringToObject(sNoticeArrangedList);
+            if (objNal instanceof ArrayList) {
+                noticeArrangedList.clear();
+                noticeArrangedList.addAll((ArrayList<HashMap<String, String>>) objNal);
             }
+
+            noticeList.clear();
+            noticeList.addAll(noticeArrangedList);
+            simpleAdapter.notifyDataSetChanged();
         } else {
             getNotice();
         }
@@ -127,7 +133,7 @@ public class NoticeFragment extends FragmentBase {
             new Thread() {
                 public void run() {
                     final Bundle bundle = new Bundle();
-                    bundle.putString(LINK, noticeListArray.get(position).get(LINK));
+                    bundle.putString(LINK, noticeScanList.get(position).get(LINK));
 
                     NoticeContentFragment noticeContentFragment = new NoticeContentFragment();
                     noticeContentFragment.setArguments(bundle);
@@ -184,7 +190,7 @@ public class NoticeFragment extends FragmentBase {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(getActivity(), "인터넷에 연결해주세요", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
                             }
                         });
                         interrupt();
@@ -229,7 +235,7 @@ public class NoticeFragment extends FragmentBase {
                                         }
                                     }
                                 });
-                                webView.loadUrl("http://yscec.yonsei.ac.kr/local/board/index.php?type=1&perpage=10000");
+                                webView.loadUrl(YscecHelper.BaseUrl + YscecHelper.BoardUrl);
                             }
                         });
                     }
@@ -248,7 +254,7 @@ public class NoticeFragment extends FragmentBase {
                 linkElements = document.select("a:has(.board-lecture-title)");
                 dateElements = document.getElementsByClass("post-date");
 
-                noticeListArray.clear();
+                noticeScanList.clear();
                 for(int i = 0; i < noticeElements.size(); i++) {
                     HashMap<String, String> map = new HashMap<> ();
                     map.put(NOTICE, noticeElements.get(i).text());
@@ -261,44 +267,46 @@ public class NoticeFragment extends FragmentBase {
                         e.printStackTrace();
                     }
                     map.put(TIMESTAMP, String.valueOf(noticeDate.getTime()/1000));
-                    noticeListArray.add(map);
+                    noticeScanList.add(map);
                 }
 
-                Collections.sort(noticeListArray, new Comparator<HashMap<String, String>>() {
+                Collections.sort(noticeScanList, new Comparator<HashMap<String, String>>() {
                     @Override
                     public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
                         return Long.parseLong(lhs.get(TIMESTAMP)) > Long.parseLong(rhs.get(TIMESTAMP)) ? -1 : Long.parseLong(lhs.get(TIMESTAMP)) < Long.parseLong(rhs.get(TIMESTAMP)) ? 1:0;
                     }
                 });
 
-                arrayList.clear();
-                for(int j = 0; j < noticeListArray.size(); j++) {
+                noticeArrangedList.clear();
+                for(int j = 0; j < noticeScanList.size(); j++) {
                     HashMap<String, String> map = new HashMap<> ();
-                    StringBuilder stringBuilder = new StringBuilder(noticeListArray.get(j).get(NOTICE));
-                    stringBuilder.replace(noticeListArray.get(j).get(NOTICE).lastIndexOf("]"), noticeListArray.get(j).get(NOTICE).lastIndexOf("]") + 1, "]\n");
+                    StringBuilder stringBuilder = new StringBuilder(noticeScanList.get(j).get(NOTICE));
+                    stringBuilder.replace(noticeScanList.get(j).get(NOTICE).lastIndexOf("]"), noticeScanList.get(j).get(NOTICE).lastIndexOf("]") + 1, "]\n");
                     map.put("item1", stringBuilder.toString());
-                    map.put("item2", noticeListArray.get(j).get(DATE));
-                    arrayList.add(map);
+                    map.put("item2", noticeScanList.get(j).get(DATE));
+                    noticeArrangedList.add(map);
                 }
 
-                String sNoticeList = SerializeObject.objectToString(noticeListArray);
-                if (sNoticeList != null && !sNoticeList.equalsIgnoreCase("")) {
-                    SerializeObject.WriteSettings(getContext(), sNoticeList, "notice_list.dat");
+                String sNoticeScanList = SerializeObject.objectToString(noticeScanList);
+                if (sNoticeScanList != null && !sNoticeScanList.equalsIgnoreCase("")) {
+                    SerializeObject.WriteSettings(getContext(), sNoticeScanList, "nsl.dat");
                 } else {
-                    SerializeObject.WriteSettings(getContext(), "", "notice_list.dat");
+                    SerializeObject.WriteSettings(getContext(), "", "nsl.dat");
                 }
 
-                String sNotice = SerializeObject.objectToString(arrayList);
-                if (sNotice != null && !sNotice.equalsIgnoreCase("")) {
-                    SerializeObject.WriteSettings(getContext(), sNotice, "notice.dat");
+                String sNoticeArrangedList = SerializeObject.objectToString(noticeArrangedList);
+                if (sNoticeArrangedList != null && !sNoticeArrangedList.equalsIgnoreCase("")) {
+                    SerializeObject.WriteSettings(getContext(), sNoticeArrangedList, "nal.dat");
                 } else {
-                    SerializeObject.WriteSettings(getContext(), "", "notice.dat");
+                    SerializeObject.WriteSettings(getContext(), "", "nal.dat");
                 }
 
                 try {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            noticeList.clear();
+                            noticeList.addAll(noticeArrangedList);
                             swipeRefreshLayout.setRefreshing(false);
                             simpleAdapter.notifyDataSetChanged();
                             webView.destroy();
@@ -318,6 +326,13 @@ public class NoticeFragment extends FragmentBase {
         {
             updateList(html);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getContext().deleteFile("nsl.dat");
+        getContext().deleteFile("nal.dat");
     }
 }
 

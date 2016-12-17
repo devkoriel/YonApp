@@ -1,5 +1,6 @@
 <resources>
 
+    <color name="colorPrimary">#000000</color>
     <color name="top_bar_background">#212121</color>
     <color name="status_bar_color">#000000</color>
     <color name="splash_text">#212121</color>
@@ -7,10 +8,12 @@
     <color name="main_background">#E0E0E0</color>
 
     <color name="tab_indicator">#002366</color>
+    <color name="like_indicator">#002366</color>
     <color name="black_overlay">#66000000</color>
     <color name="nav_drawer_background">#FFFFFF</color>
     <color name="nav_drawer_top_background">#CCCCCC</color>
     <color name="nav_drawer_no_user_background">#AAAAAA</color>
     <color name="dark_content_text">#333333</color>
     <color name="instructions_list_border_color">#FFDDDDDD</color>
+    <color name="edittext_error_color">#9AA5BF</color>
 </resources>

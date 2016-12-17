@@ -1,10 +1,9 @@
 package co.koriel.yonapp.fragment;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +11,21 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.flyco.dialog.listener.OnBtnClickL;
-import com.flyco.dialog.widget.NormalDialog;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedScanList;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import co.amazonaws.mobile.AWSMobileClient;
+import co.amazonaws.models.nosql.OnelineBoardDO;
+import co.amazonaws.models.nosql.OnelineNicknameDO;
+import co.koriel.yonapp.PushListenerService;
 import co.koriel.yonapp.R;
 import co.koriel.yonapp.SignInActivity;
 import co.koriel.yonapp.util.NetworkUtil;
@@ -47,6 +55,7 @@ public class HomeFragment extends FragmentBase implements View.OnClickListener{
         ImageButton menuButton = (ImageButton) view.findViewById(R.id.menu_button);
         ImageButton paperButton = (ImageButton) view.findViewById(R.id.paper_button);
         ImageButton logoutButton = (ImageButton) view.findViewById(R.id.logout_button);
+        ImageButton settingsButton = (ImageButton) view.findViewById(R.id.settings_button);
 
         oneLineBoardButton.setOnClickListener(this);
         solutionCloudButton.setOnClickListener(this);
@@ -58,10 +67,11 @@ public class HomeFragment extends FragmentBase implements View.OnClickListener{
         menuButton.setOnClickListener(this);
         paperButton.setOnClickListener(this);
         logoutButton.setOnClickListener(this);
+        settingsButton.setOnClickListener(this);
 
         final ArrayList<String> arrayList = getActivity().getIntent().getStringArrayListExtra("arrayList");
-        getActivity().getIntent().removeExtra("arrayList");
-        if (arrayList != null) {
+        if (arrayList != null && arrayList.get(0).equals(PushListenerService.TYPE_ONELINE_NEW_COMMENT)) {
+            getActivity().getIntent().removeExtra("arrayList");
             new Thread() {
                 public void run() {
                     try {
@@ -71,10 +81,42 @@ public class HomeFragment extends FragmentBase implements View.OnClickListener{
                                 .commit();
 
                         Bundle bundle = new Bundle();
-                        bundle.putString("ContentDateAndId", arrayList.get(3));
+                        String contentDateAndId = arrayList.get(3);
+                        bundle.putString("ContentDateAndId", contentDateAndId);
                         bundle.putString("Content", arrayList.get(5));
                         bundle.putString("Timestamp", arrayList.get(6));
                         bundle.putString("writerGcmTokenKey", arrayList.get(4));
+
+                        Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
+                        expressionAttributeValues.put(":dateAndIdToFind", new AttributeValue().withS(contentDateAndId));
+
+                        DynamoDBMapper dynamoDBMapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
+                        DynamoDBScanExpression scanExpressionOneline = new DynamoDBScanExpression()
+                                .withFilterExpression("DateAndId = :dateAndIdToFind")
+                                .withExpressionAttributeValues(expressionAttributeValues);
+
+                        PaginatedScanList<OnelineBoardDO> onelineBoardDOs = dynamoDBMapper.scan(OnelineBoardDO.class, scanExpressionOneline);
+                        boolean isNickStatic = onelineBoardDOs.get(0).isNickStatic();
+                        bundle.putString("isNickStatic", Boolean.toString(isNickStatic));
+
+                        if (isNickStatic) {
+                            expressionAttributeValues.clear();
+                            expressionAttributeValues.put(":userIdToFind", new AttributeValue().withS(contentDateAndId.split("]")[1]));
+
+                            DynamoDBScanExpression scanExpressionNickname = new DynamoDBScanExpression()
+                                    .withFilterExpression("userId = :userIdToFind")
+                                    .withExpressionAttributeValues(expressionAttributeValues);
+
+                            PaginatedScanList<OnelineNicknameDO> onelineNicknameDOs = dynamoDBMapper.scan(OnelineNicknameDO.class, scanExpressionNickname);
+
+                            if (onelineNicknameDOs.size() > 0) {
+                                bundle.putString("id", onelineNicknameDOs.get(0).getNickname());
+                            } else {
+                                bundle.putString("id", contentDateAndId.split("-")[5].split(":")[1]);
+                            }
+                        } else {
+                            bundle.putString("id", contentDateAndId.split("-")[5].split(":")[1]);
+                        }
 
                         OneLineBoardCommentFragment oneLineBoardCommentFragment = new OneLineBoardCommentFragment();
                         oneLineBoardCommentFragment.setArguments(bundle);
@@ -83,7 +125,7 @@ public class HomeFragment extends FragmentBase implements View.OnClickListener{
                                 .replace(R.id.home_root_container, oneLineBoardCommentFragment)
                                 .addToBackStack(null)
                                 .commit();
-                    } catch (NullPointerException e) {
+                    } catch (NullPointerException|IndexOutOfBoundsException e) {
                         e.printStackTrace();
                     }
                 }
@@ -105,7 +147,7 @@ public class HomeFragment extends FragmentBase implements View.OnClickListener{
                         getFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.home_root_container, new OneLineBoardFragment())
-                                .addToBackStack("oneline_board")
+                                .addToBackStack(getResources().getString(R.string.home_menu_oneline))
                                 .commit();
                     }
                 }.start();
@@ -116,7 +158,7 @@ public class HomeFragment extends FragmentBase implements View.OnClickListener{
                         getFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.home_root_container, new ContentDeliveryFragment())
-                                .addToBackStack("solution_cloud")
+                                .addToBackStack(getResources().getString(R.string.home_menu_solution_cloud))
                                 .commit();
                     }
                 }.start();
@@ -127,7 +169,7 @@ public class HomeFragment extends FragmentBase implements View.OnClickListener{
                         getFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.home_root_container, new SchoolCalendarFragment())
-                                .addToBackStack("school_calendar")
+                                .addToBackStack(getResources().getString(R.string.home_menu_school_schedule))
                                 .commit();
                     }
                 }.start();
@@ -136,14 +178,14 @@ public class HomeFragment extends FragmentBase implements View.OnClickListener{
                 new Thread() {
                     public void run() {
                         final Bundle bundle = new Bundle();
-                        bundle.putString("option", "도서 검색");
+                        bundle.putString("option", getResources().getString(R.string.home_menu_book_search));
 
                         LibrarySearchFragment librarySearchFragment = new LibrarySearchFragment();
                         librarySearchFragment.setArguments(bundle);
                         getFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.home_root_container, librarySearchFragment)
-                                .addToBackStack("book_search")
+                                .addToBackStack(getResources().getString(R.string.home_menu_book_search))
                                 .commit();
                     }
                 }.start();
@@ -152,27 +194,67 @@ public class HomeFragment extends FragmentBase implements View.OnClickListener{
                 new Thread() {
                     public void run() {
                         final Bundle bundle = new Bundle();
-                        bundle.putString("option", "학위논문 검색");
+                        bundle.putString("option", getResources().getString(R.string.home_menu_paper_search));
 
                         LibrarySearchFragment librarySearchFragment = new LibrarySearchFragment();
                         librarySearchFragment.setArguments(bundle);
                         getFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.home_root_container, librarySearchFragment)
-                                .addToBackStack("paper_search")
+                                .addToBackStack(getResources().getString(R.string.home_menu_paper_search))
                                 .commit();
                     }
                 }.start();
                 break;
             case R.id.bus_button:
-                final String sBus ="http://www.yonsei.ac.kr/sc/campus/traffic1.jsp";
-                Intent intentB = new Intent(Intent.ACTION_VIEW, Uri.parse(sBus));
-                startActivity(intentB);
+                new MaterialDialog.Builder(getContext())
+                        .iconRes(R.drawable.ic_link_black_48dp)
+                        .limitIconToDefaultSize()
+                        .title(R.string.check_bus_page)
+                        .positiveText(R.string.dialog_ok)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
+
+                                final String sBus ="http://www.yonsei.ac.kr/sc/campus/traffic1.jsp";
+                                Intent intentB = new Intent(Intent.ACTION_VIEW, Uri.parse(sBus));
+                                startActivity(intentB);
+                            }
+                        })
+                        .negativeText(R.string.dialog_cancel)
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
                 break;
             case R.id.convenience_button:
-                String sConvenience ="http://www.yonsei.ac.kr/sc/campus/convenience1.jsp?default:category_id=23&type=";
-                Intent intentC = new Intent(Intent.ACTION_VIEW, Uri.parse(sConvenience));
-                startActivity(intentC);
+                new MaterialDialog.Builder(getContext())
+                        .iconRes(R.drawable.ic_link_black_48dp)
+                        .limitIconToDefaultSize()
+                        .title(R.string.check_convenience_page)
+                        .positiveText(R.string.dialog_ok)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
+
+                                String sConvenience ="http://www.yonsei.ac.kr/sc/campus/convenience1.jsp?default:category_id=23&type=";
+                                Intent intentC = new Intent(Intent.ACTION_VIEW, Uri.parse(sConvenience));
+                                startActivity(intentC);
+                            }
+                        })
+                        .negativeText(R.string.dialog_cancel)
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
                 break;
             case R.id.about_button:
                 new Thread() {
@@ -180,7 +262,7 @@ public class HomeFragment extends FragmentBase implements View.OnClickListener{
                         getFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.home_root_container, new AboutFragment())
-                                .addToBackStack("about")
+                                .addToBackStack(getResources().getString(R.string.home_menu_about))
                                 .commit();
                     }
                 }.start();
@@ -191,44 +273,42 @@ public class HomeFragment extends FragmentBase implements View.OnClickListener{
                         getFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.home_root_container, new MenuFragment())
-                                .addToBackStack("menu")
+                                .addToBackStack(getResources().getString(R.string.home_menu_menu))
                                 .commit();
                     }
                 }.start();
                 break;
             case R.id.logout_button:
-                final NormalDialog dialog = new NormalDialog(getContext());
-                dialog.isTitleShow(false)
-                        .bgColor(Color.parseColor("#383838"))//
-                        .cornerRadius(5)//
-                        .btnText("취소", "확인")
-                        .content("로그아웃 할까요?")//
-                        .contentGravity(Gravity.CENTER)//
-                        .contentTextColor(Color.parseColor("#ffffff"))//
-                        .dividerColor(Color.parseColor("#222222"))//
-                        .btnTextSize(15.5f, 15.5f)//
-                        .btnTextColor(Color.parseColor("#ffffff"), Color.parseColor("#ffffff"))//
-                        .btnPressColor(Color.parseColor("#2B2B2B"))//
-                        .widthScale(0.85f)//
-                        .show();
-
-                dialog.setOnBtnClickL(
-                        new OnBtnClickL() {
+                new MaterialDialog.Builder(getContext())
+                        .iconRes(R.drawable.ic_exit_to_app_black_48dp)
+                        .limitIconToDefaultSize()
+                        .title(R.string.check_logout)
+                        .positiveText(R.string.dialog_ok)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
-                            public void onBtnClick() {
-                                dialog.dismiss();
-                            }
-                        },
-                        new OnBtnClickL() {
-                            @Override
-                            public void onBtnClick() {
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 dialog.dismiss();
 
                                 getActivity().finish();
-                                AWSMobileClient.defaultMobileClient().getIdentityManager().signOut();
                                 startActivity(new Intent(getContext(), SignInActivity.class));
+                                AWSMobileClient.defaultMobileClient().getIdentityManager().signOut();
                             }
-                        });
+                        })
+                        .negativeText(R.string.dialog_cancel)
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+                break;
+            case R.id.settings_button:
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.home_root_container, new SettingsFragment())
+                        .addToBackStack(getResources().getString(R.string.home_menu_settings))
+                        .commit();
                 break;
             default:
                 break;

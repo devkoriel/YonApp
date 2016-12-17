@@ -13,7 +13,7 @@
     >
     <TextView
         android:id="@+id/list_complex_title"
-        android:textSize="12dp"
+        android:textSize="12sp"
         android:layout_width="0dp"
         android:layout_weight="8.5"
         android:layout_height="wrap_content"
@@ -21,8 +21,8 @@
         />
     <TextView
         android:id="@+id/list_complex_caption"
-        android:gravity="right"
-        android:textSize="12dp"
+        android:gravity="end"
+        android:textSize="12sp"
         android:layout_width="0dp"
         android:layout_weight="1.5"
         android:layout_height="wrap_content"

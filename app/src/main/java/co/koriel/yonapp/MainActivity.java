@@ -12,44 +12,42 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.flyco.dialog.listener.OnBtnClickL;
-import com.flyco.dialog.widget.NormalDialog;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.ArrayList;
 
 import co.amazonaws.mobile.AWSMobileClient;
-import co.koriel.yonapp.fragment.SettingsFragment;
+import co.koriel.yonapp.helper.InAppBillingHelper;
 import co.koriel.yonapp.tab.TabPagerAdapter;
 import co.koriel.yonapp.util.BackPressCloseHandler;
 
 public class MainActivity extends AppCompatActivity {
-
     /** Bundle key for saving/restoring the toolbar title. */
     private final static String BUNDLE_KEY_TOOLBAR_TITLE = "title";
 
     /** The toolbar view control. */
     private Toolbar toolbar;
 
+    private TabLayout tabLayout;
     private TabPagerAdapter tabPagerAdapter;
     private int tabPosition;
 
@@ -58,9 +56,12 @@ public class MainActivity extends AppCompatActivity {
 
     private BackPressCloseHandler backPressCloseHandler;
 
-    private ImageButton menuCapture;
+    private MenuItem actionWrite;
+    private MenuItem actionShare;
+    private MenuItem actionCapture;
+    private MenuItem actionSync;
 
-    private Menu menu;
+    private InAppBillingHelper mHelper;
 
     /**
      * Initializes the Toolbar for use with the activity.
@@ -80,9 +81,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        this.menu = menu;
-        this.menu.findItem(R.id.action_share).setVisible(false);
-        this.menu.findItem(R.id.action_sync).setVisible(false);
+
+        actionWrite = menu.findItem(R.id.action_write);
+        actionShare = menu.findItem(R.id.action_share);
+        actionCapture = menu.findItem(R.id.action_capture);
+        actionSync = menu.findItem(R.id.action_sync);
+
+        actionWrite.setVisible(false);
+        actionShare.setVisible(false);
+        actionCapture.setVisible(false);
+        actionSync.setVisible(false);
         return true;
     }
 
@@ -109,18 +117,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         setupToolbar(savedInstanceState);
-        menuCapture = (ImageButton) findViewById(R.id.action_capture);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // Initializing the TabLayout
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 
         // Add tab into TabLayout
-        tabLayout.addTab(tabLayout.newTab().setText("홈"));
-        tabLayout.addTab(tabLayout.newTab().setText("공지사항"));
-        tabLayout.addTab(tabLayout.newTab().setText("시간표"));
-        tabLayout.addTab(tabLayout.newTab().setText("도서관"));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_home));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_notice));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_timetable));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_library));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         // Initializing ViewPager
@@ -140,41 +147,58 @@ public class MainActivity extends AppCompatActivity {
                 final TextView toolbarTitle = (TextView) findViewById(R.id.toolbarTitle);
 
                 if (position == 0) {
-                    int count;
-                    if ((count = tabPagerAdapter.getItem(0).getChildFragmentManager().getBackStackEntryCount()) > 0) {
-                        FragmentManager.BackStackEntry backStackEntry = tabPagerAdapter.getItem(0).getChildFragmentManager().getBackStackEntryAt(count - 1);
-                        String tag = backStackEntry.getName();
+                    try {
+                        int count;
+                        if ((count = tabPagerAdapter.getItem(0).getChildFragmentManager().getBackStackEntryCount()) > 0) {
+                            FragmentManager.BackStackEntry backStackEntry = tabPagerAdapter.getItem(0).getChildFragmentManager().getBackStackEntryAt(count - 1);
+                            String tag = backStackEntry.getName();
 
-                        if (tag.equals("oneline_board") || tag.equals("oneline_board_comment")) toolbarTitle.setText("한줄 게시판");
-                        else if (tag.equals("solution_cloud")) toolbarTitle.setText("솔루션 클라우드");
-                        else if (tag.equals("school_calendar")) toolbarTitle.setText("학사일정");
-                        else if (tag.equals("book_search")) toolbarTitle.setText("도서 검색");
-                        else if (tag.equals("menu")) toolbarTitle.setText("주간식단");
-                        else if (tag.equals("paper_search")) toolbarTitle.setText("학위논문 검색");
-                        else if (tag.equals("about")) toolbarTitle.setText("About");
+                            toolbarTitle.setText(tag);
+
+                            if (tag.equals(getResources().getString(R.string.home_menu_oneline)) && count == 1) {
+                                actionWrite.setVisible(true);
+                            } else {
+                                actionWrite.setVisible(false);
+                            }
+                        }
+                        actionShare.setVisible(false);
+                        actionCapture.setVisible(false);
+                        actionSync.setVisible(false);
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
                     }
-
-                    menuCapture.setVisibility(View.INVISIBLE);
-                    menu.findItem(R.id.action_sync).setVisible(false);
-                    menu.findItem(R.id.action_share).setVisible(false);
                 } else if (position == 1) {
-                    toolbarTitle.setText("연앱");
-                    menuCapture.setVisibility(View.INVISIBLE);
-                    menu.findItem(R.id.action_sync).setVisible(false);
-                    Log.d(MainActivity.class.getSimpleName(), String.valueOf(tabPagerAdapter.getItem(tabPosition).getChildFragmentManager().getBackStackEntryCount()));
-                    if (tabPagerAdapter.getItem(tabPosition).getChildFragmentManager().getBackStackEntryCount() == 0) {
-                        menu.findItem(R.id.action_share).setVisible(false);
-                    } else {
-                        menu.findItem(R.id.action_share).setVisible(true);
+                    toolbarTitle.setText(R.string.app_name);
+                    try {
+                        actionWrite.setVisible(false);
+                        actionCapture.setVisible(false);
+                        actionSync.setVisible(false);
+                        if (tabPagerAdapter.getItem(tabPosition).getChildFragmentManager().getBackStackEntryCount() == 0) {
+                            actionShare.setVisible(false);
+                        } else {
+                            actionShare.setVisible(true);
+                        }
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
                     }
                 } else if (position == 2) {
-                    menuCapture.setVisibility(View.VISIBLE);
-                    menu.findItem(R.id.action_sync).setVisible(true);
-                    menu.findItem(R.id.action_share).setVisible(false);
+                    try {
+                        actionWrite.setVisible(false);
+                        actionShare.setVisible(false);
+                        actionCapture.setVisible(true);
+                        actionSync.setVisible(true);
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
                 } else {
-                    menuCapture.setVisibility(View.INVISIBLE);
-                    menu.findItem(R.id.action_sync).setVisible(false);
-                    menu.findItem(R.id.action_share).setVisible(false);
+                    try {
+                        actionWrite.setVisible(false);
+                        actionShare.setVisible(false);
+                        actionCapture.setVisible(false);
+                        actionSync.setVisible(false);
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -188,45 +212,62 @@ public class MainActivity extends AppCompatActivity {
                 tabPosition = tab.getPosition();
                 final TextView toolbarTitle = (TextView) findViewById(R.id.toolbarTitle);
 
-                menu.findItem(R.id.action_share).setVisible(false);
-
                 if (tabPosition == 0) {
-                    int count;
-                    if ((count = tabPagerAdapter.getItem(0).getChildFragmentManager().getBackStackEntryCount()) > 0) {
-                        FragmentManager.BackStackEntry backStackEntry = tabPagerAdapter.getItem(0).getChildFragmentManager().getBackStackEntryAt(count - 1);
-                        String tag = backStackEntry.getName();
+                    try {
+                        int count;
+                        if ((count = tabPagerAdapter.getItem(0).getChildFragmentManager().getBackStackEntryCount()) > 0) {
+                            FragmentManager.BackStackEntry backStackEntry = tabPagerAdapter.getItem(0).getChildFragmentManager().getBackStackEntryAt(count - 1);
+                            String tag = backStackEntry.getName();
 
-                        if (tag.equals("oneline_board") || tag.equals("oneline_board_comment")) toolbarTitle.setText("한줄 게시판");
-                        else if (tag.equals("solution_cloud")) toolbarTitle.setText("솔루션 클라우드");
-                        else if (tag.equals("school_calendar")) toolbarTitle.setText("학사일정");
-                        else if (tag.equals("book_search")) toolbarTitle.setText("도서 검색");
-                        else if (tag.equals("menu")) toolbarTitle.setText("주간식단");
-                        else if (tag.equals("paper_search")) toolbarTitle.setText("학위논문 검색");
-                        else if (tag.equals("about")) toolbarTitle.setText("About");
+                            toolbarTitle.setText(tag);
+
+                            if (tag.equals(getResources().getString(R.string.home_menu_oneline)) && count == 1) {
+                                actionWrite.setVisible(true);
+                            } else {
+                                actionWrite.setVisible(false);
+                            }
+                        }
+
+                        actionShare.setVisible(false);
+                        actionCapture.setVisible(false);
+                        actionSync.setVisible(false);
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
                     }
-
-                    menuCapture.setVisibility(View.INVISIBLE);
-                    menu.findItem(R.id.action_sync).setVisible(false);
-                    menu.findItem(R.id.action_share).setVisible(false);
                 } else if (tabPosition == 1) {
-                    toolbarTitle.setText("연앱");
-                    menuCapture.setVisibility(View.INVISIBLE);
-                    menu.findItem(R.id.action_sync).setVisible(false);
-                    if (tabPagerAdapter.getItem(tabPosition).getChildFragmentManager().getBackStackEntryCount() == 0) {
-                        menu.findItem(R.id.action_share).setVisible(false);
-                    } else {
-                        menu.findItem(R.id.action_share).setVisible(true);
+                    toolbarTitle.setText(R.string.app_name);
+                    try {
+                        actionWrite.setVisible(false);
+                        actionCapture.setVisible(false);
+                        actionSync.setVisible(false);
+                        if (tabPagerAdapter.getItem(tabPosition).getChildFragmentManager().getBackStackEntryCount() == 0) {
+                            actionShare.setVisible(false);
+                        } else {
+                            actionShare.setVisible(true);
+                        }
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
                     }
                 } else if (tabPosition == 2) {
-                    toolbarTitle.setText("연앱");
-                    menuCapture.setVisibility(View.VISIBLE);
-                    menu.findItem(R.id.action_sync).setVisible(true);
-                    menu.findItem(R.id.action_share).setVisible(false);
+                    toolbarTitle.setText(R.string.app_name);
+                    try {
+                        actionWrite.setVisible(false);
+                        actionShare.setVisible(false);
+                        actionCapture.setVisible(true);
+                        actionSync.setVisible(true);
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
                 } else {
-                    toolbarTitle.setText("연앱");
-                    menuCapture.setVisibility(View.INVISIBLE);
-                    menu.findItem(R.id.action_sync).setVisible(false);
-                    menu.findItem(R.id.action_share).setVisible(false);
+                    toolbarTitle.setText(R.string.app_name);
+                    try {
+                        actionWrite.setVisible(false);
+                        actionShare.setVisible(false);
+                        actionCapture.setVisible(false);
+                        actionSync.setVisible(false);
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -237,7 +278,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tabPosition);
+                viewPager.setCurrentItem(tab.getPosition());
+
+                if (tabPagerAdapter.getItem(tabPosition).getChildFragmentManager().getBackStackEntryCount() > 0) {
+                    onBackPressed();
+                }
             }
         });
     }
@@ -266,35 +311,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        switch (id) {
-            case R.id.action_settings:
-                new Thread() {
-                    public void run() {
-                        tabPagerAdapter.getItem(tabPosition).getChildFragmentManager()
-                                .beginTransaction()
-                                .replace(tabPagerAdapter.getItem(tabPosition).getView().getId(), new SettingsFragment())
-                                .addToBackStack(null)
-                                .commit();
-                    }
-                }.start();
-                break;
-
-            default:
-                break;
-
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     protected void onSaveInstanceState(final Bundle bundle) {
         super.onSaveInstanceState(bundle);
         // Save the title so it will be restored properly to match the view loaded when rotation
@@ -308,41 +324,73 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             final ArrayList<String> arrayList = intent.getStringArrayListExtra(PushListenerService.INTENT_SNS_NOTIFICATION_DATA);
+            String type = arrayList.get(0);
 
-            final NormalDialog dialog = new NormalDialog(MainActivity.this);
-            dialog.style(NormalDialog.STYLE_TWO)
-                    .bgColor(Color.parseColor("#383838"))//
-                    .cornerRadius(5)//
-                    .btnText("취소", "확인")
-                    .title(arrayList.get(1))
-                    .content(arrayList.get(2))//
-                    .contentGravity(Gravity.CENTER)//
-                    .contentTextColor(Color.parseColor("#ffffff"))//
-                    .dividerColor(Color.parseColor("#222222"))//
-                    .btnTextSize(15.5f, 15.5f)//
-                    .btnTextColor(Color.parseColor("#ffffff"), Color.parseColor("#ffffff"))//
-                    .btnPressColor(Color.parseColor("#2B2B2B"))//
-                    .widthScale(0.85f)//
-                    .show();
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-            dialog.setOnBtnClickL(
-                    new OnBtnClickL() {
-                        @Override
-                        public void onBtnClick() {
-                            dialog.dismiss();
-                        }
-                    },
-                    new OnBtnClickL() {
-                        @Override
-                        public void onBtnClick() {
-                            dialog.dismiss();
+            if (type.equals(PushListenerService.TYPE_ANNOUNCEMENT) && prefs.getBoolean("push_notice_all", true)) {
+                new MaterialDialog.Builder(MainActivity.this)
+                        .iconRes(R.drawable.ic_announcement_black_48dp)
+                        .limitIconToDefaultSize()
+                        .title(arrayList.get(1))
+                        .content(arrayList.get(2))
+                        .positiveText(R.string.dialog_ok)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+            } else if (type.equals(PushListenerService.TYPE_ONELINE_NEW_COMMENT) && prefs.getBoolean("push_oneline_new_comment", true)) {
+                new MaterialDialog.Builder(MainActivity.this)
+                        .iconRes(R.drawable.ic_chat_black_48dp)
+                        .limitIconToDefaultSize()
+                        .title(arrayList.get(1))
+                        .content(arrayList.get(2))
+                        .positiveText(R.string.dialog_ok)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
 
-                            Intent restartIntent = getIntent();
-                            restartIntent.putStringArrayListExtra("arrayList", arrayList);
-                            finish();
-                            startActivity(restartIntent);
-                        }
-                    });
+                                Intent restartIntent = getIntent();
+                                restartIntent.putStringArrayListExtra("arrayList", arrayList);
+                                finish();
+                                startActivity(restartIntent);
+                            }
+                        })
+                        .negativeText(R.string.dialog_cancel)
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+            } else if (type.equals(PushListenerService.TYPE_NEW_NOTICE) && prefs.getBoolean("push_yscec_new_notice", true)) {
+                new MaterialDialog.Builder(MainActivity.this)
+                        .iconRes(R.drawable.ic_fiber_new_black_48dp)
+                        .limitIconToDefaultSize()
+                        .title(arrayList.get(1))
+                        .content(arrayList.get(2))
+                        .positiveText(R.string.dialog_ok)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
+                                tabLayout.getTabAt(1).select();
+                            }
+                        })
+                        .negativeText(R.string.dialog_cancel)
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+            }
         }
     };
 
@@ -368,7 +416,7 @@ public class MainActivity extends AppCompatActivity {
             tabPagerAdapter.getItem(tabPosition).getChildFragmentManager().popBackStack();
 
             if (tabPosition == 1 && count == 2) {
-                menu.findItem(R.id.action_share).setVisible(true);
+                actionShare.setVisible(true);
             }
         } else {
             backPressCloseHandler.onBackPressed();

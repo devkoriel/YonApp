@@ -3,6 +3,8 @@
     <!-- CUSTOMIZE THESE FOR YOUR APP -->
 
     <string name="app_name">연앱</string>
+    <string name="title_activity_sign_in">로그인</string>
+    <string name="title_activity_main">@string/app_name</string>
     <!-- Suffix after '-' must be the app package name as specified in the build.gradle file. This
        is used by the DownloadQueueProvider class. -->
     <string name="download_queue_provider_authority">com.amazonaws.mobile.downloader-co.koriel.yonapp</string>
@@ -12,83 +14,128 @@
     <string name="google_cloud_messaging_package">co.koriel.yonapp</string>
 
     <!-- REQUIRED FOR GENERAL APP FUNCTIONALITY - YOU MAY WANT TO KEEP THESE -->
+    <string name="tab_home">홈</string>
+    <string name="tab_notice">공지사항</string>
+    <string name="tab_timetable">시간표</string>
+    <string name="tab_library">도서관</string>
 
-    <string name="main_nav_menu_item_home">Home</string>
-    <string name="title_activity_item_detail">Item Detail</string>
-    <string name="title_activity_item_list">Item List</string>
-    <string name="title_activity_main">@string/app_name</string>
-    <string name="title_activity_sign_in">Sign-in</string>
-    <string name="button_text_sign_in">SIGN IN</string>
-    <string name="button_text_sign_out">SIGN OUT</string>
-    <string name="main_nav_menu_default_user_text">\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020\u0020</string>
-    <string name="content_helper_error_title">No Content Viewer</string>
-    <string name="content_helper_error_no_app">No Viewing App exists for content type \'%s\'.</string>
+    <string name="home_menu_oneline">한줄 게시판</string>
+    <string name="home_menu_solution_cloud">솔루션 클라우드</string>
+    <string name="home_menu_school_schedule">학사일정</string>
+    <string name="home_menu_book_search">도서 검색</string>
+    <string name="home_menu_shuttle">셔틀버스</string>
+    <string name="home_menu_convenience">편의시설</string>
+    <string name="home_menu_menu">주간식단</string>
+    <string name="home_menu_paper_search">학위논문 검색</string>
+    <string name="home_menu_logout">로그아웃</string>
+    <string name="home_menu_settings">환경설정</string>
+    <string name="home_menu_about">About</string>
+    <string name="push_alert">푸시 알림</string>
+
+    <string name="portal_auth">연세 포탈 인증하기</string>
+    <string name="privacy_policy">개인정보 처리방침</string>
+    <string name="signin_auth">포탈 인증 중</string>
+    <string name="auth_success">인증 성공</string>
+    <string name="auth_fail">인증 실패</string>
+    <string name="auth_continue">아래 확인 버튼을 눌러 계속하세요</string>
+    <string name="blocked_user">차단된 사용자입니다</string>
+    <string name="please_enter_student_id_passwd">학번과 비밀번호를 입력해주세요</string>
+    <string name="please_enter_student_id">학번을 입력해주세요</string>
+    <string name="please_enter_student_passwd">비밀번호를 입력해주세요</string>
+    <string name="login_error">로그인 에러</string>
+    <string name="login_cancel">로그인이 취소되었습니다</string>
+    <string name="login_fail">로그인에 실패했습니다</string>
+    <string name="please_login_again">다시 로그인해주세요</string>
+    <string name="auth_check">학번과 비밀번호를 올바르게 적었는 지 확인해보세요</string>
+    <string name="please_wait">잠시 기다려주세요&#8230;</string>
+
+    <string name="dialog_ok">확인</string>
+    <string name="dialog_cancel">취소</string>
+
+    <string name="select_share_medium">공유할 서비스 선택</string>
+    <string name="loading">불러오는 중</string>
+    <string name="registering">등록 중</string>
+    <string name="registered">등록 완료</string>
+    <string name="cannot_include_space">공백을 포함할 수 없습니다</string>
+    <string name="please_register_again">다시 설정해주세요</string>
+    <string name="already_occupied_nickname">이미 있는 닉네임</string>
+    <string name="social_gathering_warning">과도한 친목질은 한줄 게시판에 해가 됩니다</string>
+
+    <string name="student_id">학번</string>
+    <string name="student_passwd">비밀번호</string>
+    <string name="sign_in_with_google">구글 계정으로 로그인</string>
+    <string name="sign_in_with_facebook">페이스북으로 로그인</string>
+
+    <string name="app_info">연앱 정보</string>
+    <string name="check_logout">로그아웃 할까요?</string>
+    <string name="check_blog">블로그로 이동할까요?</string>
+    <string name="check_bus_page">셔틀버스 웹페이지로 이동할까요?</string>
+    <string name="check_convenience_page">편의시설 웹페이지로 이동할까요?</string>
+    <string name="check_update">최신 버전으로 업데이트할까요?</string>
+    <string name="lastest_version">이미 최신 버전입니다</string>
+
+    <string name="please_connect_internet">인터넷에 연결해주세요</string>
+    <string name="please_write_oneline">한줄을 입력해주세요</string>
+    <string name="please_write_comment">댓글을 입력해주세요</string>
+    <string name="error_occured">오류가 발생했습니다</string>
+    <string name="warn_too_often">너무 자주 작성할 수 없습니다</string>
+    <string name="action_like">좋아요 했습니다</string>
+    <string name="already_action_like">이미 좋아요 했습니다</string>
+    <string name="action_report">신고했습니다</string>
+    <string name="already_action_report">이미 신고했습니다</string>
+    <string name="copied_to_clipboard">클립보드에 복사되었습니다</string>
+    <string name="no_nickname">고정 닉네임이 없습니다</string>
+    <string name="please_register_nickname">[홈 > 환경설정]에서 고정 닉네임을 등록해주세요</string>
+    <string name="delete">삭제</string>
+    <string name="copy">복사</string>
+    <string name="share">공유</string>
+    <string name="capture">캡처</string>
+    <string name="refresh">새로고침</string>
+    <string name="like">추천</string>
+    <string name="report">신고</string>
+    <string name="photo">사진</string>
+
+    <string name="central_library">중앙도서관</string>
+    <string name="samsung_library">연세 • 삼성 학술정보관</string>
+
+    <string name="search">검색&#8230;</string>
+    <string name="searching">검색 중&#8230;</string>
+
+    <string name="oneline_header">아름답고 깨끗한 한줄 게시판 만듭시다</string>
+    <string name="anonymous">익명</string>
+    <string name="oneline">한줄</string>
+    <string name="oneline_input">한줄 작성하기</string>
+    <string name="oneline_input_content">바른 말, 고운 말. 연세인의 자부심입니다.</string>
+    <string name="oneline_input_hint">새 한줄을 작성하세요</string>
+    <string name="oneline_input_prefill"></string>
+    <string name="comment">댓글</string>
+    <string name="write">작성</string>
+    <string name="writer_suffix">(글쓴이)</string>
+    <string name="attach_picture">사진 첨부</string>
+    <string name="attach_picture_cancel">사진 첨부 취소</string>
+    <string name="attach_picture_failure_title_text">사진 첨부 오류</string>
+    <string name="attach_picture_failure_text">사진을 첨부하는 과정에서 오류가 발생했습니다</string>
+    <string name="check_cancel_write">한줄 작성을 취소할까요?</string>
+
+    <string name="year_ago">년 전</string>
+    <string name="month_ago">개월 전</string>
+    <string name="week_ago">주 전</string>
+    <string name="day_ago">일 전</string>
+    <string name="hour_ago">시간 전</string>
+    <string name="minute_ago">분 전</string>
+    <string name="just_ago">방금 전</string>
+
+    <string name="push_notice_all_title">앱 전체 공지사항</string>
+    <string name="push_notice_all_summary">앱 전체 공지사항 알림을 받습니다</string>
+    <string name="push_oneline_new_comment_title">한줄게시판 새 댓글</string>
+    <string name="push_oneline_new_comment_summary">내 한줄에 댓글이 달리면 알림을 받습니다</string>
+    <string name="push_yscec_new_notice_title">YSCEC 새 공지사항</string>
+    <string name="push_yscec_new_notice_summary">새로운 공지사항이 있으면 알림을 받습니다</string>
+    <string name="oneline_static_nickname_title">고정 닉네임</string>
+    <string name="oneline_static_nickname_summary">한줄 게시판에서 사용할 고정 닉네임을 등록합니다</string>
+    <string name="oneline_static_nickname_dialog">사용할 고정 닉네임을 입력하세요\n(10글자 이내)</string>
 
     <!-- USED BY DEMO FEATURES ONLY - YOU CAN DISCARD THESE WITH THE DEMO FOLDER -->
-
-    <string name="fragment_demo_instruction_overview_header">Overview</string>
-    <string name="fragment_demo_instruction_description_header">Sample App Features</string>
-    <string name="feature_sign_in_title">프로필</string>
-    <string name="feature_sign_in_subtitle">접속 정보를 확인할 수 있습니다.</string>
-    <string name="feature_sign_in_overview">Whether your users sign in or not, the User sign-in feature configures Amazon Cognito to uniquely identify the user and provide your app the appropriate credentials to access your AWS resources.</string>
-    <string name="feature_sign_in_description">The Sample App demonstrates assignment of a unique identifier for the user, the Amazon Cognito User ID. If optional or mandatory User Sign-in has been enabled in your project, then the Sample App also includes a sign-in screen, with a button for each configured sign-in provider.</string>
-    <string name="feature_sign_in_powered_by">Powered by Amazon Cognito</string>
-    <string name="feature_sign_in_demo_button">Demo User Identity</string>
-    <string name="feature_app_analytics_title">App Analytics</string>
-    <string name="feature_app_analytics_subtitle">Collect app usage information and analyze key metrics.</string>
-    <string name="feature_app_analytics_overview">Amazon Mobile Analytics allows you to collect, visualize, and export app event data. You can track app usage and monetization in the Amazon Mobile Analytics console, or run custom analysis by automatically exporting app events to Amazon S3 and Amazon Redshift.</string>
-    <string name="feature_app_analytics_description">The Sample App records user session activity in metrics that may be viewed in the Amazon Mobile Analytics console. It also provides buttons to demonstrate generating a custom or monetization event, which records user activity, such as the sale of an in-app purchase item.</string>
-    <string name="feature_app_analytics_powered_by">Powered by Amazon Mobile Analytics</string>
-    <string name="feature_app_analytics_demo_button">Demo App Analytics</string>
-    <string name="feature_app_content_delivery_title">App Content Delivery</string>
-    <string name="feature_app_content_delivery_subtitle">Store and distribute media assets and other files.</string>
-    <string name="feature_app_content_delivery_overview">Store app assets like resource files in the cloud. Download and cache files in your app.</string>
-    <string name="feature_app_content_delivery_description">The Sample App demonstrates file download and caching by providing a remote file explorer. You can download files from Amazon S3 (and optionally Amazon CloudFront) and pin them to the cache on device by clicking on each file entry. From the menu, you can download all recent files, set the cache size limit, or clear the cache.</string>
-    <string name="feature_app_content_delivery_powered_by">Powered by Amazon S3 and Amazon CloudFront</string>
-    <string name="feature_app_content_delivery_demo_button">Demo Content Delivery</string>
-    <string name="feature_push_notifications_title">설정</string>
-    <string name="feature_push_notifications_subtitle">앱 의설정 을바 꿀 수있습니다.</string>
-    <string name="feature_push_notifications_overview">Receive push notifications on your device and subscribe to topics you have created.</string>
-    <string name="feature_push_notifications_description">The Sample App allows you to register to receive push notifications, and it provides checkboxes to demonstrate subscribing to receive messages from your configured Amazon SNS topics.</string>
-    <string name="feature_push_notifications_powered_by">Powered by Amazon SNS</string>
-    <string name="feature_push_notifications_demo_button">Demo Push Notifications</string>
-    <string name="feature_cloud_logic_title">Cloud Logic</string>
-    <string name="feature_cloud_logic_subtitle">Run backend code in the cloud.</string>
-    <string name="feature_cloud_logic_overview">Run backend code in the cloud.</string>
-    <string name="feature_cloud_logic_description">The Sample App demonstrates the ability of a mobile app to invoke an AWS Lambda function. Enter the name of the function you wish to run and provide a list of request inputs. Invoke the function and see results.</string>
-    <string name="feature_cloud_logic_powered_by">Powered by AWS Lambda</string>
-    <string name="feature_cloud_logic_demo_button">Demo Cloud Logic</string>
-    <string name="main_fragment_title_user_identity">User Identity</string>
-    <string name="main_fragment_subtitle_user_identity">Keep track of users</string>
-    <string name="identity_demo_text_view_description">Displays the user identity.</string>
-    <string name="unknown_user">Guest User</string>
-    <string name="user_id">USER IDENTIFIER</string>
-    <string name="identity_demo_textview_username_description">User\'s name</string>
-    <string name="identity_demo_textview_userid_description">User\'s unique identifier</string>
-    <string name="identity_demo_unknown_identity_text">&lt;UNKNOWN IDENTITY&gt;</string>
-    <string name="identity_demo_dialog_dismiss_text">DISMISS</string>
-    <string name="identity_demo_error_dialog_title">Failed Identity Retrieval</string>
-    <string name="identity_demo_error_message_failed_get_identity">Could not retrieve the user identity:\u0020</string>
-    <string name="main_fragment_title_push_notification">Push Notifications</string>
-    <string name="main_fragment_subtitle_push_notification">Engage users with push notifications</string>
-    <string name="push_enable_choice_text">푸시 알림 켜기</string>
-    <string name="push_demo_title">새로운 공지사항이 있습니다</string>
-    <string name="push_demo_progress_dialog_title">잠시 기다려주세요 &#8230;</string>
-    <string name="push_demo_wait_message_register">Registering device for push notification.</string>
-    <string name="push_demo_wait_message_update_notification">푸시 알림 상태를 업데이트 중.</string>
-    <string name="push_demo_wait_message_update_subscription">Updating subscription status.</string>
-    <string name="push_demo_error_message_register">Failed to register device due to \'%s\'.</string>
-    <string name="push_demo_error_message_update_notification">Failed to update notification status due to \'%s\'.</string>
-    <string name="push_demo_error_message_update_subscription">Failed to update subscription due to \'%s\'.</string>
-    <string name="push_demo_error_message_google_play_services_unavailable">Push Notifications are disabled because Google Play Services are unavailable on the device.</string>
-    <string name="push_demo_confirm_message_unsubscribe">Do you want to unsubscribe from \'%s\'.</string>
-    <string name="main_fragment_title_app_analytics">App Analytics</string>
-    <string name="main_fragment_subtitle_app_analytics">Understand customer usage</string>
-    <string name="app_analytics_long_description">Note that events are batch processed and may take up to 60 minutes to display in the console.</string>
-    <string name="generate_custom_event">Generate Custom Event</string>
-    <string name="generate_monetization_event">Generate Monetization Event</string>
-    <string name="main_fragment_title_content_delivery">Content Delivery</string>
-    <string name="main_fragment_subtitle_content_delivery">Store app assets like resource files in the cloud. Download and cache files in your app.</string>
     <string name="content_dialog_ok">OK</string>
     <string name="content_cache_summary_text">솔루션 신청: https://goo.gl/tE1dH0</string>
     <string name="content_cache_limit_text">제한</string>
@@ -115,128 +162,13 @@
     <string name="content_list_failure_text">Failure Listing Content</string>
     <string name="content_transfer_failure_text">Transfer Failure</string>
     <string name="content_removal_error_text">Content Removal Error</string>
-    <string name="content_permission_failure_title_text">Permission Failure</string>
-    <string name="content_permission_failure_text">Denial of Read External Storage Permission has disabled the ability to upload user files.</string>
-    <string name="main_fragment_title_cloud_logic">Cloud Logic</string>
-    <string name="main_fragment_subtitle_cloud_logic">Deploy app logic to the cloud.</string>
-    <string name="cloud_logic_function">FUNCTION</string>
-    <string name="cloud_logic_request">REQUEST</string>
-    <string name="cloud_logic_result">RESULT</string>
-    <string name="cloud_logic_reset">RESET</string>
-    <string name="cloud_logic_invoke">INVOKE</string>
-    <string name="cloud_logic_error_title">Error</string>
-    <string name="cloud_logic_error_dismiss">Dismiss</string>
-    <string name="feature_nosql_database_title">NoSQL Database</string>
-    <string name="feature_nosql_database_subtitle">Store data in the cloud.</string>
-    <string name="feature_nosql_database_overview">Store data in the cloud.</string>
-    <string name="feature_nosql_database_description">The Sample App demonstrates how to access your configured Amazon DynamoDB NoSQL database tables. Select your table, insert sample data, and perform queries by choosing from a list of examples. Hold down an item in query results to update or delete the item. When you\'re done with the demo, you can remove the sample data from your table.</string>
-    <string name="feature_nosql_database_powered_by">Powered by Amazon DynamoDB</string>
-
-    <string name="main_fragment_title_nosql_database">NoSQL Database</string>
-    <string name="feature_nosql_database_demo_button">Demo NoSQL Database</string>
-
-    <string name="main_fragment_title_nosql_select_operation">NoSQL Demo: %s</string>
-    <string name="main_fragment_title_nosql_select_table">NoSQL Demo: Select Table</string>
-
-    <string name="nosql_select_table_item_partition_key_text">Partition Key</string>
-    <string name="nosql_select_table_item_sort_key_text">Sort Key</string>
-    <string name="nosql_select_table_index_count_text">Indexes</string>
-
-    <string name="nosql_dialog_title_failed_dynamodb_describe_table_text">Failed retrieving schema for table \'%s\'.</string>
-    <string name="nosql_dialog_title_failed_operation_text">Operation Failed</string>
-    <string name="nosql_dialog_title_failed_loading_more_results">Failed Loading More Results</string>
-    <string name="nosql_dialog_title_failed_update_item_text">Update Item Failed</string>
-    <string name="nosql_dialog_title_failed_delete_item_text">Delete Item Failed</string>
-
-    <string name="nosql_database_table_item_creation_date_text">Created %s</string>
-    <string name="nosql_insert_sample_data_button_text">INSERT SAMPLE DATA</string>
-    <string name="nosql_remove_sample_data_button_text">REMOVE SAMPLE DATA</string>
-
-    <string name="nosql_dialog_title_remove_confirmation">Confirm Removal of Sample Items</string>
-    <string name="nosql_dialog_message_remove_confirmation">This will remove all your sample items.  Are you sure?</string>
-
-    <string name="nosql_dialog_title_added_sample_data_text">Added Sample Data</string>
-    <string name="nosql_dialog_message_added_sample_data_text">20 Sample Items with random data were added to your table.</string>
-    <string name="nosql_dialog_title_removed_sample_data_text">Removed Sample Data</string>
-    <string name="nosql_dialog_message_removed_sample_data_text">All Sample Items have been removed from your table.</string>
-    <string name="nosql_dialog_ok_text">OK</string>
-
-    <!-- NoSQL Demo Operations Headers -->
-    <string name="nosql_operation_header_get">Get</string>
-    <string name="nosql_operation_header_primary_queries">Primary Index Queries</string>
-    <string name="nosql_operation_header_secondary_queries">Secondary Index Queries (%s)</string>
-    string>
-    <string name="nosql_operation_header_scan">Scan</string>string>
-    <!-- NoSQL Demo Get Operations -->
-    <string name="nosql_operation_get_by_partition_text">Get Item</string>
-    <string name="nosql_operation_example_get_by_partition_text">Find Item with %1$s = \'%2$s\'.</string>
-
-    <string name="nosql_operation_get_by_partition_and_sort_text">Get Item</string>
-    <string name="nosql_operation_example_get_by_partition_and_sort_text">Find Item with %1$s = \'%2$s\' and %3$s = \'%4$s\'.</string>
-
-    <!-- NoSQL Demo Query Operations -->
-    <string name="nosql_operation_title_query_by_partition_and_sort_condition_text">Query by Partition Key and Sort Condition</string>
-    <string name="nosql_operation_example_query_by_partition_and_sort_condition_text">Find all items with %1$s = \'%2$s\' and %3$s &lt; \'%4$s\'.</string>
-
-    <string name="nosql_operation_title_query_by_partition_text">Query by Partition Key</string>
-    <string name="nosql_operation_example_query_by_partition_text">Find all items with %1$s = \'%2$s\'.</string>
-
-    <string name="nosql_operation_title_query_by_partition_and_filter_text">Query by Partition Key and Filter</string>
-    <string name="nosql_operation_example_query_by_partition_and_filter_text">Find all items with %1$s = \'%2$s\' and %3$s &gt; \'%4$s\'.</string>
-
-    <string name="nosql_operation_title_query_by_partition_sort_condition_and_filter_text">Query by Partition Key, Sort Condition, and Filter</string>
-    <string name="nosql_operation_example_query_by_partition_sort_condition_and_filter_text">Find all items with %1$s = \'%2$s\', %3$s &lt; \'%4$s\', and %5$s &gt; \'%6$s\'.</string>
-
-    <string name="nosql_operation_title_index_query_by_partition_and_sort_condition_text">Query by Partition Key and Sort Condition</string>
-    <string name="nosql_operation_example_index_query_by_partition_and_sort_condition_text">Find all items with %1$s = \'%2$s\' and %3$s &gt; \'%4$s\'.</string>
-
-    <string name="nosql_operation_title_index_query_by_partition_text">Query by Partition Key</string>
-    <string name="nosql_operation_example_index_query_by_partition_text">Find all items with %1$s = \'%2$s\'.</string>
-
-    <string name="nosql_operation_title_index_query_by_partition_and_filter_text">Query by Partition Key and Filter</string>
-    <string name="nosql_operation_example_index_query_by_partition_and_filter_text">Find all items with %1$s = \'%2$s\' and %3$s &gt; \'%4$s\'.</string>
-
-    <string name="nosql_operation_title_index_query_by_partition_sort_condition_and_filter_text">Query by Partition Key, Sort Condition, and Filter</string>
-    <string name="nosql_operation_example_index_query_by_partition_sort_condition_and_filter_text">Find all items with %1$s = \'%2$s\', %3$s &lt; \'%4$s\', and %5$s &gt; \'%6$s\'.</string>
-
-    <string name="nosql_operation_title_scan_with_filter">Scan with Filter</string>
-    <string name="nosql_operation_example_scan_with_filter">Find all items with \'%1$s\' &gt; \'%2$s\'.</string>
-    <string name="nosql_operation_example_scan_with_filter_on_partition_and_sort">Find all items with \'%1$s\' beginning with \'%2$s\' and \'%3$s\' beginning with \'%4$s\'.</string>
-    <string name="nosql_operation_example_scan_with_filter_on_partition">Find all items with \'%1$s\' beginning with \'%2$s\'</string>
-
-    <string name="nosql_operation_title_scan_without_filter">Scan</string>
-    <string name="nosql_operation_example_scan_without_filter">Show all items in the table.</string>
-
-    <string name="nosql_dialog_title_pending_results_text">Please wait&#8230;</string>
-    <string name="nosql_dialog_message_pending_results_text">Waiting for the response to load the results.</string>
-
-    <string name="nosql_dialog_title_scan_warning_text">WARNING: Scan is Expensive</string>
-    <string name="nosql_dialog_message_scan_warning_text">This operation scans the entire table and should not generally be used in a production app.</string>
-
-    <string name="nosql_dialog_title_no_results_text">No Matching Items Found</string>
-    <string name="nosql_dialog_message_no_results_text">No items match your criteria. Insert more sample data and try again.</string>
-
-    <string name="nosql_context_menu_title_for_results_text">Update or Delete Item</string>
-    <string name="nosql_context_menu_entry_update_item_text">Update Item</string>
-    <string name="nosql_context_menu_entry_delete_item_text">Delete Item</string>
-    <string name="nosql_dialog_title_confirm_update_item_text">Confirm Update</string>
-    <string name="nosql_dialog_message_confirm_update_item_text">Are you sure you want to update the selected item?</string>
-    <string name="nosql_dialog_title_confirm_delete_item_text">Confirm Delete</string>
-    <string name="nosql_dialog_message_confirm_delete_item_text">Are you sure you want to delete the selected item?</string>
+    <string name="content_permission_failure_title_text">권한 오류</string>
+    <string name="content_permission_failure_text">외부 저장소 읽기 권한이 없어 파일을 불러올 수 없습니다</string>
+    <string name="content_helper_error_title">No Content Viewer</string>
+    <string name="content_helper_error_no_app">No Viewing App exists for content type \'%s\'.</string>
 
     <string name="fragment_notice_content_attachment">첨부파일:\n %1$s</string>
 
-    <string-array name="book_search_option">
-        <item>전체</item>
-        <item>서명</item>
-        <item>저자</item>
-        <item>출판사</item>
-        <item>주제어</item>
-    </string-array>
-
     <string name="native_ad_unit_id">ca-app-pub-7714914181398758/9029839423</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

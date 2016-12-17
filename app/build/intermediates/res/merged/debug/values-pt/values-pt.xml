@@ -36,5 +36,6 @@
     <string name="com_facebook_share_button_text">Compartilhar</string>
     <string name="com_facebook_tooltip_default">Novidade! Você está no controle - escolha quais informações quer compartilhar com os aplicativos.</string>
     <string name="messenger_send_button_text">Enviar</string>
+    <string msgid="146198913615257606" name="search_menu_title">"Pesquisar"</string>
     <string msgid="2869576371154716097" name="status_bar_notification_info_overflow">"999+"</string>
 </resources>

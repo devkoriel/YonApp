@@ -2,6 +2,7 @@
 <LinearLayout
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="@color/main_background"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -9,8 +10,7 @@
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
         android:layout_weight="10"
-        tools:context="co.koriel.yonapp.SignInActivity">>
-
+        tools:context="co.koriel.yonapp.SignInActivity">
 
     <RelativeLayout
         android:orientation="vertical"
@@ -48,7 +48,7 @@
                     android:layout_marginTop="@dimen/sign_in_button_margin"
                     android:layout_marginBottom="@dimen/sign_in_button_margin"
                     android:inputType="text"
-                    android:hint="학번"
+                    android:hint="@string/student_id"
                     android:imeOptions="actionNext"
                     android:id="@+id/student_id_edittext"
                     android:textSize="14sp" />
@@ -64,7 +64,7 @@
                     android:layout_marginTop="@dimen/sign_in_button_margin"
                     android:layout_marginBottom="@dimen/sign_in_button_margin"
                     android:inputType="textPassword"
-                    android:hint="비밀번호"
+                    android:hint="@string/student_passwd"
                     android:imeOptions="actionDone"
                     android:id="@+id/student_passwd_edittext"
                     android:textSize="14sp" />
@@ -83,8 +83,8 @@
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/g_login_button"
             android:background="@color/top_bar_background"
-            android:textSize="11dp"
-            android:text="구글 계정으로 로그인"
+            android:textSize="12sp"
+            android:text="@string/sign_in_with_google"
             android:textAllCaps="false"
             android:textColor="@color/main_background"
             android:layout_width="fill_parent"
@@ -96,8 +96,8 @@
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/fb_login_button"
             android:background="@color/top_bar_background"
-            android:textSize="11dp"
-            android:text="페이스북으로 로그인"
+            android:textSize="12sp"
+            android:text="@string/sign_in_with_facebook"
             android:textAllCaps="false"
             android:textColor="@color/main_background"
             android:layout_width="fill_parent"
@@ -109,8 +109,8 @@
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/yscec_auth_button"
             android:background="@color/main_background"
-            android:textSize="11dp"
-            android:text="연세 포탈 인증하기"
+            android:textSize="12sp"
+            android:text="@string/portal_auth"
             android:textAllCaps="false"
             android:textColor="@color/top_bar_background"
             android:layout_width="fill_parent"
@@ -119,8 +119,8 @@
             android:layout_above="@+id/fb_login_button" />
 
         <TextView
-            android:text="개인정보 처리방침"
-            android:textSize="12dp"
+            android:text="@string/privacy_policy"
+            android:textSize="12sp"
             android:clickable="true"
             android:layout_marginBottom="12dp"
             android:layout_width="wrap_content"

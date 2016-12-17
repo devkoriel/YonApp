@@ -1,6 +1,5 @@
 package co.koriel.yonapp.fragment;
 
-import android.app.AlertDialog;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +17,7 @@ import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.flyco.dialog.listener.OnOperItemClickL;
@@ -36,18 +36,9 @@ import co.koriel.yonapp.R;
 import co.koriel.yonapp.db.DataBase;
 import co.koriel.yonapp.util.Crypto;
 import co.koriel.yonapp.util.NonLeakingWebView;
-import dmax.dialog.SpotsDialog;
 
 public class NoticeContentFragment extends FragmentBase {
-
     private String js;
-    private final String jsLogin = "javascript: document.getElementById('username').value='" + DataBase.userInfo.getStudentId() + "';" +
-            "document.getElementById('password').value='" + Crypto.decryptPbkdf2(DataBase.userInfo.getStudentPasswd()) + "';" +
-            "(function(){document.getElementById('loginbtn').click();})()";
-
-    private final String jsGetContent =  "javascript: window.HTMLOUT.showHTML(document.getElementById('page-content').innerHTML);";
-
-    private Menu menu;
 
     private NonLeakingWebView noticeContentWebView;
 
@@ -66,7 +57,7 @@ public class NoticeContentFragment extends FragmentBase {
 
     private String[] attachmentsLink;
 
-    private AlertDialog pDialog;
+    private MaterialDialog pDialog;
 
     public NoticeContentFragment() {
         // Required empty public constructor
@@ -82,9 +73,10 @@ public class NoticeContentFragment extends FragmentBase {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Do something that differs the Activity's menu here
         super.onCreateOptionsMenu(menu, inflater);
-        this.menu = menu;
-        this.menu.findItem(R.id.action_share).setVisible(true);
-        this.menu.findItem(R.id.action_sync).setVisible(false);
+        menu.findItem(R.id.action_write).setVisible(false);
+        menu.findItem(R.id.action_share).setVisible(true);
+        menu.findItem(R.id.action_capture).setVisible(false);
+        menu.findItem(R.id.action_sync).setVisible(false);
     }
 
     @Override
@@ -129,6 +121,7 @@ public class NoticeContentFragment extends FragmentBase {
                                     }
                                 }.start();
                                 break;
+
                             case 1:
                                 new Thread() {
                                     public void run() {
@@ -142,25 +135,29 @@ public class NoticeContentFragment extends FragmentBase {
                                     }
                                 }.start();
                                 break;
+
                             default:
                                 break;
                         }
                     }
                 });
-                break;
-            default:
-                break;
-        }
+                return true;
 
-        return false;
+            default:
+                return false;
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        pDialog = new SpotsDialog(getContext(), R.style.CustomDialogLoad);
-        pDialog.show();
+        pDialog = new MaterialDialog.Builder(getContext())
+                .title(R.string.loading)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .progressIndeterminateStyle(false)
+                .show();
 
         noticeContentWebView = new NonLeakingWebView(getActivity());
         noticeContentWebView.setVisibility(View.INVISIBLE);
@@ -179,18 +176,25 @@ public class NoticeContentFragment extends FragmentBase {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if (url.equals(contentUrl)) js = jsGetContent;
-                else if (url.equals("http://yscec.yonsei.ac.kr/login/index.php")) js = jsLogin;
-                    if (Build.VERSION.SDK_INT >= 19) {
-                        view.evaluateJavascript(js, new ValueCallback<String>() {
-                            @Override
-                            public void onReceiveValue(String s) {
+                if (url.equals(contentUrl)) {
+                    js = "javascript: window.HTMLOUT.showHTML(document.getElementById('page-content').innerHTML);";
+                }
+                else if (url.equals("http://yscec.yonsei.ac.kr/login/index.php")) {
+                    js = "javascript: document.getElementById('username').value='" + DataBase.userInfo.getStudentId() + "';" +
+                            "document.getElementById('password').value='" + Crypto.decryptPbkdf2(DataBase.userInfo.getStudentPasswd()) + "';" +
+                            "(function(){document.getElementById('loginbtn').click();})()";
+                }
 
-                            }
-                        });
-                    } else {
-                        view.loadUrl(js);
-                    }
+                if (Build.VERSION.SDK_INT >= 19) {
+                    view.evaluateJavascript(js, new ValueCallback<String>() {
+                        @Override
+                        public void onReceiveValue(String s) {
+
+                        }
+                    });
+                } else {
+                    view.loadUrl(js);
+                }
             }
         });
 
@@ -252,7 +256,7 @@ public class NoticeContentFragment extends FragmentBase {
                             contentView.setText(contentElement.text().replace("$$$", "\n\n"));
 
                             if (!attachmentElement.html().equals("")) {
-                                String string = new String();
+                                String string = "";
                                 for(String str : attachmentsLink) {
                                     string += str + "\n";
                                 }

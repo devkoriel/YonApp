@@ -4,6 +4,10 @@
         "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/menu/menu_oneline.xml"
     },
     {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/menu/menu_oneline_my.xml",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/menu/menu_oneline_my.xml"
+    },
+    {
         "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/menu/menu_main.xml",
         "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/menu/menu_main.xml"
     },

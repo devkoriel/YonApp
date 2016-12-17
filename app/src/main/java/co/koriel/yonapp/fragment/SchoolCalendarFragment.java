@@ -71,7 +71,7 @@ public class SchoolCalendarFragment extends FragmentBase {
         isFirst = true;
 
         TextView toolbarTitle = (TextView) getActivity().findViewById(R.id.toolbarTitle);
-        toolbarTitle.setText("학사일정");
+        toolbarTitle.setText(R.string.home_menu_school_schedule);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(OnRefreshLayout);
@@ -119,7 +119,7 @@ public class SchoolCalendarFragment extends FragmentBase {
         protected void onPreExecute() {
             if(!NetworkUtil.isNetworkConnected(getActivity())) {
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(getActivity(), "인터넷에 연결해주세요", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
                 cancel(true);
             }
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="book_search_option">
+        <item>전체</item>
+        <item>서명</item>
+        <item>저자</item>
+        <item>출판사</item>
+        <item>주제어</item>
+    </string-array>
+</resources>

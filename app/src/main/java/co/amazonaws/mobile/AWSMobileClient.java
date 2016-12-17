@@ -12,21 +12,23 @@ import android.content.Context;
 import android.util.Log;
 
 import com.amazonaws.ClientConfiguration;
-import co.amazonaws.mobile.user.IdentityManager;
-import com.amazonaws.regions.Region;
-import co.amazonaws.mobile.push.PushManager;
-import co.amazonaws.mobile.push.GCMTokenHelper;
 import com.amazonaws.mobileconnectors.amazonmobileanalytics.AnalyticsConfig;
 import com.amazonaws.mobileconnectors.amazonmobileanalytics.EventClient;
 import com.amazonaws.mobileconnectors.amazonmobileanalytics.InitializationException;
 import com.amazonaws.mobileconnectors.amazonmobileanalytics.MobileAnalyticsManager;
 import com.amazonaws.mobileconnectors.amazonmobileanalytics.SessionClient;
-import com.amazonaws.mobileconnectors.lambdainvoker.LambdaInvokerFactory;
-import com.amazonaws.services.lambda.AWSLambdaClient;
-import com.amazonaws.regions.Regions;
-import co.amazonaws.mobile.content.ContentManager;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.amazonaws.mobileconnectors.lambdainvoker.LambdaInvokerFactory;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.lambda.AWSLambdaClient;
+
+import co.amazonaws.mobile.content.ContentManager;
+import co.amazonaws.mobile.content.UserFileManager;
+import co.amazonaws.mobile.push.GCMTokenHelper;
+import co.amazonaws.mobile.push.PushManager;
+import co.amazonaws.mobile.user.IdentityManager;
 
 /**
  * The AWS Mobile Client bootstraps the application to make calls to AWS 
@@ -326,6 +328,30 @@ public class AWSMobileClient {
         AWSLambdaClient awsLambdaClient = new AWSLambdaClient(identityManager.getCredentialsProvider(), clientConfiguration);
         awsLambdaClient.setRegion(Region.getRegion(AWSConfiguration.AMAZON_CLOUD_LOGIC_REGION));
         return awsLambdaClient;
+    }
+
+    /**
+     * Creates a User File Manager instance, which facilitates file transfers
+     * between the device and the specified Amazon S3 (Simple Storage Service) bucket.
+     *
+     * @param s3Bucket Amazon S3 bucket
+     * @param s3FolderPrefix Folder pre-fix for files affected by this user file
+     *                       manager instance
+     * @param resultHandler handles the resulting UserFileManager instance
+     */
+    public void createUserFileManager(final String s3Bucket,
+                                      final String s3FolderPrefix,
+                                      final Regions region,
+                                      final UserFileManager.BuilderResultHandler resultHandler) {
+
+        new UserFileManager.Builder().withContext(context)
+                .withIdentityManager(getIdentityManager())
+                .withS3Bucket(s3Bucket)
+                .withS3ObjectDirPrefix(s3FolderPrefix)
+                .withLocalBasePath(context.getFilesDir().getAbsolutePath())
+                .withClientConfiguration(clientConfiguration)
+                .withRegion(region)
+                .build(resultHandler);
     }
 
     /**

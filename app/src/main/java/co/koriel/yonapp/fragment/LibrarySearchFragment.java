@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,20 +66,17 @@ public class LibrarySearchFragment extends Fragment implements SearchView.OnQuer
         if (getArguments() != null) {
             SEARCH_STRING = getArguments().getString("option");
         } else {
-            SEARCH_STRING = "도서 검색";
+            SEARCH_STRING = getResources().getString(R.string.home_menu_book_search);
         }
 
         Spinner spinner = (Spinner) view.findViewById(R.id.book_search_spinner);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView) parent.getChildAt(0)).setTextColor(getResources().getColor(R.color.main_background));
+                ((TextView) parent.getChildAt(0)).setTextColor(ContextCompat.getColor(getContext(), R.color.main_background));
 
-                if (parent.getItemAtPosition(position).equals("전체")) searchOption = "TOTAL";
-                else if (parent.getItemAtPosition(position).equals("서명")) searchOption = "1";
-                else if (parent.getItemAtPosition(position).equals("저자")) searchOption = "2";
-                else if (parent.getItemAtPosition(position).equals("출판사")) searchOption = "3";
-                else if (parent.getItemAtPosition(position).equals("주제어")) searchOption = "4";
+                String[] searchOptions = {"TOTAL", "1", "2", "3", "4"};
+                searchOption = searchOptions[position];
             }
 
             @Override
@@ -89,7 +87,7 @@ public class LibrarySearchFragment extends Fragment implements SearchView.OnQuer
 
         SearchView searchView = (SearchView) view.findViewById(R.id.book_search_view);
         searchView.setIconifiedByDefault(false);
-        searchView.setQueryHint("검색...");
+        searchView.setQueryHint(getResources().getString(R.string.search));
         searchView.setOnQueryTextListener(this);
 
         bookSearchNumText = (TextView) view.findViewById(R.id.book_search_num);
@@ -131,14 +129,14 @@ public class LibrarySearchFragment extends Fragment implements SearchView.OnQuer
     class GetSearchResult extends AsyncTask<String, Void, Void> {
         protected void onPreExecute() {
             if(!NetworkUtil.isNetworkConnected(getActivity())) {
-                Toast.makeText(getActivity(), "인터넷에 연결해주세요", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
                 cancel(true);
                 return;
             }
 
             arrayList.clear();
             simpleAdapter.notifyDataSetChanged();
-            bookSearchNumText.setText("검색 중...");
+            bookSearchNumText.setText(R.string.searching);
 
         }
 
@@ -199,9 +197,9 @@ public class LibrarySearchFragment extends Fragment implements SearchView.OnQuer
     public boolean onQueryTextSubmit(String query) {
         GetSearchResult getSearchResult = new GetSearchResult();
 
-        if (SEARCH_STRING.equals("도서 검색")) {
+        if (SEARCH_STRING.equals(getResources().getString(R.string.home_menu_book_search))) {
             getSearchResult.execute(BOOK_SEARCH_URL + query.replace(" ", "+") + BOOK_SEARCH_OPTION_1 + searchOption + BOOK_SEARCH_OPTION_2);
-        } else if (SEARCH_STRING.equals("학위논문 검색")) {
+        } else if (SEARCH_STRING.equals(getResources().getString(R.string.home_menu_paper_search))) {
             getSearchResult.execute(PAPER_SEARCH_URL + searchOption + PAPER_SEARCH_OPTION_1 + query.replace(" ", "+") + PAPER_SEARCH_OPTION_2);
         }
 
