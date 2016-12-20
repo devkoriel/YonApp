@@ -8,12 +8,12 @@
         "source": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.6.0/res/drawable/com_facebook_button_background.xml"
     },
     {
-        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable/messenger_button_blue_bg_selector.xml",
-        "source": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.6.0/res/drawable/messenger_button_blue_bg_selector.xml"
-    },
-    {
         "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable/kakao_login_symbol.png",
         "source": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.1.25/res/drawable/kakao_login_symbol.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable/messenger_button_blue_bg_selector.xml",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.6.0/res/drawable/messenger_button_blue_bg_selector.xml"
     },
     {
         "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable/abc_ic_clear_material.xml",
@@ -32,12 +32,12 @@
         "source": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/drawable/abc_ratingbar_indicator_material.xml"
     },
     {
-        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable/abc_seekbar_track_material.xml",
-        "source": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/drawable/abc_seekbar_track_material.xml"
-    },
-    {
         "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable/common_google_signin_btn_icon_dark_focused.xml",
         "source": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/res/drawable/common_google_signin_btn_icon_dark_focused.xml"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable/abc_seekbar_track_material.xml",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/drawable/abc_seekbar_track_material.xml"
     },
     {
         "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable/md_btn_selected_dark.xml",
@@ -60,6 +60,10 @@
         "source": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/res/drawable/abc_ic_ab_back_material.xml"
     },
     {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable/rounded_textview.xml",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable/rounded_textview.xml"
+    },
+    {
         "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable/com_facebook_button_send_background.xml",
         "source": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.6.0/res/drawable/com_facebook_button_send_background.xml"
     },
@@ -70,6 +74,10 @@
     {
         "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable/kakao_login_bar.png",
         "source": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.1.25/res/drawable/kakao_login_bar.png"
+    },
+    {
+        "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable/circle.xml",
+        "source": "/home/daniel/AndroidStudioProjects/연앱/app/src/main/res/drawable/circle.xml"
     },
     {
         "merged": "/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/res/merged/debug/drawable/abc_ic_go_search_api_material.xml",

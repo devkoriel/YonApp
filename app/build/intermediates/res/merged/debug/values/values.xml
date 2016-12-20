@@ -539,10 +539,10 @@
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
-    <string name="action_like">좋아요 했습니다</string>
-    <string name="action_report">신고했습니다</string>
-    <string name="already_action_like">이미 좋아요 했습니다</string>
-    <string name="already_action_report">이미 신고했습니다</string>
+    <string name="action_like">추천!</string>
+    <string name="action_report">비추!</string>
+    <string name="already_action_like">추천은 한번만 할 수 있어요!</string>
+    <string name="already_action_report">비추는 한번만 할 수 있어요!</string>
     <string name="already_occupied_nickname">이미 있는 닉네임</string>
     <string name="anonymous">익명</string>
     <string name="app_info">연앱 정보</string>
@@ -659,6 +659,7 @@
     <string name="day_ago">일 전</string>
     <string name="default_web_client_id" translatable="false">1030033504381-ut7s3fsncqvruu3bk4p84s1ou5h6v1bi.apps.googleusercontent.com</string>
     <string name="delete">삭제</string>
+    <string name="deleted_oneline">삭제된 한줄입니다</string>
     <string name="dialog_cancel">취소</string>
     <string name="dialog_ok">확인</string>
     <string name="download_queue_provider_authority">com.amazonaws.mobile.downloader-co.koriel.yonapp</string>
@@ -706,8 +707,10 @@
     <string name="minute_ago">분 전</string>
     <string name="month_ago">개월 전</string>
     <string name="native_ad_unit_id">ca-app-pub-7714914181398758/9029839423</string>
+    <string name="need_external_storage_write_permission">외부 저장소 쓰기 권한이 필요합니다</string>
     <string name="new_folder">New Folder</string>
     <string name="no_nickname">고정 닉네임이 없습니다</string>
+    <string name="no_notice">공지사항이 없습니다\n다시 시도하려면 위에서 아래로 드래그하세요</string>
     <string name="oneline">한줄</string>
     <string name="oneline_header">아름답고 깨끗한 한줄 게시판 만듭시다</string>
     <string name="oneline_input">한줄 작성하기</string>
@@ -740,8 +743,11 @@
     <string name="refresh">새로고침</string>
     <string name="registered">등록 완료</string>
     <string name="registering">등록 중</string>
-    <string name="report">신고</string>
+    <string name="report">비추</string>
     <string name="samsung_library">연세 • 삼성 학술정보관</string>
+    <string name="screenshot_permission_failure_text">외부 저장소 읽기 권한이 없어 스크린샷을 저장할 수 없습니다</string>
+    <string name="screenshot_permission_failure_title_text">권한 오류</string>
+    <string name="screenshot_saved_into_gallery">갤러리에 저장되었습니다</string>
     <string name="search">검색…</string>
     <string name="search_menu_title">Search</string>
     <string name="searching">검색 중…</string>
@@ -754,6 +760,11 @@
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="student_id">학번</string>
     <string name="student_passwd">비밀번호</string>
+    <string name="sync_library_seat_fail">도서관 좌석 정보 동기화 실패</string>
+    <string name="sync_school_calendar_fail">학사 일정 정보 동기화 실패</string>
+    <string name="sync_timetable_fail">시간표 가져오기 실패</string>
+    <string name="sync_timetable_success">시간표 가져오기 성공</string>
+    <string name="syncing_timetable">시간표 가져오는 중…</string>
     <string name="tab_home">홈</string>
     <string name="tab_library">도서관</string>
     <string name="tab_notice">공지사항</string>

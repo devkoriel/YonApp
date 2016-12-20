@@ -31,7 +31,6 @@ public class LibraryFragment extends FragmentBase {
     public final static String ITEM_CAPTION = "caption";
 
     public final static String URL = "http://library.yonsei.ac.kr/seat/reserveStatus";
-    private GetLibraryReserve getLibraryReserve;
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -42,23 +41,7 @@ public class LibraryFragment extends FragmentBase {
     private List<Map<String,?>> central;
     private List<Map<String,?>> samsung;
 
-    private Elements libraryReserveElements;
-    private Elements centralColumn;
-    private Elements centralColumn2;
-    private Elements centralColumn3;
-    private Elements samsungColumn;
-    private Elements samsungColumn2;
-    private Elements samsungColumn3;
-    private Elements samsungColumn4;
-
-
-    private ArrayList<String> centralInfoArray;
-    private ArrayList<String> centralReserveArray;
-    private ArrayList<String> samsungInfoArray;
-    private ArrayList<String> samsungReserveArray;
-
     public LibraryFragment() {
-        // Required empty public constructor
     }
 
     public Map<String,?> createItem(String title, String caption) {
@@ -71,11 +54,6 @@ public class LibraryFragment extends FragmentBase {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        centralInfoArray = new ArrayList<>();
-        centralReserveArray = new ArrayList<>();
-        samsungInfoArray = new ArrayList<>();
-        samsungReserveArray = new ArrayList<>();
 
         central = new LinkedList<>();
         samsung = new LinkedList<>();
@@ -107,7 +85,7 @@ public class LibraryFragment extends FragmentBase {
         libraryListView.setAdapter(adapter);
         libraryListView.setOnScrollListener(OnScrollChange);
 
-        getLibraryReserve = new GetLibraryReserve();
+        GetLibraryReserve getLibraryReserve = new GetLibraryReserve();
         getLibraryReserve.execute(URL);
 
         return view;
@@ -116,7 +94,7 @@ public class LibraryFragment extends FragmentBase {
     private SwipeRefreshLayout.OnRefreshListener OnRefreshLayout = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
         public void onRefresh() {
-            getLibraryReserve = new GetLibraryReserve();
+            GetLibraryReserve getLibraryReserve = new GetLibraryReserve();
             getLibraryReserve.execute(URL);
         }
     };
@@ -159,64 +137,72 @@ public class LibraryFragment extends FragmentBase {
     }
 
     private void updateList(final String html) {
-        new Thread() {
-            public void run() {
-                Document document = Jsoup.parse(html);
-                libraryReserveElements = document.getElementsByClass("listTable");
-                Document document1 = Jsoup.parse(libraryReserveElements.get(0).html());
-                Document document2 = Jsoup.parse(libraryReserveElements.get(1).html());
+        if (html != null) {
+            new Thread() {
+                public void run() {
+                    try {
+                        Document document = Jsoup.parse(html);
+                        Elements libraryReserveElements = document.getElementsByClass("listTable");
+                        Document document1 = Jsoup.parse(libraryReserveElements.get(0).html());
+                        Document document2 = Jsoup.parse(libraryReserveElements.get(1).html());
 
-                centralColumn = document1.getElementsByClass("author");
-                centralColumn2 = document1.getElementsByClass("bookTitle");
-                centralColumn3 = document1.getElementsByClass("title2");
-                samsungColumn = document2.getElementsByClass("num");
-                samsungColumn2 = document2.getElementsByClass("bookTitle");
-                samsungColumn3 = document2.getElementsByClass("title2");
-                samsungColumn4 = document2.getElementsByClass("author");
+                        Elements centralColumn = document1.getElementsByClass("author");
+                        Elements centralColumn2 = document1.getElementsByClass("bookTitle");
+                        Elements centralColumn3 = document1.getElementsByClass("title2");
+                        Elements samsungColumn = document2.getElementsByClass("num");
+                        Elements samsungColumn2 = document2.getElementsByClass("bookTitle");
+                        Elements samsungColumn3 = document2.getElementsByClass("title2");
+                        Elements samsungColumn4 = document2.getElementsByClass("author");
 
-                centralInfoArray.clear();
-                centralReserveArray.clear();
-                samsungInfoArray.clear();
-                samsungReserveArray.clear();
+                        ArrayList<String> centralInfoArray = new ArrayList<>();
+                        ArrayList<String> centralReserveArray = new ArrayList<>();
+                        ArrayList<String> samsungInfoArray = new ArrayList<>();
+                        ArrayList<String> samsungReserveArray = new ArrayList<>();
 
-                for (int i = 0; i < centralColumn2.size(); i++) {
-                    centralInfoArray.add(centralColumn.get(3 * i).text() + "\t" +
-                            centralColumn2.get(i).text() + "\t" +
-                            centralColumn3.get(2 * i).text() +
-                            centralColumn3.get(2 * i + 1).text());
-                    centralReserveArray.add(centralColumn.get(3 * i + 2).text());
-                }
-
-                for (int j = 0; j < samsungColumn.size(); j++) {
-                    samsungInfoArray.add(samsungColumn.get(j).text() + "\t" +
-                            samsungColumn2.get(j).text() + "\t" +
-                            samsungColumn3.get(2 * j).text() +
-                            samsungColumn3.get(2 * j + 1).text());
-                    samsungReserveArray.add(samsungColumn4.get(2 * j + 1).text());
-                }
-
-                central.clear();
-                for (int i = 0; i < centralInfoArray.size(); i++) {
-                    central.add(createItem(centralInfoArray.get(i), centralReserveArray.get(i)));
-                }
-
-                samsung.clear();
-                for (int j = 0; j < samsungInfoArray.size(); j++) {
-                    samsung.add(createItem(samsungInfoArray.get(j), samsungReserveArray.get(j)));
-                }
-
-                try {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.notifyDataSetChanged();
-                            swipeRefreshLayout.setRefreshing(false);
+                        for (int i = 0; i < centralColumn2.size(); i++) {
+                            centralInfoArray.add(centralColumn.get(3 * i).text() + "\t" +
+                                    centralColumn2.get(i).text() + "\t" +
+                                    centralColumn3.get(2 * i).text() +
+                                    centralColumn3.get(2 * i + 1).text());
+                            centralReserveArray.add(centralColumn.get(3 * i + 2).text());
                         }
-                    });
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
+
+                        for (int j = 0; j < samsungColumn.size(); j++) {
+                            samsungInfoArray.add(samsungColumn.get(j).text() + "\t" +
+                                    samsungColumn2.get(j).text() + "\t" +
+                                    samsungColumn3.get(2 * j).text() +
+                                    samsungColumn3.get(2 * j + 1).text());
+                            samsungReserveArray.add(samsungColumn4.get(2 * j + 1).text());
+                        }
+
+                        final List<Map<String,?>> centralScanList = new LinkedList<>();
+                        for (int i = 0; i < centralInfoArray.size(); i++) {
+                            centralScanList.add(createItem(centralInfoArray.get(i), centralReserveArray.get(i)));
+                        }
+
+                        final List<Map<String,?>> samsungScanList = new LinkedList<>();
+                        for (int j = 0; j < samsungInfoArray.size(); j++) {
+                            samsungScanList.add(createItem(samsungInfoArray.get(j), samsungReserveArray.get(j)));
+                        }
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                central.clear();
+                                central.addAll(centralScanList);
+                                samsung.clear();
+                                samsung.addAll(samsungScanList);
+                                adapter.notifyDataSetChanged();
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        });
+                    } catch (NullPointerException | IndexOutOfBoundsException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        }.start();
+            }.start();
+        } else {
+            Toast.makeText(getActivity(), R.string.sync_library_seat_fail, Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -74,15 +74,18 @@
     <string name="check_update">최신 버전으로 업데이트할까요?</string>
     <string name="lastest_version">이미 최신 버전입니다</string>
 
+    <string name="no_notice">공지사항이 없습니다\n다시 시도하려면 위에서 아래로 드래그하세요</string>
+
     <string name="please_connect_internet">인터넷에 연결해주세요</string>
     <string name="please_write_oneline">한줄을 입력해주세요</string>
     <string name="please_write_comment">댓글을 입력해주세요</string>
     <string name="error_occured">오류가 발생했습니다</string>
+    <string name="deleted_oneline">삭제된 한줄입니다</string>
     <string name="warn_too_often">너무 자주 작성할 수 없습니다</string>
-    <string name="action_like">좋아요 했습니다</string>
-    <string name="already_action_like">이미 좋아요 했습니다</string>
-    <string name="action_report">신고했습니다</string>
-    <string name="already_action_report">이미 신고했습니다</string>
+    <string name="action_like">추천!</string>
+    <string name="already_action_like">추천은 한번만 할 수 있어요!</string>
+    <string name="action_report">비추!</string>
+    <string name="already_action_report">비추는 한번만 할 수 있어요!</string>
     <string name="copied_to_clipboard">클립보드에 복사되었습니다</string>
     <string name="no_nickname">고정 닉네임이 없습니다</string>
     <string name="please_register_nickname">[홈 > 환경설정]에서 고정 닉네임을 등록해주세요</string>
@@ -92,7 +95,7 @@
     <string name="capture">캡처</string>
     <string name="refresh">새로고침</string>
     <string name="like">추천</string>
-    <string name="report">신고</string>
+    <string name="report">비추</string>
     <string name="photo">사진</string>
 
     <string name="central_library">중앙도서관</string>
@@ -134,6 +137,17 @@
     <string name="oneline_static_nickname_title">고정 닉네임</string>
     <string name="oneline_static_nickname_summary">한줄 게시판에서 사용할 고정 닉네임을 등록합니다</string>
     <string name="oneline_static_nickname_dialog">사용할 고정 닉네임을 입력하세요\n(10글자 이내)</string>
+
+    <string name="sync_timetable_success">시간표 가져오기 성공</string>
+    <string name="sync_timetable_fail">시간표 가져오기 실패</string>
+    <string name="syncing_timetable">시간표 가져오는 중&#8230;</string>
+    <string name="screenshot_saved_into_gallery">갤러리에 저장되었습니다</string>
+    <string name="need_external_storage_write_permission">외부 저장소 쓰기 권한이 필요합니다</string>
+    <string name="screenshot_permission_failure_title_text">권한 오류</string>
+    <string name="screenshot_permission_failure_text">외부 저장소 읽기 권한이 없어 스크린샷을 저장할 수 없습니다</string>
+
+    <string name="sync_library_seat_fail">도서관 좌석 정보 동기화 실패</string>
+    <string name="sync_school_calendar_fail">학사 일정 정보 동기화 실패</string>
 
     <!-- USED BY DEMO FEATURES ONLY - YOU CAN DISCARD THESE WITH THE DEMO FOLDER -->
     <string name="content_dialog_ok">OK</string>

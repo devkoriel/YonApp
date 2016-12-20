@@ -28,26 +28,12 @@ import co.koriel.yonapp.util.NetworkUtil;
 
 public class LibrarySearchFragment extends Fragment implements SearchView.OnQueryTextListener {
     private String SEARCH_STRING;
-
-    private static final String BOOK_SEARCH_URL = "http://library.yonsei.ac.kr/search/tot/result?folder_id=null&q=";
-    private static final String BOOK_SEARCH_OPTION_1 = "&bk_0=jttjmjttj&st=KWRD&si=";
-    private static final String BOOK_SEARCH_OPTION_2 = "&oi=&os=&cpp=1000";
-
-    private static final String PAPER_SEARCH_URL = "http://library.yonsei.ac.kr/search/tot/result?st=KWRD&commandType=advanced&si=";
-    private static final String PAPER_SEARCH_OPTION_1 = "&q=";
-    private static final String PAPER_SEARCH_OPTION_2 = "&b0=and&weight0=&si=TOTAL&q=&b1=and&weight1=&si=TOTAL&q=&weight2=&_lmt0=on&lmtsn=000000000001&lmtst=OR&_lmt0=on&_lmt0=on&_lmt0=on&lmt0=t&_lmt0=on&_lmt0=on&_lmt0=on&inc=TOTAL&_inc=on&_inc=on&_inc=on&_inc=on&_inc=on&_inc=on&lmt1=TOTAL&lmtsn=000000000003&lmtst=OR&lmt2=TOTAL&lmtsn=000000000006&lmtst=OR&rf=&rt=&range=000000000021&cpp=1000&msc=10000";
+    private String searchOption = "TOTAL";
 
     private TextView bookSearchNumText;
 
-    private ArrayList<HashMap<String, String>> arrayList;
+    private ArrayList<HashMap<String, String>> searchResultList;
     private SimpleAdapter simpleAdapter;
-
-    private Elements itemElements;
-    private Elements infoElements;
-    private Elements locationElements;
-
-    private String infoString;
-    private String searchOption = "TOTAL";
 
     public LibrarySearchFragment() {
         // Required empty public constructor
@@ -95,8 +81,8 @@ public class LibrarySearchFragment extends Fragment implements SearchView.OnQuer
         TextView toolbarTitle = (TextView) getActivity().findViewById(R.id.toolbarTitle);
         toolbarTitle.setText(SEARCH_STRING);
 
-        arrayList = new ArrayList<> ();
-        simpleAdapter = new SimpleAdapter(getContext(), arrayList, android.R.layout.simple_list_item_2, new String[]{"item1", "item2"}, new int[]{android.R.id.text1, android.R.id.text2}) {
+        searchResultList = new ArrayList<> ();
+        simpleAdapter = new SimpleAdapter(getContext(), searchResultList, android.R.layout.simple_list_item_2, new String[]{"item1", "item2"}, new int[]{android.R.id.text1, android.R.id.text2}) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 try {
                     View view = super.getView(position, convertView, parent);
@@ -134,7 +120,6 @@ public class LibrarySearchFragment extends Fragment implements SearchView.OnQuer
                 return;
             }
 
-            arrayList.clear();
             simpleAdapter.notifyDataSetChanged();
             bookSearchNumText.setText(R.string.searching);
 
@@ -150,43 +135,47 @@ public class LibrarySearchFragment extends Fragment implements SearchView.OnQuer
     private void updateList(final String html) {
         new Thread() {
             public void run() {
-                Document document = Jsoup.parse(html);
-                Document document1;
-                itemElements = document.getElementsByClass("items");
-
-                arrayList.clear();
-                for(int i = 0; i < itemElements.size(); i++) {
-                    HashMap<String, String> map = new HashMap<>();
-                    map.clear();
-                    infoString = "";
-                    document1 = Jsoup.parse(itemElements.get(i).html());
-
-                    map.put("item1", document1.select("dd.title").text().replace("상세보기", ""));
-
-                    infoElements = document1.select("dd.info");
-                    for (int j = 0; j < infoElements.size(); j++) {
-                        infoString += infoElements.get(j).text() + "\n";
-                    }
-
-                    infoString += "\n";
-
-                    locationElements = document1.getElementsByClass("location");
-                    for (int j = 0; j < locationElements.size(); j++) {
-                        infoString += locationElements.get(j).text() + "\n";
-                    }
-
-                    map.put("item2", infoString);
-                    arrayList.add(map);
-                }
                 try {
+                    Document document = Jsoup.parse(html);
+                    Document document1;
+                    final Elements itemElements = document.getElementsByClass("items");
+
+                    String infoString;
+
+                    final ArrayList<HashMap<String, String>> arrayList = new ArrayList<>();
+                    for(int i = 0; i < itemElements.size(); i++) {
+                        HashMap<String, String> map = new HashMap<>();
+                        map.clear();
+                        infoString = "";
+                        document1 = Jsoup.parse(itemElements.get(i).html());
+
+                        map.put("item1", document1.select("dd.title").text().replace("상세보기", ""));
+
+                        Elements infoElements = document1.select("dd.info");
+                        for (int j = 0; j < infoElements.size(); j++) {
+                            infoString += infoElements.get(j).text() + "\n";
+                        }
+
+                        infoString += "\n";
+
+                        Elements locationElements = document1.getElementsByClass("location");
+                        for (int j = 0; j < locationElements.size(); j++) {
+                            infoString += locationElements.get(j).text() + "\n";
+                        }
+
+                        map.put("item2", infoString);
+                        arrayList.add(map);
+                    }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             bookSearchNumText.setText("총 " + itemElements.size() + "건");
+                            searchResultList.clear();
+                            searchResultList.addAll(arrayList);
                             simpleAdapter.notifyDataSetChanged();
                         }
                     });
-                } catch (NullPointerException e) {
+                } catch (NullPointerException | IndexOutOfBoundsException e) {
                     e.printStackTrace();
                 }
             }
@@ -198,9 +187,9 @@ public class LibrarySearchFragment extends Fragment implements SearchView.OnQuer
         GetSearchResult getSearchResult = new GetSearchResult();
 
         if (SEARCH_STRING.equals(getResources().getString(R.string.home_menu_book_search))) {
-            getSearchResult.execute(BOOK_SEARCH_URL + query.replace(" ", "+") + BOOK_SEARCH_OPTION_1 + searchOption + BOOK_SEARCH_OPTION_2);
+            getSearchResult.execute("http://library.yonsei.ac.kr/search/tot/result?folder_id=null&q=" + query.replace(" ", "+") + "&bk_0=jttjmjttj&st=KWRD&si=" + searchOption + "&oi=&os=&cpp=1000");
         } else if (SEARCH_STRING.equals(getResources().getString(R.string.home_menu_paper_search))) {
-            getSearchResult.execute(PAPER_SEARCH_URL + searchOption + PAPER_SEARCH_OPTION_1 + query.replace(" ", "+") + PAPER_SEARCH_OPTION_2);
+            getSearchResult.execute("http://library.yonsei.ac.kr/search/tot/result?st=KWRD&commandType=advanced&si=" + searchOption + "&q=" + query.replace(" ", "+") + "&b0=and&weight0=&si=TOTAL&q=&b1=and&weight1=&si=TOTAL&q=&weight2=&_lmt0=on&lmtsn=000000000001&lmtst=OR&_lmt0=on&_lmt0=on&_lmt0=on&lmt0=t&_lmt0=on&_lmt0=on&_lmt0=on&inc=TOTAL&_inc=on&_inc=on&_inc=on&_inc=on&_inc=on&_inc=on&lmt1=TOTAL&lmtsn=000000000003&lmtst=OR&lmt2=TOTAL&lmtsn=000000000006&lmtst=OR&rf=&rt=&range=000000000021&cpp=1000&msc=10000");
         }
 
         return false;

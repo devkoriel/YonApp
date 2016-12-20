@@ -1,6 +1,5 @@
 package co.koriel.yonapp.fragment;
 
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,7 +14,6 @@ import android.webkit.WebViewClient;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,10 +28,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 
 import co.koriel.yonapp.R;
 import co.koriel.yonapp.db.DataBase;
+import co.koriel.yonapp.fragment.adapter.NoticeAdapter;
+import co.koriel.yonapp.fragment.adapter.NoticeItem;
 import co.koriel.yonapp.util.Crypto;
 import co.koriel.yonapp.util.NetworkUtil;
 import co.koriel.yonapp.util.NonLeakingWebView;
@@ -41,25 +40,13 @@ import co.koriel.yonapp.util.SerializeObject;
 import co.koriel.yonapp.util.YscecHelper;
 
 public class NoticeFragment extends FragmentBase {
-    private static final String NOTICE = "notice";
-    private static final String DATE = "date";
-    private static final String LINK = "link";
-    private static final String TIMESTAMP = "timestamp";
-
     private SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout swipeRefreshLayoutEmpty;
 
     private NonLeakingWebView webView;
     private ListView noticeListView;
-    private SimpleAdapter simpleAdapter;
-    private ArrayList<HashMap<String, String>> noticeScanList;
-    private ArrayList<HashMap<String, String>> noticeArrangedList;
-    private ArrayList<HashMap<String, String>> noticeList;
-
-    private Elements noticeElements;
-    private Elements linkElements;
-    private Elements dateElements;
-
-    private Date noticeDate;
+    private NoticeAdapter noticeAdapter;
+    private ArrayList<NoticeItem> noticeScanList;
 
     public NoticeFragment() {
         // Required empty public constructor
@@ -81,46 +68,31 @@ public class NoticeFragment extends FragmentBase {
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(OnRefreshLayout);
+        swipeRefreshLayoutEmpty = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout_empty);
+        swipeRefreshLayoutEmpty.setOnRefreshListener(OnRefreshLayout);
 
         noticeScanList = new ArrayList<>();
-        noticeArrangedList = new ArrayList<> ();
-        noticeList = new ArrayList<>();
-        simpleAdapter = new SimpleAdapter(getContext(), noticeList, android.R.layout.simple_list_item_2, new String[]{"item1", "item2"}, new int[]{android.R.id.text1, android.R.id.text2}) {
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-                TextView text2 = (TextView) view.findViewById(android.R.id.text2);
-                text1.setTextSize(15);
-                text2.setTextSize(12);
-                text2.setTextColor(Color.GRAY);
-                return view;
-            }
-        };
+        noticeAdapter = new NoticeAdapter();
         noticeListView = (ListView) view.findViewById(R.id.notice_list);
+        noticeListView.setEmptyView(swipeRefreshLayoutEmpty);
         noticeListView.setOnItemClickListener(OnClickListItem);
-        noticeListView.setAdapter(simpleAdapter);
+        noticeListView.setAdapter(noticeAdapter);
         noticeListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         noticeListView.setOnScrollListener(OnScrollChange);
 
-        String sNoticeScanList = SerializeObject.ReadSettings(getContext(), "nsl.dat");
-        String sNoticeArrangedList = SerializeObject.ReadSettings(getContext(), "nal.dat");
-        if (!sNoticeScanList.equalsIgnoreCase("") && !sNoticeArrangedList.equalsIgnoreCase("")) {
+        String sNoticeScanList = SerializeObject.ReadSettings(getContext(), "notice_scan_list.dat");
+        if (!sNoticeScanList.equalsIgnoreCase("")) {
             Object objNsl = SerializeObject.stringToObject(sNoticeScanList);
             if (objNsl instanceof ArrayList) {
                 noticeScanList.clear();
-                noticeScanList.addAll((ArrayList<HashMap<String, String>>) objNsl);
+                noticeScanList.addAll((ArrayList<NoticeItem>) objNsl);
             }
 
-            Object objNal = SerializeObject.stringToObject(sNoticeArrangedList);
-            if (objNal instanceof ArrayList) {
-                noticeArrangedList.clear();
-                noticeArrangedList.addAll((ArrayList<HashMap<String, String>>) objNal);
-            }
-
-            noticeList.clear();
-            noticeList.addAll(noticeArrangedList);
-            simpleAdapter.notifyDataSetChanged();
+            noticeAdapter.clearItems();
+            noticeAdapter.addAllItems(noticeScanList);
+            noticeAdapter.notifyDataSetChanged();
         } else {
+            swipeRefreshLayoutEmpty.setRefreshing(true);
             getNotice();
         }
 
@@ -133,7 +105,7 @@ public class NoticeFragment extends FragmentBase {
             new Thread() {
                 public void run() {
                     final Bundle bundle = new Bundle();
-                    bundle.putString(LINK, noticeScanList.get(position).get(LINK));
+                    bundle.putString("link", noticeScanList.get(position).getLink());
 
                     NoticeContentFragment noticeContentFragment = new NoticeContentFragment();
                     noticeContentFragment.setArguments(bundle);
@@ -176,143 +148,146 @@ public class NoticeFragment extends FragmentBase {
     };
 
     private void getNotice() {
-        swipeRefreshLayout.post(new Runnable() {
-            @Override public void run() {
-                swipeRefreshLayout.setRefreshing(true);
+        try {
+            if (!NetworkUtil.isNetworkConnected(getActivity())) {
+                swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshLayoutEmpty.setRefreshing(false);
+                Toast.makeText(getActivity(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
+                return;
             }
-        });
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
-        new Thread() {
+        new Thread(new Runnable() {
+            @Override
             public void run() {
                 try {
-                    if (!NetworkUtil.isNetworkConnected(getActivity())) {
-                        swipeRefreshLayout.setRefreshing(false);
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getActivity(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
+                    final String js = "javascript:try { document.getElementById('username').value='" + DataBase.userInfo.getStudentId() + "';" +
+                            "document.getElementById('password').value='" + Crypto.decryptPbkdf2(DataBase.userInfo.getStudentPasswd()) + "';" +
+                            "(function(){document.getElementById('loginbtn').click();})()} catch (exception) {}" +
+                            "finally {window.HTMLOUT.showHTML(document.getElementsByClassName('board-list-area')[0].innerHTML);}";
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            webView = new NonLeakingWebView(getActivity());
+                            if (Build.VERSION.SDK_INT >= 21) {
+                                webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+                                webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+                            } else if (Build.VERSION.SDK_INT >= 19) {
+                                webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
                             }
-                        });
-                        interrupt();
-                        return;
-                    }
+                            else {
+                                webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                            }
+                            webView.setVisibility(View.INVISIBLE);
+                            webView.getSettings().setJavaScriptEnabled(true);
+                            webView.getSettings().setLoadsImagesAutomatically(false);
+                            webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+                            webView.addJavascriptInterface(new JavaScriptInterface(), "HTMLOUT");
+                            webView.setWebViewClient(new WebViewClient() {
 
-                    if (!isInterrupted()) {
-                        final String js = "javascript:try { document.getElementById('username').value='" + DataBase.userInfo.getStudentId() + "';" +
-                                "document.getElementById('password').value='" + Crypto.decryptPbkdf2(DataBase.userInfo.getStudentPasswd()) + "';" +
-                                "(function(){document.getElementById('loginbtn').click();})()} catch (exception) {}" +
-                                "finally {window.HTMLOUT.showHTML(document.getElementsByClassName('board-list-area')[0].innerHTML);}";
+                                @Override
+                                public void onPageFinished(WebView view, String url) {
+                                    super.onPageFinished(view, url);
 
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                webView = new NonLeakingWebView(getActivity());
-                                if (Build.VERSION.SDK_INT >= 19) {
-                                    webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-                                }
-                                else {
-                                    webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                                }
-                                webView.setVisibility(View.INVISIBLE);
-                                webView.getSettings().setJavaScriptEnabled(true);
-                                webView.getSettings().setLoadsImagesAutomatically(false);
-                                webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-                                webView.addJavascriptInterface(new JavaScriptInterface(), "HTMLOUT");
-                                webView.setWebViewClient(new WebViewClient() {
-
-                                    @Override
-                                    public void onPageFinished(WebView view, String url) {
-                                        super.onPageFinished(view, url);
-
-                                        if (Build.VERSION.SDK_INT >= 19) {
-                                            view.evaluateJavascript(js, new ValueCallback<String>() {
-                                                @Override
-                                                public void onReceiveValue(String s) {
-                                                }
-                                            });
-                                        } else {
-                                            view.loadUrl(js);
-                                        }
+                                    if (Build.VERSION.SDK_INT >= 19) {
+                                        view.evaluateJavascript(js, new ValueCallback<String>() {
+                                            @Override
+                                            public void onReceiveValue(String s) {
+                                            }
+                                        });
+                                    } else {
+                                        view.loadUrl(js);
                                     }
-                                });
-                                webView.loadUrl(YscecHelper.BaseUrl + YscecHelper.BoardUrl);
-                            }
-                        });
-                    }
+                                }
+                            });
+                            webView.loadUrl(YscecHelper.BaseUrl + YscecHelper.BoardUrl);
+                        }
+                    });
                 } catch (NullPointerException e) {
                     e.printStackTrace();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(false);
+                            swipeRefreshLayoutEmpty.setRefreshing(false);
+                        }
+                    });
                 }
             }
-        }.start();
+        }).start();
     }
+
+
 
     private void updateList(final String html) {
         new Thread() {
             public void run() {
-                Document document = Jsoup.parse(html);
-                noticeElements = document.getElementsByClass("post-title");
-                linkElements = document.select("a:has(.board-lecture-title)");
-                dateElements = document.getElementsByClass("post-date");
-
-                noticeScanList.clear();
-                for(int i = 0; i < noticeElements.size(); i++) {
-                    HashMap<String, String> map = new HashMap<> ();
-                    map.put(NOTICE, noticeElements.get(i).text());
-                    map.put(LINK, linkElements.get(i).attr("href"));
-                    map.put(DATE, dateElements.get(i).text());
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일-hh:mm");
-                    try {
-                        noticeDate = dateFormat.parse(dateElements.get(i).text().split(",")[0] + "-" + dateElements.get(i).text().split(",")[2].split(" ")[1]);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    map.put(TIMESTAMP, String.valueOf(noticeDate.getTime()/1000));
-                    noticeScanList.add(map);
-                }
-
-                Collections.sort(noticeScanList, new Comparator<HashMap<String, String>>() {
-                    @Override
-                    public int compare(HashMap<String, String> lhs, HashMap<String, String> rhs) {
-                        return Long.parseLong(lhs.get(TIMESTAMP)) > Long.parseLong(rhs.get(TIMESTAMP)) ? -1 : Long.parseLong(lhs.get(TIMESTAMP)) < Long.parseLong(rhs.get(TIMESTAMP)) ? 1:0;
-                    }
-                });
-
-                noticeArrangedList.clear();
-                for(int j = 0; j < noticeScanList.size(); j++) {
-                    HashMap<String, String> map = new HashMap<> ();
-                    StringBuilder stringBuilder = new StringBuilder(noticeScanList.get(j).get(NOTICE));
-                    stringBuilder.replace(noticeScanList.get(j).get(NOTICE).lastIndexOf("]"), noticeScanList.get(j).get(NOTICE).lastIndexOf("]") + 1, "]\n");
-                    map.put("item1", stringBuilder.toString());
-                    map.put("item2", noticeScanList.get(j).get(DATE));
-                    noticeArrangedList.add(map);
-                }
-
-                String sNoticeScanList = SerializeObject.objectToString(noticeScanList);
-                if (sNoticeScanList != null && !sNoticeScanList.equalsIgnoreCase("")) {
-                    SerializeObject.WriteSettings(getContext(), sNoticeScanList, "nsl.dat");
-                } else {
-                    SerializeObject.WriteSettings(getContext(), "", "nsl.dat");
-                }
-
-                String sNoticeArrangedList = SerializeObject.objectToString(noticeArrangedList);
-                if (sNoticeArrangedList != null && !sNoticeArrangedList.equalsIgnoreCase("")) {
-                    SerializeObject.WriteSettings(getContext(), sNoticeArrangedList, "nal.dat");
-                } else {
-                    SerializeObject.WriteSettings(getContext(), "", "nal.dat");
-                }
-
                 try {
+                    Document document = Jsoup.parse(html);
+                    Elements noticeElements = document.getElementsByClass("post-title");
+                    Elements linkElements = document.select("a:has(.board-lecture-title)");
+                    Elements dateElements = document.getElementsByClass("post-date");
+
+                    noticeScanList.clear();
+                    for(int i = 0; i < noticeElements.size(); i++) {
+                        String notice = noticeElements.get(i).text();
+                        String date = dateElements.get(i).text();
+
+                        NoticeItem noticeItem = new NoticeItem();
+                        noticeItem.setLink(linkElements.get(i).attr("href"));
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일-hh:mm");
+
+                        Date noticeDate;
+                        try {
+                            noticeDate = dateFormat.parse(date.split(",")[0] + "-" + date.split(",")[2].split(" ")[1]);
+                            noticeItem.setTimestamp(noticeDate.getTime()/1000);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+
+                            if (i == 0) {
+                                noticeItem.setTimestamp(0);
+                            } else {
+                                noticeItem.setTimestamp(noticeScanList.get(i - 1).getTimestamp());
+                            }
+                        }
+
+                        StringBuilder stringBuilder = new StringBuilder(notice);
+                        stringBuilder.replace(notice.lastIndexOf("]"), notice.lastIndexOf("]") + 1, "]\n");
+                        noticeItem.setTitle(stringBuilder.toString());
+                        noticeItem.setDate(date);
+
+                        noticeScanList.add(noticeItem);
+                    }
+
+                    Collections.sort(noticeScanList, new Comparator<NoticeItem>() {
+                        @Override
+                        public int compare(NoticeItem lhs, NoticeItem rhs) {
+                            return lhs.getTimestamp() > rhs.getTimestamp() ? -1 : lhs.getTimestamp() < rhs.getTimestamp() ? 1:0;
+                        }
+                    });
+
+                    String sNoticeScanList = SerializeObject.objectToString(noticeScanList);
+                    if (sNoticeScanList != null && !sNoticeScanList.equalsIgnoreCase("")) {
+                        SerializeObject.WriteSettings(getContext(), sNoticeScanList, "notice_scan_list.dat");
+                    } else {
+                        SerializeObject.WriteSettings(getContext(), "", "notice_scan_list.dat");
+                    }
+
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            noticeList.clear();
-                            noticeList.addAll(noticeArrangedList);
                             swipeRefreshLayout.setRefreshing(false);
-                            simpleAdapter.notifyDataSetChanged();
+                            swipeRefreshLayoutEmpty.setRefreshing(false);
+                            noticeAdapter.clearItems();
+                            noticeAdapter.addAllItems(noticeScanList);
+                            noticeAdapter.notifyDataSetChanged();
                             webView.destroy();
                         }
                     });
-                } catch (NullPointerException e) {
+                } catch (NullPointerException | IndexOutOfBoundsException e) {
                     e.printStackTrace();
                 }
             }
@@ -331,8 +306,7 @@ public class NoticeFragment extends FragmentBase {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getContext().deleteFile("nsl.dat");
-        getContext().deleteFile("nal.dat");
+        getContext().deleteFile("notice_scan_list.dat");
     }
 }
 

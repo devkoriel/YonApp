@@ -11,13 +11,16 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import co.amazonaws.mobile.AWSMobileClient;
 import co.koriel.yonapp.R;
 
 public class OneLineBoardCommentAdapter extends BaseAdapter {
     private ArrayList<OneLineBoardCommentItem> oneLineBoardCommentItems;
+    private String userId;
 
     public OneLineBoardCommentAdapter() {
         this.oneLineBoardCommentItems = new ArrayList<>();
+        this.userId = AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID();
     }
 
     @Override
@@ -76,15 +79,19 @@ public class OneLineBoardCommentAdapter extends BaseAdapter {
         });
 
         String preString = idTextView.getText().toString();
-        if (!preString.equals(oneLineBoardCommentItem.getId())) {
-            if (preString.length() == 0) {
-                idTextView.setText(oneLineBoardCommentItem.getId());
-                idTextView.startAnimation(fadeIn);
+        String postString = oneLineBoardCommentItem.getId();
+
+        if (postString.length() != 0) {
+            if (!preString.equals(postString)) {
+                if (preString.length() == 0) {
+                    idTextView.setText(postString);
+                    idTextView.startAnimation(fadeIn);
+                } else {
+                    idTextView.startAnimation(fadeOutIdText);
+                }
             } else {
-                idTextView.startAnimation(fadeOutIdText);
+                idTextView.setText(postString);
             }
-        } else {
-            idTextView.setText(oneLineBoardCommentItem.getId());
         }
 
         timeBeforeTextView.setText(oneLineBoardCommentItem.getTimeBefore());
@@ -92,6 +99,20 @@ public class OneLineBoardCommentAdapter extends BaseAdapter {
         commentTextView.setText(oneLineBoardCommentItem.getComment());
 
         return view;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 2;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (this.oneLineBoardCommentItems.get(position).getCommentDateAndId().split("]")[1].equals(userId)) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
     public void addItem(OneLineBoardCommentItem oneLineBoardCommentItem) {

@@ -10,10 +10,17 @@ public class OneLineBoardItem implements Serializable {
     private int commentCount;
     private boolean isNickStatic;
     private boolean isPicture;
+    private boolean isGif;
 
     private String contentDateAndId;
     private long timestamp;
     private String writerGcmTokenKey;
+
+    public OneLineBoardItem() {
+        this.id = "";
+        this.likeCount = -1;
+        this.commentCount = -1;
+    }
 
     public String getId() {
         return id;
@@ -93,5 +100,13 @@ public class OneLineBoardItem implements Serializable {
 
     public void setWriterGcmTokenKey(String writerGcmTokenKey) {
         this.writerGcmTokenKey = writerGcmTokenKey;
+    }
+
+    public boolean isGif() {
+        return isGif;
+    }
+
+    public void setGif(boolean gif) {
+        isGif = gif;
     }
 }

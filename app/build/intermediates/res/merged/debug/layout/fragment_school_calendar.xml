@@ -11,20 +11,9 @@
         android:layout_height="match_parent"
         android:id="@+id/swipe_refresh_layout">
 
-        <ScrollView
-            android:id="@+id/school_calendar_scroll"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:fillViewport="true">
-
             <ListView
                 android:id="@+id/school_calendar_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-        </ScrollView>
-
     </android.support.v4.widget.SwipeRefreshLayout>
-
 </RelativeLayout>

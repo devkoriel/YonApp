@@ -16,19 +16,10 @@
             android:layout_height="match_parent"
             android:id="@+id/swipe_refresh_layout_one_line">
 
-            <ScrollView
-                android:id="@+id/oneline_board_scroll"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:fillViewport="true">
-
-                <ListView
-                    android:id="@+id/oneline_board_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </ScrollView>
+            <com.baoyz.swipemenulistview.SwipeMenuListView
+                 android:id="@+id/oneline_board_list"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content" />
 
         </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>

@@ -161,7 +161,10 @@ public class NoticeContentFragment extends FragmentBase {
 
         noticeContentWebView = new NonLeakingWebView(getActivity());
         noticeContentWebView.setVisibility(View.INVISIBLE);
-        if (Build.VERSION.SDK_INT >= 19) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            noticeContentWebView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+            noticeContentWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        } else if (Build.VERSION.SDK_INT >= 19) {
             noticeContentWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
         else {

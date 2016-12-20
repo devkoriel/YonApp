@@ -42,9 +42,6 @@ public class SchoolCalendarFragment extends FragmentBase {
 
     private LinkedList<List<Map<String,?>>> calendarList;
 
-    private Elements thElements;
-    private Elements tdElements;
-
     private static boolean isFirst;
 
     public SchoolCalendarFragment() {
@@ -135,52 +132,56 @@ public class SchoolCalendarFragment extends FragmentBase {
 
 
     private void updateList(final String html) {
-        new Thread() {
-            public void run() {
-                Document document = Jsoup.parse(html);
+        if (html != null) {
+            new Thread() {
+                public void run() {
+                    try {
+                        Document document = Jsoup.parse(html);
 
-                thElements = document.getElementsByTag("th");
-                tdElements = document.getElementsByTag("td");
+                        final Elements thElements = document.getElementsByTag("th");
+                        Elements tdElements = document.getElementsByTag("td");
 
-                int rowSpanSum = 0;
-                calendarList.clear();
-                for (int i = 0; i < thElements.size(); i++) {
-                    calendarList.add(new LinkedList<Map<String,?>>());
-                    calendarList.get(i).clear();
-                    for (int j = 0; j < Integer.parseInt(thElements.get(i).attr("rowspan")); j++) {
-                        calendarList.get(i).add(createItem(tdElements.get(2 * rowSpanSum + 2 * j + 1).text(),
-                                tdElements.get(2 * rowSpanSum + 2 * j).text()));
+                        int rowSpanSum = 0;
+                        calendarList.clear();
+                        for (int i = 0; i < thElements.size(); i++) {
+                            calendarList.add(new LinkedList<Map<String,?>>());
+                            calendarList.get(i).clear();
+                            for (int j = 0; j < Integer.parseInt(thElements.get(i).attr("rowspan")); j++) {
+                                calendarList.get(i).add(createItem(tdElements.get(2 * rowSpanSum + 2 * j + 1).text(),
+                                        tdElements.get(2 * rowSpanSum + 2 * j).text()));
 
-                    }
-                    rowSpanSum += Integer.parseInt(thElements.get(i).attr("rowspan"));
-                }
-                try {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (isFirst) {
-                                adapter = new SeparatedListAdapter(getContext());
+                            }
+                            rowSpanSum += Integer.parseInt(thElements.get(i).attr("rowspan"));
+                        }
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (isFirst) {
+                                    adapter = new SeparatedListAdapter(getContext());
 
-                                for (int i = 0; i < thElements.size(); i++) {
-                                    adapter.addSection(thElements.get(i).text(), new SimpleAdapter(getContext(), calendarList.get(i), R.layout.list_complex_calendar,
-                                            new String[] { ITEM_TITLE, ITEM_CAPTION }, new int[] { R.id.list_complex_title_calendar, R.id.list_complex_caption_calendar }));
+                                    for (int i = 0; i < thElements.size(); i++) {
+                                        adapter.addSection(thElements.get(i).text(), new SimpleAdapter(getContext(), calendarList.get(i), R.layout.list_complex_calendar,
+                                                new String[] { ITEM_TITLE, ITEM_CAPTION }, new int[] { R.id.list_complex_title_calendar, R.id.list_complex_caption_calendar }));
+                                    }
+
+                                    calendarListView = (ListView) view.findViewById(R.id.school_calendar_list);
+                                    calendarListView.setAdapter(adapter);
+                                    calendarListView.setOnScrollListener(OnScrollChange);
+
+                                    isFirst = false;
                                 }
 
-                                calendarListView = (ListView) view.findViewById(R.id.school_calendar_list);
-                                calendarListView.setAdapter(adapter);
-                                calendarListView.setOnScrollListener(OnScrollChange);
-
-                                isFirst = false;
+                                adapter.notifyDataSetChanged();
+                                swipeRefreshLayout.setRefreshing(false);
                             }
-
-                            adapter.notifyDataSetChanged();
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                    });
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
+                        });
+                    } catch (NullPointerException | IndexOutOfBoundsException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        }.start();
+            }.start();
+        } else {
+            Toast.makeText(getActivity(), R.string.sync_school_calendar_fail, Toast.LENGTH_SHORT).show();
+        }
     }
 }

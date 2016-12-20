@@ -20,7 +20,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
@@ -33,10 +32,8 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import java.util.ArrayList;
-
 import co.amazonaws.mobile.AWSMobileClient;
-import co.koriel.yonapp.helper.InAppBillingHelper;
+import co.koriel.yonapp.tab.TabPager;
 import co.koriel.yonapp.tab.TabPagerAdapter;
 import co.koriel.yonapp.util.BackPressCloseHandler;
 
@@ -52,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private int tabPosition;
 
     /** The viewpager control */
-    private ViewPager viewPager;
+    public TabPager viewPager;
 
     private BackPressCloseHandler backPressCloseHandler;
 
@@ -60,8 +57,6 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem actionShare;
     private MenuItem actionCapture;
     private MenuItem actionSync;
-
-    private InAppBillingHelper mHelper;
 
     /**
      * Initializes the Toolbar for use with the activity.
@@ -131,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         // Initializing ViewPager
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager = (TabPager) findViewById(R.id.viewPager);
         viewPager.setOffscreenPageLimit(4);
 
         // Creating TabPagerAdapter adapter
@@ -155,8 +150,13 @@ public class MainActivity extends AppCompatActivity {
 
                             toolbarTitle.setText(tag);
 
-                            if (tag.equals(getResources().getString(R.string.home_menu_oneline)) && count == 1) {
-                                actionWrite.setVisible(true);
+                            if (tag.equals(getResources().getString(R.string.home_menu_oneline))) {
+                                viewPager.setAllowedSwipeDirection(TabPager.SwipeDirection.RIGHT);
+                                if (count == 1) {
+                                    actionWrite.setVisible(true);
+                                } else {
+                                    actionWrite.setVisible(false);
+                                }
                             } else {
                                 actionWrite.setVisible(false);
                             }
@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 } else if (position == 1) {
+                    viewPager.setAllowedSwipeDirection(TabPager.SwipeDirection.ALL);
                     toolbarTitle.setText(R.string.app_name);
                     try {
                         actionWrite.setVisible(false);
@@ -182,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 } else if (position == 2) {
+                    viewPager.setAllowedSwipeDirection(TabPager.SwipeDirection.ALL);
                     try {
                         actionWrite.setVisible(false);
                         actionShare.setVisible(false);
@@ -191,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 } else {
+                    viewPager.setAllowedSwipeDirection(TabPager.SwipeDirection.ALL);
                     try {
                         actionWrite.setVisible(false);
                         actionShare.setVisible(false);
@@ -221,8 +224,13 @@ public class MainActivity extends AppCompatActivity {
 
                             toolbarTitle.setText(tag);
 
-                            if (tag.equals(getResources().getString(R.string.home_menu_oneline)) && count == 1) {
-                                actionWrite.setVisible(true);
+                            if (tag.equals(getResources().getString(R.string.home_menu_oneline))) {
+                                viewPager.setAllowedSwipeDirection(TabPager.SwipeDirection.RIGHT);
+                                if (count == 1) {
+                                    actionWrite.setVisible(true);
+                                } else {
+                                    actionWrite.setVisible(false);
+                                }
                             } else {
                                 actionWrite.setVisible(false);
                             }
@@ -235,6 +243,7 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 } else if (tabPosition == 1) {
+                    viewPager.setAllowedSwipeDirection(TabPager.SwipeDirection.ALL);
                     toolbarTitle.setText(R.string.app_name);
                     try {
                         actionWrite.setVisible(false);
@@ -249,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 } else if (tabPosition == 2) {
+                    viewPager.setAllowedSwipeDirection(TabPager.SwipeDirection.ALL);
                     toolbarTitle.setText(R.string.app_name);
                     try {
                         actionWrite.setVisible(false);
@@ -259,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 } else {
+                    viewPager.setAllowedSwipeDirection(TabPager.SwipeDirection.ALL);
                     toolbarTitle.setText(R.string.app_name);
                     try {
                         actionWrite.setVisible(false);
@@ -323,8 +334,8 @@ public class MainActivity extends AppCompatActivity {
     private final BroadcastReceiver notificationReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            final ArrayList<String> arrayList = intent.getStringArrayListExtra(PushListenerService.INTENT_SNS_NOTIFICATION_DATA);
-            String type = arrayList.get(0);
+            final Bundle data = intent.getExtras();
+            String type = data.getString("type");
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
@@ -332,8 +343,8 @@ public class MainActivity extends AppCompatActivity {
                 new MaterialDialog.Builder(MainActivity.this)
                         .iconRes(R.drawable.ic_announcement_black_48dp)
                         .limitIconToDefaultSize()
-                        .title(arrayList.get(1))
-                        .content(arrayList.get(2))
+                        .title(data.getString("title"))
+                        .content(data.getString("message"))
                         .positiveText(R.string.dialog_ok)
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
@@ -346,8 +357,8 @@ public class MainActivity extends AppCompatActivity {
                 new MaterialDialog.Builder(MainActivity.this)
                         .iconRes(R.drawable.ic_chat_black_48dp)
                         .limitIconToDefaultSize()
-                        .title(arrayList.get(1))
-                        .content(arrayList.get(2))
+                        .title(data.getString("title"))
+                        .content(data.getString("message"))
                         .positiveText(R.string.dialog_ok)
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
@@ -355,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
                                 dialog.dismiss();
 
                                 Intent restartIntent = getIntent();
-                                restartIntent.putStringArrayListExtra("arrayList", arrayList);
+                                restartIntent.putExtras(data);
                                 finish();
                                 startActivity(restartIntent);
                             }
@@ -372,8 +383,8 @@ public class MainActivity extends AppCompatActivity {
                 new MaterialDialog.Builder(MainActivity.this)
                         .iconRes(R.drawable.ic_fiber_new_black_48dp)
                         .limitIconToDefaultSize()
-                        .title(arrayList.get(1))
-                        .content(arrayList.get(2))
+                        .title(data.getString("title"))
+                        .content(data.getString("message"))
                         .positiveText(R.string.dialog_ok)
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override

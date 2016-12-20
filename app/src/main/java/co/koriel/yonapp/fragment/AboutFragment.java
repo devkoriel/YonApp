@@ -32,9 +32,6 @@ import co.koriel.yonapp.R;
 import co.koriel.yonapp.helper.InAppBillingHelper;
 
 public class AboutFragment extends FragmentBase {
-    private final String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiP6nqx4fVvwYlTGsdxt47jMBeUDeH1WpfW3ZIHebNLAW8+2ngq5FQ0Q64c13hYfNXCQWyhiC3daMSwK5rExQAoUAXtO68UazkPdWAmWHLzf/xPQV3cryV6uru3wsurmhE+3sTdpRomaMivRlm5TJdr4VNExgNm9UCtdenqfjFoTVAiyt/5+Q+wOsaMhct5p+tA1wTgyX//L8c4MRnPg/3I7AHcI74x+90yjFFgzwxM+NHBnLpEzF5yyPB7IMS/9oZhqWNKrD4/xMNHY3dCATqoZGBhHLNYpiLNNQ5vXu6x3Y1zLGNZVIg6LF1+niw3v3k8f9uifJoBmkff6zORcfpwIDAQAB";
-    private InAppBillingHelper inAppBillingHelper;
-
     private ArrayList<HashMap<String, String>> arrayList;
     private SimpleAdapter simpleAdapter;
 
@@ -230,7 +227,7 @@ public class AboutFragment extends FragmentBase {
                     }
                 }.start();
             } else if (position == 5) {
-                inAppBillingHelper = new InAppBillingHelper(getActivity(), base64EncodedPublicKey);
+                final InAppBillingHelper inAppBillingHelper = new InAppBillingHelper(getActivity(), "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiP6nqx4fVvwYlTGsdxt47jMBeUDeH1WpfW3ZIHebNLAW8+2ngq5FQ0Q64c13hYfNXCQWyhiC3daMSwK5rExQAoUAXtO68UazkPdWAmWHLzf/xPQV3cryV6uru3wsurmhE+3sTdpRomaMivRlm5TJdr4VNExgNm9UCtdenqfjFoTVAiyt/5+Q+wOsaMhct5p+tA1wTgyX//L8c4MRnPg/3I7AHcI74x+90yjFFgzwxM+NHBnLpEzF5yyPB7IMS/9oZhqWNKrD4/xMNHY3dCATqoZGBhHLNYpiLNNQ5vXu6x3Y1zLGNZVIg6LF1+niw3v3k8f9uifJoBmkff6zORcfpwIDAQAB");
                 final String[] skuList = {"donate_1000", "donate_5000", "donate_10000", "donate_50000", "donate_100000"};
 
                 new Thread() {
@@ -301,14 +298,5 @@ public class AboutFragment extends FragmentBase {
         lastestVersion = version;
         arrayList.get(0).put("item2", "현재 버전: " + currentVersion + "\n최신 버전: " + lastestVersion + "\n");
         simpleAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        if (inAppBillingHelper != null) {
-            inAppBillingHelper.destroy();
-        }
     }
 }

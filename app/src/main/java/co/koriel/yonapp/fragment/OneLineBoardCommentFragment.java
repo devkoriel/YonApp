@@ -2,24 +2,21 @@ package co.koriel.yonapp.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.preference.PreferenceManager;
-import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -41,15 +38,20 @@ import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TimeZone;
 
 import co.amazonaws.mobile.AWSConfiguration;
@@ -57,17 +59,21 @@ import co.amazonaws.mobile.AWSMobileClient;
 import co.amazonaws.models.nosql.OnelineBoardCommentDO;
 import co.amazonaws.models.nosql.OnelineLikeDO;
 import co.amazonaws.models.nosql.OnelineNicknameDO;
+import co.amazonaws.models.nosql.OnelineReportDO;
+import co.koriel.yonapp.MainActivity;
 import co.koriel.yonapp.R;
 import co.koriel.yonapp.fragment.adapter.OneLineBoardCommentAdapter;
 import co.koriel.yonapp.fragment.adapter.OneLineBoardCommentItem;
+import co.koriel.yonapp.helper.MathHelper;
+import co.koriel.yonapp.tab.TabPager;
 import co.koriel.yonapp.util.NetworkUtil;
 
 public class OneLineBoardCommentFragment extends FragmentBase implements CompoundButton.OnCheckedChangeListener {
     private final String S3_PREFIX_PUBLIC_IMG_ONELINE = "public/img/oneline";
 
-    private SharedPreferences prefs;
+    private DynamoDBMapper dynamoDBMapper;
 
-    private PostComment postComment;
+    private SharedPreferences prefs;
 
     private TextView contentDateAndIdView;
     private TextView contentTime;
@@ -81,17 +87,13 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
     private boolean isNickStatic;
     private EditText comment;
 
-    private Bitmap resizedBitmap;
-
-    private ListView commentListView;
+    private SwipeMenuListView commentListView;
     private OneLineBoardCommentAdapter oneLineBoardCommentAdapter;
     private ArrayList<OneLineBoardCommentItem> commentArrangedList;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private DynamoDBMapper dynamoDBMapper;
-
-    private long timeBefore;
-    private String timeBeforeString;
+    private SwipeMenuItem reportItem;
+    private SwipeMenuItem deleteItem;
 
     private String id;
     private String ContentDateAndId;
@@ -99,9 +101,8 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
     private String writerGcmTokenKey;
     private boolean isContentNickStatic;
     private boolean isContentPicture;
+    private boolean isContentGif;
     private long ContentTimestamp;
-
-    private AdapterView.AdapterContextMenuInfo acmi;
 
     private UpdateCommentThread updateCommentThread;
 
@@ -112,11 +113,28 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        Drawable reportDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_thumb_down_white_24dp);
+        DrawableCompat.setTint(reportDrawable, ContextCompat.getColor(getContext(), R.color.tab_indicator));
+
+        Drawable deleteDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_delete_white_24dp);
+        DrawableCompat.setTint(deleteDrawable, ContextCompat.getColor(getContext(), R.color.main_background));
+
+        reportItem = new SwipeMenuItem(getContext());
+        reportItem.setBackground(R.color.main_background);
+        reportItem.setIcon(reportDrawable);
+        reportItem.setWidth(MathHelper.dpToPx(60));
+
+        deleteItem = new SwipeMenuItem(getContext());
+        deleteItem.setBackground(R.color.tab_indicator);
+        deleteItem.setIcon(deleteDrawable);
+        deleteItem.setWidth(MathHelper.dpToPx(60));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ((MainActivity) getActivity()).viewPager.setAllowedSwipeDirection(TabPager.SwipeDirection.RIGHT);
         dynamoDBMapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
         TextView toolbarTitle = (TextView) getActivity().findViewById(R.id.toolbarTitle);
         toolbarTitle.setText(R.string.home_menu_oneline);
@@ -127,24 +145,27 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        contentDateAndIdView = (TextView) view.findViewById(R.id.comment_content_date_and_id);
-        contentTime = (TextView) view.findViewById(R.id.comment_content_time);
-        contentView = (TextView) view.findViewById(R.id.comment_content);
-        contentImageView = (ImageView) view.findViewById(R.id.comment_img);
-        imageHeader = (ImageView) view.findViewById(R.id.image_attach);
-        attachHeader = (TextView) view.findViewById(R.id.text_picture_attached);
-        likeHeader = (TextView) view.findViewById(R.id.like_count);
-        commentHeader = (TextView) view.findViewById(R.id.comment_count);
+        View header = getLayoutInflater(savedInstanceState).inflate(R.layout.one_line_board_comment_header_view, null, false);
+
+        contentDateAndIdView = (TextView) header.findViewById(R.id.comment_content_date_and_id);
+        contentTime = (TextView) header.findViewById(R.id.comment_content_time);
+        contentView = (TextView) header.findViewById(R.id.comment_content);
+        contentImageView = (ImageView) header.findViewById(R.id.comment_img);
+        imageHeader = (ImageView) header.findViewById(R.id.image_attach);
+        attachHeader = (TextView) header.findViewById(R.id.text_picture_attached);
+        likeHeader = (TextView) header.findViewById(R.id.like_count);
+        commentHeader = (TextView) header.findViewById(R.id.comment_count);
 
         Bundle bundle;
         if((bundle = getArguments()) != null) {
             id = bundle.getString("id");
             ContentDateAndId = bundle.getString("ContentDateAndId");
             Content = bundle.getString("Content");
-            ContentTimestamp = Long.valueOf(bundle.getString("Timestamp"));
+            ContentTimestamp = bundle.getLong("Timestamp");
             writerGcmTokenKey = bundle.getString("writerGcmTokenKey");
-            isContentNickStatic = Boolean.parseBoolean(bundle.getString("isNickStatic"));
-            isContentPicture = Boolean.parseBoolean(bundle.getString("isPicture"));
+            isContentNickStatic = bundle.getBoolean("isNickStatic");
+            isContentPicture = bundle.getBoolean("isPicture");
+            isContentGif = bundle.getBoolean("isGif");
         }
 
         checkBoxAnonymous = (CheckBox) view.findViewById(R.id.checkbox_anonymous);
@@ -198,7 +219,7 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
                                 swipeRefreshLayout.setRefreshing(true);
                             }
                         });
-                        postComment = new PostComment();
+                        PostComment postComment = new PostComment();
                         postComment.execute(comment.getText().toString());
                         comment.setText("");
                         InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -225,7 +246,7 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
                             swipeRefreshLayout.setRefreshing(true);
                         }
                     });
-                    postComment = new PostComment();
+                    PostComment postComment = new PostComment();
                     postComment.execute(comment.getText().toString());
                     comment.setText("");
                     InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -239,8 +260,12 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
 
         commentArrangedList = new ArrayList<>();
         oneLineBoardCommentAdapter = new OneLineBoardCommentAdapter();
-        commentListView = (ListView) view.findViewById(R.id.oneline_board_comment_list);
+        commentListView = (SwipeMenuListView) view.findViewById(R.id.oneline_board_comment_list);
+        commentListView.addHeaderView(header);
         commentListView.setAdapter(oneLineBoardCommentAdapter);
+        commentListView.setMenuCreator(swipeMenuCreator);
+        commentListView.setSwipeDirection(SwipeMenuListView.DIRECTION_RIGHT);
+        commentListView.setOnMenuItemClickListener(onMenuItemClickListener);
         registerForContextMenu(commentListView);
         commentListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         commentListView.setOnScrollListener(OnScrollChange);
@@ -380,48 +405,116 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
         }
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        if (v.getId()==R.id.oneline_board_comment_list) {
-            MenuInflater inflater = getActivity().getMenuInflater();
-            acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            if (commentArrangedList.get(acmi.position).getCommentDateAndId().split("]")[1].equals(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID())) {
-                inflater.inflate(R.menu.menu_oneline_comment, menu);
+    private SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
+        @Override
+        public void create(SwipeMenu menu) {
+            switch (menu.getViewType()) {
+                case 0:
+                    menu.addMenuItem(deleteItem);
+                    break;
+
+                case 1:
+                    menu.addMenuItem(reportItem);
+                    break;
             }
         }
-    }
+    };
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.action_comment_delte:
-                new Thread() {
-                    public void run() {
-                        OnelineBoardCommentDO onelineBoardCommentDO = new OnelineBoardCommentDO();
-                        onelineBoardCommentDO.setCommentDateAndId(commentArrangedList.get(acmi.position).getCommentDateAndId());
-                        dynamoDBMapper.delete(onelineBoardCommentDO);
+    private SwipeMenuListView.OnMenuItemClickListener onMenuItemClickListener = new SwipeMenuListView.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(final int position, SwipeMenu menu, int index) {
+            if(!NetworkUtil.isNetworkConnected(getActivity())) {
+                Toast.makeText(getActivity(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
+                return false;
+            }
 
-                        swipeRefreshLayout.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                swipeRefreshLayout.setRefreshing(true);
+            final String userId = AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID();
+            if (userId == null) {
+                Toast.makeText(getActivity(), R.string.error_occured, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            switch (menu.getViewType()) {
+                case 0:
+                    new Thread() {
+                        public void run() {
+                            OnelineBoardCommentDO onelineBoardCommentDO = new OnelineBoardCommentDO();
+                            onelineBoardCommentDO.setCommentDateAndId(commentArrangedList.get(position).getCommentDateAndId());
+                            dynamoDBMapper.delete(onelineBoardCommentDO);
+
+                            swipeRefreshLayout.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    swipeRefreshLayout.setRefreshing(true);
+                                }
+                            });
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateComment(false);
+                                }
+                            });
+                        }
+                    }.start();
+                    break;
+
+                case 1:
+                    new Thread() {
+                        public void run() {
+                            TimeZone tz = TimeZone.getTimeZone("Asia/Seoul");
+                            DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss");
+                            dateFormatter.setTimeZone(tz);
+                            Date today = new Date();
+                            String date = dateFormatter.format(today);
+
+                            OnelineReportDO reportToFind = new OnelineReportDO();
+                            reportToFind.setContentDateAndId(commentArrangedList.get(position).getCommentDateAndId());
+
+                            Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
+                            expressionAttributeValues.put(":userId", new AttributeValue().withS(userId));
+
+                            DynamoDBQueryExpression queryExpressionReport = new DynamoDBQueryExpression()
+                                    .withIndexName("contentDateAndId-index")
+                                    .withHashKeyValues(reportToFind)
+                                    .withFilterExpression("contains(reportDateAndId, :userId)")
+                                    .withExpressionAttributeValues(expressionAttributeValues)
+                                    .withConsistentRead(false);
+
+                            PaginatedQueryList<OnelineReportDO> onelineReportDOs = dynamoDBMapper.query(OnelineReportDO.class, queryExpressionReport);
+
+                            if (onelineReportDOs.isEmpty()) {
+                                OnelineReportDO onelineReportDO = new OnelineReportDO();
+                                onelineReportDO.setReportDateAndId(date + "]" + userId);
+                                onelineReportDO.setContentDateAndId(commentArrangedList.get(position).getCommentDateAndId());
+                                onelineReportDO.setContentTimestamp(commentArrangedList.get(position).getTimestamp());
+                                onelineReportDO.setType(true);
+                                dynamoDBMapper.save(onelineReportDO);
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getActivity(), R.string.action_report, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            } else {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getActivity(), R.string.already_action_report, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
-                        });
+                        }
+                    }.start();
+                    break;
 
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                updateComment(false);
-                            }
-                        });
-                    }
-                }.start();
-                return true;
-            default:
-                return super.onContextItemSelected(item);
+                default:
+                    return false;
+            }
+            return false;
         }
-    }
+    };
 
     private SwipeRefreshLayout.OnRefreshListener OnRefreshLayout = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
@@ -497,35 +590,35 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
             final URL presignedUrl = s3.generatePresignedUrl(AWSConfiguration.AMAZON_S3_USER_FILES_BUCKET, S3_PREFIX_PUBLIC_IMG_ONELINE + "/" + ContentDateAndId,
                     new Date(new Date().getTime() + 60 * 60 * 1000));
 
+            final float density = getContext().getResources().getDisplayMetrics().density;
+            final int x = (int) (640 * density);
+            final int y = (int) (360 * density);
+
             try {
-                HttpURLConnection httpURLConnection = (HttpURLConnection) presignedUrl.openConnection();
-                httpURLConnection.setDoInput(true);
-                httpURLConnection.connect();
-
-                InputStream inputStream = httpURLConnection.getInputStream();
-                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-
-                float density = getContext().getResources().getDisplayMetrics().density;
-                float imageWidth = bitmap.getWidth();
-                float imageHeight = bitmap.getHeight();
-                float imageWidthDp = imageWidth / density;
-                float imageHeightDp = imageHeight / density;
-
-                if (imageWidthDp > 300 || imageHeightDp > 300) {
-                    if (imageWidthDp >= imageHeightDp) {
-                        resizedBitmap = Bitmap.createScaledBitmap(bitmap, (int) (imageWidth * (300 / imageWidthDp)), (int) (imageHeight * (300 / imageWidthDp)), true);
-                    } else {
-                        resizedBitmap = Bitmap.createScaledBitmap(bitmap, (int) (imageWidth * (300 / imageHeightDp)), (int) (imageHeight * (300 / imageHeightDp)), true);
-                    }
+                if (isContentGif) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Glide.with(getContext())
+                                    .load(presignedUrl.toString())
+                                    .asGif()
+                                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                                    .override(x, y)
+                                    .into(contentImageView);
+                        }
+                    });
+                } else {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Glide.with(getContext())
+                                    .load(presignedUrl.toString())
+                                    .override(x, y)
+                                    .into(contentImageView);
+                        }
+                    });
                 }
-
-                contentImageView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        contentImageView.setImageBitmap(resizedBitmap);
-                    }
-                });
-            } catch (NullPointerException | IOException e) {
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             }
         }
@@ -575,13 +668,20 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
 
                 final PaginatedQueryList<OnelineBoardCommentDO> comments = dynamoDBMapper.query(OnelineBoardCommentDO.class, queryExpressionComment);
 
+                swipeRefreshLayout.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+
                 commentArrangedList.clear();
                 for(int i = 0; i < comments.size(); i++) {
                     OnelineBoardCommentDO onelineBoardCommentDO = comments.get(i);
                     if(onelineBoardCommentDO.getComment() != null) {
                         OneLineBoardCommentItem oneLineBoardCommentItem = new OneLineBoardCommentItem();
-                        timeBefore = (System.currentTimeMillis() / 1000) - onelineBoardCommentDO.getTimestamp();
-                        timeBeforeString = beautifyTime(timeBefore);
+                        long timeBefore = (System.currentTimeMillis() / 1000) - onelineBoardCommentDO.getTimestamp();
+                        String timeBeforeString = beautifyTime(timeBefore);
 
                         String dateAndId = onelineBoardCommentDO.getCommentDateAndId();
 
@@ -589,8 +689,6 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
                             UpdateNicknameThread updateNicknameThread = new UpdateNicknameThread(i, dateAndId);
                             updateNicknameThread.setPriority(NORM_PRIORITY);
                             updateNicknameThread.start();
-
-                            oneLineBoardCommentItem.setId("");
                         } else {
                             if (dateAndId.split("]")[1].equals(ContentDateAndId.split("]")[1])) {
                                 oneLineBoardCommentItem.setId(dateAndId.split("-")[5].split(":")[1] + getResources().getString(R.string.writer_suffix));
@@ -604,6 +702,7 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
                         oneLineBoardCommentItem.setComment(onelineBoardCommentDO.getComment());
                         oneLineBoardCommentItem.setCommentDateAndId(dateAndId);
                         oneLineBoardCommentItem.setNickStatic(onelineBoardCommentDO.isNickStatic());
+                        oneLineBoardCommentItem.setTimestamp(onelineBoardCommentDO.getTimestamp());
 
                         commentArrangedList.add(oneLineBoardCommentItem);
                     }
@@ -615,7 +714,6 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
                         oneLineBoardCommentAdapter.clearItems();
                         oneLineBoardCommentAdapter.addAllItems(commentArrangedList);
                         oneLineBoardCommentAdapter.notifyDataSetChanged();
-                        swipeRefreshLayout.setRefreshing(false);
                     }
                 });
             } catch (NullPointerException|AmazonClientException|IllegalStateException|IndexOutOfBoundsException e) {

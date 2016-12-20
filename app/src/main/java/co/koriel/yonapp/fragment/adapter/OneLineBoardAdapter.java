@@ -12,13 +12,16 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import co.amazonaws.mobile.AWSMobileClient;
 import co.koriel.yonapp.R;
 
 public class OneLineBoardAdapter extends BaseAdapter {
     private ArrayList<OneLineBoardItem> oneLineBoardItems;
+    private String userId;
 
     public OneLineBoardAdapter() {
-        oneLineBoardItems = new ArrayList<>();
+        this.oneLineBoardItems = new ArrayList<>();
+        this.userId = AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID();
     }
 
     @Override
@@ -38,7 +41,6 @@ public class OneLineBoardAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        final int position = i;
         final Context context = viewGroup.getContext();
 
         if (view == null) {
@@ -54,7 +56,7 @@ public class OneLineBoardAdapter extends BaseAdapter {
         final TextView likeCountTextView = (TextView) view.findViewById(R.id.text_like_count);
         final TextView commentCountTextView = (TextView) view.findViewById(R.id.text_comment_count);
 
-        final OneLineBoardItem oneLineBoardItem = this.oneLineBoardItems.get(position);
+        final OneLineBoardItem oneLineBoardItem = this.oneLineBoardItems.get(i);
 
         final Animation fadeIn = new AlphaAnimation(0.0f, 1.0f);
         fadeIn.setDuration(500);
@@ -80,15 +82,19 @@ public class OneLineBoardAdapter extends BaseAdapter {
         });
 
         String preString = idTextView.getText().toString();
-        if (!preString.equals(oneLineBoardItem.getId())) {
-            if (preString.length() == 0) {
-                idTextView.setText(oneLineBoardItem.getId());
-                idTextView.startAnimation(fadeIn);
+        String postString = oneLineBoardItem.getId();
+
+        if (postString.length() != 0) {
+            if (!preString.equals(postString)) {
+                if (preString.length() == 0) {
+                    idTextView.setText(postString);
+                    idTextView.startAnimation(fadeIn);
+                } else {
+                    idTextView.startAnimation(fadeOutIdText);
+                }
             } else {
-                idTextView.startAnimation(fadeOutIdText);
+                idTextView.setText(postString);
             }
-        } else {
-            idTextView.setText(oneLineBoardItem.getId());
         }
 
         timeBeforeTextView.setText(oneLineBoardItem.getTimeBefore());
@@ -123,15 +129,19 @@ public class OneLineBoardAdapter extends BaseAdapter {
         });
 
         preString = likeCountTextView.getText().toString();
-        if (!preString.equals(Integer.toString(oneLineBoardItem.getLikeCount()))) {
-            if (preString.length() == 0) {
-                likeCountTextView.setText(Integer.toString(oneLineBoardItem.getLikeCount()));
-                likeCountTextView.startAnimation(fadeIn);
+        postString = Integer.toString(oneLineBoardItem.getLikeCount());
+
+        if (!postString.equals("-1")) {
+            if (!preString.equals(postString)) {
+                if (preString.length() == 0) {
+                    likeCountTextView.setText(postString);
+                    likeCountTextView.startAnimation(fadeIn);
+                } else {
+                    likeCountTextView.startAnimation(fadeOutLikeText);
+                }
             } else {
-                likeCountTextView.startAnimation(fadeOutLikeText);
+                likeCountTextView.setText(postString);
             }
-        } else {
-            likeCountTextView.setText(Integer.toString(oneLineBoardItem.getLikeCount()));
         }
 
         final Animation fadeOutCommentCountText = new AlphaAnimation(1.0f, 0.0f);
@@ -155,18 +165,36 @@ public class OneLineBoardAdapter extends BaseAdapter {
         });
 
         preString = commentCountTextView.getText().toString();
-        if (!preString.equals(Integer.toString(oneLineBoardItem.getCommentCount()))) {
-            if (preString.length() == 0) {
-                commentCountTextView.setText(Integer.toString(oneLineBoardItem.getCommentCount()));
-                commentCountTextView.startAnimation(fadeIn);
+        postString = Integer.toString(oneLineBoardItem.getCommentCount());
+
+        if (!postString.equals("-1")) {
+            if (!preString.equals(postString)) {
+                if (preString.length() == 0) {
+                    commentCountTextView.setText(postString);
+                    commentCountTextView.startAnimation(fadeIn);
+                } else {
+                    commentCountTextView.startAnimation(fadeOutCommentCountText);
+                }
             } else {
-                commentCountTextView.startAnimation(fadeOutCommentCountText);
+                commentCountTextView.setText(postString);
             }
-        } else {
-            commentCountTextView.setText(Integer.toString(oneLineBoardItem.getCommentCount()));
         }
 
         return view;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 2;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (this.oneLineBoardItems.get(position).getContentDateAndId().split("]")[1].equals(userId)) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
     public void addItem(OneLineBoardItem oneLineBoardItem) {

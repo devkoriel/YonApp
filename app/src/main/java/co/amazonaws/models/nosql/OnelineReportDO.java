@@ -11,6 +11,7 @@ public class OnelineReportDO {
     private String reportDateAndId;
     private String contentDateAndId;
     private long contentTimestamp;
+    private boolean type;
 
     @DynamoDBHashKey(attributeName = "reportDateAndId")
     public String getReportDateAndId() {
@@ -38,5 +39,14 @@ public class OnelineReportDO {
 
     public void setContentTimestamp(long contentTimestamp) {
         this.contentTimestamp = contentTimestamp;
+    }
+
+    @DynamoDBAttribute(attributeName = "type")
+    public boolean getType() {
+        return type;
+    }
+
+    public void setType(boolean type) {
+        this.type = type;
     }
 }

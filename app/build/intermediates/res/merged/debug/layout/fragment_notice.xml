@@ -8,25 +8,36 @@
     android:gravity="center_vertical">
 
     <android.support.v4.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/swipe_refresh_layout">
+        android:layout_height="match_parent">
 
-    <ScrollView
-        android:id="@+id/notice_scroll"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:fillViewport="true">
-
-        <ListView
-            android:id="@+id/notice_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </ScrollView>
-
+            <ListView
+                android:id="@+id/notice_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <TextView
+                android:id="@+id/notice_list_empty"
+                android:text="@string/no_notice"
+                android:textSize="12sp"
+                android:textColor="@color/top_bar_background"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center" />
+
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

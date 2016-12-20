@@ -20,6 +20,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -207,7 +208,11 @@ public class SignInActivity extends Activity implements View.OnClickListener{
         }
 
         signinWebView = new NonLeakingWebView(SignInActivity.this);
-        if (Build.VERSION.SDK_INT >= 19) {
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            signinWebView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+            signinWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        } else if (Build.VERSION.SDK_INT >= 19) {
             signinWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
         else {
@@ -349,6 +354,8 @@ public class SignInActivity extends Activity implements View.OnClickListener{
                                         pDialog.dismiss();
 
                                         final MaterialDialog dialog = new MaterialDialog.Builder(SignInActivity.this)
+                                                .iconRes(R.drawable.ic_done_black_48dp)
+                                                .limitIconToDefaultSize()
                                                 .title(R.string.auth_success)
                                                 .content(R.string.auth_continue)
                                                 .positiveText(R.string.dialog_ok)
@@ -395,6 +402,8 @@ public class SignInActivity extends Activity implements View.OnClickListener{
                     pDialog.dismiss();
 
                     final MaterialDialog dialog = new MaterialDialog.Builder(SignInActivity.this)
+                            .iconRes(R.drawable.ic_error_outline_black_48dp)
+                            .limitIconToDefaultSize()
                             .title(R.string.auth_fail)
                             .content(R.string.auth_check)
                             .positiveText(R.string.dialog_ok)

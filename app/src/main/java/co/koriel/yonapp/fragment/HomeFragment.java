@@ -14,20 +14,15 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
-import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedScanList;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import co.amazonaws.mobile.AWSMobileClient;
 import co.amazonaws.models.nosql.OnelineBoardDO;
 import co.amazonaws.models.nosql.OnelineNicknameDO;
+import co.koriel.yonapp.MainActivity;
 import co.koriel.yonapp.PushListenerService;
 import co.koriel.yonapp.R;
 import co.koriel.yonapp.SignInActivity;
+import co.koriel.yonapp.tab.TabPager;
 import co.koriel.yonapp.util.NetworkUtil;
 
 public class HomeFragment extends FragmentBase implements View.OnClickListener{
@@ -35,6 +30,7 @@ public class HomeFragment extends FragmentBase implements View.OnClickListener{
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
+        ((MainActivity) getActivity()).viewPager.setAllowedSwipeDirection(TabPager.SwipeDirection.ALL);
         TextView toolbarTitle = (TextView) getActivity().findViewById(R.id.toolbarTitle);
         toolbarTitle.setText(R.string.app_name);
 
@@ -69,64 +65,74 @@ public class HomeFragment extends FragmentBase implements View.OnClickListener{
         logoutButton.setOnClickListener(this);
         settingsButton.setOnClickListener(this);
 
-        final ArrayList<String> arrayList = getActivity().getIntent().getStringArrayListExtra("arrayList");
-        if (arrayList != null && arrayList.get(0).equals(PushListenerService.TYPE_ONELINE_NEW_COMMENT)) {
-            getActivity().getIntent().removeExtra("arrayList");
+        final Bundle data = getActivity().getIntent().getExtras();
+        String type;
+        if (data != null && (type = data.getString("type")) != null && type.equals(PushListenerService.TYPE_ONELINE_NEW_COMMENT)) {
+            getActivity().getIntent().removeExtra("type");
             new Thread() {
                 public void run() {
                     try {
                         getFragmentManager().beginTransaction()
                                 .replace(R.id.home_root_container, new OneLineBoardFragment())
-                                .addToBackStack(null)
+                                .addToBackStack(getResources().getString(R.string.home_menu_oneline))
                                 .commit();
 
                         Bundle bundle = new Bundle();
-                        String contentDateAndId = arrayList.get(3);
+                        String contentDateAndId = data.getString("contentId");
                         bundle.putString("ContentDateAndId", contentDateAndId);
-                        bundle.putString("Content", arrayList.get(5));
-                        bundle.putString("Timestamp", arrayList.get(6));
-                        bundle.putString("writerGcmTokenKey", arrayList.get(4));
-
-                        Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
-                        expressionAttributeValues.put(":dateAndIdToFind", new AttributeValue().withS(contentDateAndId));
+                        bundle.putString("Content", data.getString("content"));
+                        bundle.putLong("Timestamp", Long.parseLong(data.getString("contentTimestamp")));
+                        bundle.putString("writerGcmTokenKey", data.getString("gcmToken"));
 
                         DynamoDBMapper dynamoDBMapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-                        DynamoDBScanExpression scanExpressionOneline = new DynamoDBScanExpression()
-                                .withFilterExpression("DateAndId = :dateAndIdToFind")
-                                .withExpressionAttributeValues(expressionAttributeValues);
+                        OnelineBoardDO onelineBoardDO = dynamoDBMapper.load(OnelineBoardDO.class, contentDateAndId);
 
-                        PaginatedScanList<OnelineBoardDO> onelineBoardDOs = dynamoDBMapper.scan(OnelineBoardDO.class, scanExpressionOneline);
-                        boolean isNickStatic = onelineBoardDOs.get(0).isNickStatic();
-                        bundle.putString("isNickStatic", Boolean.toString(isNickStatic));
+                        if (onelineBoardDO != null) {
+                            boolean isNickStatic = onelineBoardDO.isNickStatic();
+                            bundle.putBoolean("isNickStatic", isNickStatic);
+                            bundle.putBoolean("isPicture", onelineBoardDO.isPicture());
+                            bundle.putBoolean("isGif", onelineBoardDO.isGif());
 
-                        if (isNickStatic) {
-                            expressionAttributeValues.clear();
-                            expressionAttributeValues.put(":userIdToFind", new AttributeValue().withS(contentDateAndId.split("]")[1]));
+                            if (isNickStatic) {
+                                OnelineNicknameDO onelineNicknameDO = dynamoDBMapper.load(OnelineNicknameDO.class, contentDateAndId.split("]")[1]);
 
-                            DynamoDBScanExpression scanExpressionNickname = new DynamoDBScanExpression()
-                                    .withFilterExpression("userId = :userIdToFind")
-                                    .withExpressionAttributeValues(expressionAttributeValues);
-
-                            PaginatedScanList<OnelineNicknameDO> onelineNicknameDOs = dynamoDBMapper.scan(OnelineNicknameDO.class, scanExpressionNickname);
-
-                            if (onelineNicknameDOs.size() > 0) {
-                                bundle.putString("id", onelineNicknameDOs.get(0).getNickname());
+                                if (onelineNicknameDO != null) {
+                                    bundle.putString("id", onelineNicknameDO.getNickname());
+                                } else {
+                                    bundle.putString("id", contentDateAndId.split("-")[5].split(":")[1]);
+                                }
                             } else {
                                 bundle.putString("id", contentDateAndId.split("-")[5].split(":")[1]);
                             }
+
+                            OneLineBoardCommentFragment oneLineBoardCommentFragment = new OneLineBoardCommentFragment();
+                            oneLineBoardCommentFragment.setArguments(bundle);
+
+                            getFragmentManager().beginTransaction()
+                                    .replace(R.id.home_root_container, oneLineBoardCommentFragment)
+                                    .addToBackStack(getResources().getString(R.string.home_menu_oneline))
+                                    .commit();
                         } else {
-                            bundle.putString("id", contentDateAndId.split("-")[5].split(":")[1]);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), R.string.deleted_oneline, Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
-
-                        OneLineBoardCommentFragment oneLineBoardCommentFragment = new OneLineBoardCommentFragment();
-                        oneLineBoardCommentFragment.setArguments(bundle);
-
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.home_root_container, oneLineBoardCommentFragment)
-                                .addToBackStack(null)
-                                .commit();
                     } catch (NullPointerException|IndexOutOfBoundsException e) {
                         e.printStackTrace();
+
+                        try {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), R.string.error_occured, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } catch (NullPointerException ee) {
+                            ee.printStackTrace();
+                        }
                     }
                 }
             }.start();

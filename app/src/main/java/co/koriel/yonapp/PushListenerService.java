@@ -15,7 +15,6 @@ import android.support.v7.preference.PreferenceManager;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,46 +31,6 @@ public class PushListenerService extends GcmListenerService {
     public static final String TYPE_ANNOUNCEMENT = "announcement";
     public static final String TYPE_ONELINE_NEW_COMMENT = "oneline_new_comment";
     public static final String TYPE_NEW_NOTICE = "new_notice";
-
-    /**
-     * Helper method to extract SNS message from bundle.
-     *
-     * @param data bundle
-     * @return message string from SNS push notification
-     */
-    public static ArrayList<String> getMessage(Bundle data) {
-        // If a push notification is sent as plain text, then the message appears in "default".
-        // Otherwise it's in the "message" for JSON format.
-
-        ArrayList<String> arrayList = new ArrayList<>();
-        String type = data.getString("type");
-
-        if (type != null) {
-            if (type.equals(TYPE_ANNOUNCEMENT)) {
-                arrayList.add(type);
-                arrayList.add(data.getString("title"));
-                arrayList.add(data.getString("message"));
-            } else if (type.equals(TYPE_ONELINE_NEW_COMMENT)) {
-                arrayList.add(type);
-                arrayList.add(data.getString("title"));
-                arrayList.add(data.getString("message"));
-                arrayList.add(data.getString("contentId"));
-                arrayList.add(data.getString("gcmToken"));
-                arrayList.add(data.getString("content"));
-                arrayList.add(data.getString("contentTimestamp"));
-            } else if (type.equals(TYPE_NEW_NOTICE)) {
-                arrayList.add(type);
-                arrayList.add(data.getString("title"));
-                arrayList.add(data.getString("message"));
-            } else {
-                arrayList.add(type);
-            }
-        } else {
-            arrayList.add("null");
-        }
-
-        return arrayList;
-    }
 
     private static boolean isForeground(Context context) {
         // Gets a list of running processes.
@@ -91,9 +50,8 @@ public class PushListenerService extends GcmListenerService {
         return false;
     }
 
-    private void displayNotification(final ArrayList<String> arrayList) {
-
-        String type = arrayList.get(0);
+    private void displayNotification(final Bundle data) {
+        String type = data.getString("type");
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
@@ -111,9 +69,9 @@ public class PushListenerService extends GcmListenerService {
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setSmallIcon(R.drawable.ic_announcement_white_24dp)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
-                    .setContentTitle(arrayList.get(1))
-                    .setTicker(arrayList.get(2))
-                    .setContentText(arrayList.get(2))
+                    .setContentTitle(data.getString("title"))
+                    .setTicker(data.getString("message"))
+                    .setContentText(data.getString("message"))
                     .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
                     .setAutoCancel(true)
                     .setContentIntent(contentIntent);
@@ -123,36 +81,36 @@ public class PushListenerService extends GcmListenerService {
 
             notificationManager.notify((int) System.currentTimeMillis(), builder.build());
         } else if (type.equals(TYPE_ONELINE_NEW_COMMENT) && prefs.getBoolean("push_oneline_new_comment", true)) {
-                Intent notificationIntent = new Intent(this, SplashActivity.class);
-                notificationIntent.setFlags(
-                        Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                notificationIntent.putStringArrayListExtra("arrayList", arrayList);
-                int requestID = (int) System.currentTimeMillis();
-                PendingIntent contentIntent = PendingIntent.getActivity(this, requestID, notificationIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
+            Intent notificationIntent = new Intent(this, SplashActivity.class);
+            notificationIntent.setFlags(
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            notificationIntent.putExtras(data);
+            int requestID = (int) System.currentTimeMillis();
+            PendingIntent contentIntent = PendingIntent.getActivity(this, requestID, notificationIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
 
-                // Display a notification with an icon, message as content, and default sound. It also
-                // opens the app when the notification is clicked.
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-                        .setSmallIcon(R.drawable.ic_chat_white_36dp)
-                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
-                        .setContentTitle(arrayList.get(1))
-                        .setTicker(arrayList.get(2))
-                        .setContentText(arrayList.get(2))
-                        .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
-                        .setAutoCancel(true)
-                        .setContentIntent(contentIntent);
+            // Display a notification with an icon, message as content, and default sound. It also
+            // opens the app when the notification is clicked.
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setSmallIcon(R.drawable.ic_chat_white_36dp)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+                    .setContentTitle(data.getString("title"))
+                    .setTicker(data.getString("message"))
+                    .setContentText(data.getString("message"))
+                    .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
+                    .setAutoCancel(true)
+                    .setContentIntent(contentIntent);
 
-                NotificationManager notificationManager = (NotificationManager) getSystemService(
-                        Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(
+                    Context.NOTIFICATION_SERVICE);
 
-                notificationManager.notify((int) System.currentTimeMillis(), builder.build());
+            notificationManager.notify((int) System.currentTimeMillis(), builder.build());
         } else if (type.equals(TYPE_NEW_NOTICE) && prefs.getBoolean("push_yscec_new_notice", true)) {
             Intent notificationIntent = new Intent(this, SplashActivity.class);
             notificationIntent.setFlags(
                     Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            notificationIntent.putStringArrayListExtra("arrayList", arrayList);
+            notificationIntent.putExtras(data);
             int requestID = (int) System.currentTimeMillis();
             PendingIntent contentIntent = PendingIntent.getActivity(this, requestID, notificationIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
@@ -163,9 +121,9 @@ public class PushListenerService extends GcmListenerService {
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setSmallIcon(R.drawable.ic_fiber_new_white_24dp)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
-                    .setContentTitle(arrayList.get(1))
-                    .setTicker(arrayList.get(2))
-                    .setContentText(arrayList.get(2))
+                    .setContentTitle(data.getString("title"))
+                    .setTicker(data.getString("message"))
+                    .setContentText(data.getString("message"))
                     .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
                     .setAutoCancel(true)
                     .setContentIntent(contentIntent);
@@ -177,10 +135,10 @@ public class PushListenerService extends GcmListenerService {
         }
     }
 
-    private void broadcast(final String from, final ArrayList<String> arrayList) {
+    private void broadcast(final String from, final Bundle data) {
         Intent intent = new Intent(ACTION_SNS_NOTIFICATION);
         intent.putExtra(INTENT_SNS_NOTIFICATION_FROM, from);
-        intent.putStringArrayListExtra(INTENT_SNS_NOTIFICATION_DATA, arrayList);
+        intent.putExtras(data);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
@@ -193,10 +151,12 @@ public class PushListenerService extends GcmListenerService {
      */
     @Override
     public void onMessageReceived(final String from, final Bundle data) {
-        if (isForeground(this)) {
-            broadcast(from, getMessage(data));
-        } else {
-            displayNotification(getMessage(data));
+        if (data.getString("type") != null) {
+            if (isForeground(this)) {
+                broadcast(from, data);
+            } else {
+                displayNotification(data);
+            }
         }
     }
 }

@@ -10,6 +10,11 @@ public class OneLineBoardCommentItem implements Serializable {
     private boolean isNickStatic;
 
     private String commentDateAndId;
+    private long Timestamp;
+
+    public OneLineBoardCommentItem() {
+        this.id = "";
+    }
 
     public String getId() {
         return id;
@@ -57,5 +62,13 @@ public class OneLineBoardCommentItem implements Serializable {
 
     public void setNickStatic(boolean nickStatic) {
         isNickStatic = nickStatic;
+    }
+
+    public long getTimestamp() {
+        return Timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        Timestamp = timestamp;
     }
 }

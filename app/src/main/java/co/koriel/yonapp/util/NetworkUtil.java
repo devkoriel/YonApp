@@ -3,7 +3,6 @@ package co.koriel.yonapp.util;
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.util.Log;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -76,9 +75,9 @@ public class NetworkUtil {
                     conn.disconnect();
                 }
             }
-        } catch(Exception ex) {
-            Log.e("SampleHTTP", "Exception in processing response.", ex);
-            ex.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+            return null;
         }
 
         return output.toString();

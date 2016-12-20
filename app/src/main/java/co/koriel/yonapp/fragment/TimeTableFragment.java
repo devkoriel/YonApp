@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,11 +24,14 @@ import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.io.File;
 
@@ -40,6 +45,8 @@ import co.koriel.yonapp.util.WebViewAllCapture;
 public class TimeTableFragment extends FragmentBase {
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
 
+    private SharedPreferences sharedPreferences;
+
     private NonLeakingWebView timeTableWebView;
     private RelativeLayout relativeLayout;
     private NotificationManager notificationManager;
@@ -52,6 +59,8 @@ public class TimeTableFragment extends FragmentBase {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
     }
 
     @Override
@@ -75,7 +84,7 @@ public class TimeTableFragment extends FragmentBase {
                         // Show an expanation to the user *asynchronously* -- don't block
                         // this thread waiting for the user's response! After the user
                         // sees the explanation, try again to request the permission.
-                        Toast.makeText(getContext(), "외부 저장소 쓰기 권한이 필요합니다", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.need_external_storage_write_permission, Toast.LENGTH_SHORT).show();
                     }
 
                     requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -86,6 +95,7 @@ public class TimeTableFragment extends FragmentBase {
                 }
                 break;
             case R.id.action_sync:
+                sharedPreferences.edit().putBoolean("enable_sync_yscec_timetable", true).apply();
                 getTimetable(true);
                 break;
             default:
@@ -104,128 +114,138 @@ public class TimeTableFragment extends FragmentBase {
 
         relativeLayout = (RelativeLayout) view.findViewById(R.id.timetable_layout);
 
-        getTimetable(false);
+        if (sharedPreferences.getBoolean("enable_sync_yscec_timetable", true)) getTimetable(false);
 
         return view;
     }
 
     private void getTimetable(final boolean isRefresh) {
+        try {
+            if (!NetworkUtil.isNetworkConnected(getActivity())) {
+                Toast.makeText(getActivity(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
+                return;
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
         new Thread() {
             public void run() {
                 try {
-                    if (!NetworkUtil.isNetworkConnected(getActivity())) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getActivity(), "인터넷에 연결해주세요", Toast.LENGTH_SHORT).show();
+                    final String js = "javascript:try { document.getElementById('username').value='" + DataBase.userInfo.getStudentId() + "';" +
+                            "document.getElementById('password').value='" + Crypto.decryptPbkdf2(DataBase.userInfo.getStudentPasswd()) + "';" +
+                            "(function(){document.getElementById('loginbtn').click();})() } catch (exception) {}";
+
+                    final String js2 = "javascript:try { document.getElementById('mobile-header').remove();" +
+                            "$('#page-content').css('top', '0px'); " +
+                            "document.getElementById('page-content-title').remove();" +
+                            "document.getElementsByClassName('fc-toolbar')[0].remove();" +
+                            "$('#content-region').css('padding', '0px 0px 0px');" +
+                            "$('#content-region').css('width', '100%');" +
+                            "document.getElementsByClassName('fc-day-header fc-widget-header fc-mon')[0].innerHTML = '월';" +
+                            "document.getElementsByClassName('fc-day-header fc-widget-header fc-tue')[0].innerHTML = '화';" +
+                            "document.getElementsByClassName('fc-day-header fc-widget-header fc-wed')[0].innerHTML = '수';" +
+                            "document.getElementsByClassName('fc-day-header fc-widget-header fc-thu')[0].innerHTML = '목';" +
+                            "document.getElementsByClassName('fc-day-header fc-widget-header fc-fri')[0].innerHTML = '금';" +
+                            "$('div[role=\"main\"]').css('width', '100%');" +
+                            "$('div[role=\"main\"]').css('margin', '0px');" + "" +
+                            "window.invoke.webViewHandler()} catch (exception) {}";
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            timeTableWebView = new NonLeakingWebView(getActivity());
+                            if (Build.VERSION.SDK_INT >= 21) {
+                                timeTableWebView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+                                timeTableWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+                            } else if (Build.VERSION.SDK_INT >= 19) {
+                                timeTableWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
                             }
-                        });
-                        interrupt();
-                        return;
-                    }
+                            else {
+                                timeTableWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                            }
+                            timeTableWebView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                            timeTableWebView.setVisibility(View.INVISIBLE);
+                            timeTableWebView.getSettings().setJavaScriptEnabled(true);
+                            timeTableWebView.getSettings().setDomStorageEnabled(true);
+                            timeTableWebView.setDrawingCacheEnabled(true);
+                            timeTableWebView.addJavascriptInterface(new JavaScriptInterface(), "invoke");
+                            relativeLayout.addView(timeTableWebView);
 
-                    if (!isInterrupted()) {
-                        final String js = "javascript:try { document.getElementById('username').value='" + DataBase.userInfo.getStudentId() + "';" +
-                                "document.getElementById('password').value='" + Crypto.decryptPbkdf2(DataBase.userInfo.getStudentPasswd()) + "';" +
-                                "(function(){document.getElementById('loginbtn').click();})() } catch (exception) {}";
+                            if (isFilePresent("/yonapp_timetable.mht") && !isRefresh) {
+                                timeTableWebView.loadUrl("file://" + getActivity().getExternalCacheDir() + "/yonapp_timetable.mht");
+                                timeTableWebView.setVisibility(View.VISIBLE);
+                            } else {
+                                Intent push = new Intent();
+                                push.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                        final String js2 = "javascript:try { document.getElementById('mobile-header').remove();" +
-                                "$('#page-content').css('top', '0px'); " +
-                                "document.getElementById('page-content-title').remove();" +
-                                "document.getElementsByClassName('fc-toolbar')[0].remove();" +
-                                "$('#content-region').css('padding', '0px 0px 0px');" +
-                                "$('#content-region').css('width', '100%');" +
-                                "document.getElementsByClassName('fc-day-header fc-widget-header fc-mon')[0].innerHTML = '월';" +
-                                "document.getElementsByClassName('fc-day-header fc-widget-header fc-tue')[0].innerHTML = '화';" +
-                                "document.getElementsByClassName('fc-day-header fc-widget-header fc-wed')[0].innerHTML = '수';" +
-                                "document.getElementsByClassName('fc-day-header fc-widget-header fc-thu')[0].innerHTML = '목';" +
-                                "document.getElementsByClassName('fc-day-header fc-widget-header fc-fri')[0].innerHTML = '금';" +
-                                "$('div[role=\"main\"]').css('width', '100%');" +
-                                "$('div[role=\"main\"]').css('margin', '0px');" + "" +
-                                "window.invoke.webViewHandler()} catch (exception) {}";
+                                final PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, push, PendingIntent.FLAG_CANCEL_CURRENT);
 
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                timeTableWebView = new NonLeakingWebView(getActivity());
-                                timeTableWebView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                                timeTableWebView.setVisibility(View.INVISIBLE);
-                                timeTableWebView.getSettings().setJavaScriptEnabled(true);
-                                timeTableWebView.getSettings().setDomStorageEnabled(true);
-                                timeTableWebView.setDrawingCacheEnabled(true);
-                                timeTableWebView.addJavascriptInterface(new JavaScriptInterface(), "invoke");
-                                relativeLayout.addView(timeTableWebView);
+                                builder = new NotificationCompat.Builder(getContext())
+                                        .setPriority(NotificationCompat.PRIORITY_MAX)
+                                        .setSmallIcon(R.drawable.ic_refresh_white_36dp)
+                                        .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+                                        .setOngoing(true)
+                                        .setAutoCancel(false)
+                                        .setTicker(getResources().getString(R.string.syncing_timetable))
+                                        .setContentTitle(getResources().getString(R.string.app_name))
+                                        .setContentText(getResources().getString(R.string.syncing_timetable))
+                                        .setContentIntent(contentIntent);
 
-                                if (isFilePresent("/yonapp_timetable.mht") && !isRefresh) {
-                                    timeTableWebView.loadUrl("file://" + getActivity().getExternalCacheDir() + "/yonapp_timetable.mht");
-                                    timeTableWebView.setVisibility(View.VISIBLE);
-                                } else {
-                                    Intent push = new Intent();
-                                    push.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+                                builder.setFullScreenIntent(contentIntent, true);
 
-                                    final PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, push, PendingIntent.FLAG_CANCEL_CURRENT);
-
-                                    builder = new NotificationCompat.Builder(getContext())
-                                            .setPriority(NotificationCompat.PRIORITY_MAX)
-                                            .setSmallIcon(R.drawable.ic_refresh_white_36dp)
-                                            .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
-                                            .setOngoing(true)
-                                            .setAutoCancel(false)
-                                            .setTicker("시간표 가져오는 중...")
-                                            .setContentTitle("연세대학교 연앱")
-                                            .setContentText("시간표 가져오는 중...")
-                                            .setContentIntent(contentIntent);
-
-                                    notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-                                    builder.setFullScreenIntent(contentIntent, true);
-
-                                    if (Build.VERSION.SDK_INT >= 19) {
-                                        timeTableWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-                                    } else {
-                                        timeTableWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                                timeTableWebView.getSettings().setLoadsImagesAutomatically(false);
+                                timeTableWebView.setWebChromeClient(new WebChromeClient() {
+                                    @Override
+                                    public void onProgressChanged(WebView view, int progress) {
+                                        builder.setProgress(100, progress, false);
+                                        notificationManager.notify(0, builder.build());
                                     }
-                                    timeTableWebView.getSettings().setLoadsImagesAutomatically(false);
-                                    timeTableWebView.setWebChromeClient(new WebChromeClient() {
-                                        @Override
-                                        public void onProgressChanged(WebView view, int progress) {
-                                            builder.setProgress(100, progress, false);
+                                });
+                                timeTableWebView.setWebViewClient(new WebViewClient() {
+                                    @Override
+                                    public void onPageFinished(WebView view, String url) {
+                                        super.onPageFinished(view, url);
+
+                                        if (url.equals("https://yscec.yonsei.ac.kr/login/index.php")) {
+                                            if (Build.VERSION.SDK_INT >= 19) {
+                                                timeTableWebView.evaluateJavascript(js, new ValueCallback<String>() {
+                                                    @Override
+                                                    public void onReceiveValue(String s) {
+                                                    }
+                                                });
+                                            } else {
+                                                timeTableWebView.loadUrl(js);
+                                            }
+                                        } else if (url.equals("http://yscec.yonsei.ac.kr/local/timetable/index.php")) {
+                                            if (Build.VERSION.SDK_INT >= 19) {
+                                                timeTableWebView.evaluateJavascript(js2, new ValueCallback<String>() {
+                                                    @Override
+                                                    public void onReceiveValue(String s) {
+                                                    }
+                                                });
+                                            } else {
+                                                timeTableWebView.loadUrl(js2);
+                                            }
+                                        } else {
+                                            sharedPreferences.edit().putBoolean("enable_sync_yscec_timetable", false).apply();
+
+                                            builder.setSmallIcon(R.drawable.ic_error_outline_white_36dp)
+                                                    .setContentText(getResources().getString(R.string.sync_timetable_fail))
+                                                    .setTicker(getResources().getString(R.string.sync_timetable_fail))
+                                                    .setOngoing(false)
+                                                    .setAutoCancel(true)
+                                                    .setProgress(0, 0, false);
                                             notificationManager.notify(0, builder.build());
                                         }
-                                    });
-                                    timeTableWebView.setWebViewClient(new WebViewClient() {
-                                        @Override
-                                        public void onPageFinished(WebView view, String url) {
-                                            super.onPageFinished(view, url);
+                                    }
+                                });
 
-                                            if (url.equals("https://yscec.yonsei.ac.kr/login/index.php")) {
-                                                if (Build.VERSION.SDK_INT >= 19) {
-                                                    timeTableWebView.evaluateJavascript(js, new ValueCallback<String>() {
-                                                        @Override
-                                                        public void onReceiveValue(String s) {
-                                                        }
-                                                    });
-                                                } else {
-                                                    timeTableWebView.loadUrl(js);
-                                                }
-                                            } else if (url.equals("http://yscec.yonsei.ac.kr/local/timetable/index.php")) {
-                                                if (Build.VERSION.SDK_INT >= 19) {
-                                                    timeTableWebView.evaluateJavascript(js2, new ValueCallback<String>() {
-                                                        @Override
-                                                        public void onReceiveValue(String s) {
-                                                        }
-                                                    });
-                                                } else {
-                                                    timeTableWebView.loadUrl(js2);
-                                                }
-                                            }
-                                        }
-                                    });
-
-                                    timeTableWebView.loadUrl("http://yscec.yonsei.ac.kr/local/timetable/index.php");
-                                }
+                                timeTableWebView.loadUrl("http://yscec.yonsei.ac.kr/local/timetable/index.php");
                             }
-                        });
-                    }
+                        }
+                    });
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
@@ -236,34 +256,26 @@ public class TimeTableFragment extends FragmentBase {
     class JavaScriptInterface {
         @JavascriptInterface
         public void webViewHandler() {
+            sharedPreferences.edit().putBoolean("enable_sync_yscec_timetable", true).apply();
+
             builder.setSmallIcon(R.drawable.ic_done_white_36dp)
-                    .setContentText("시간표 가져오기 완료")
-                    .setTicker("시간표 가져오기 완료")
+                    .setContentText(getResources().getString(R.string.sync_timetable_success))
+                    .setTicker(getResources().getString(R.string.sync_timetable_success))
                     .setOngoing(false)
                     .setAutoCancel(true)
                     .setProgress(0, 0, false);
             notificationManager.notify(0, builder.build());
 
             try {
-                getActivity().runOnUiThread(new Runnable() {
+                timeTableWebView.post(new Runnable() {
                     @Override
                     public void run() {
                         timeTableWebView.setVisibility(View.VISIBLE);
+                        timeTableWebView.saveWebArchive(getContext().getExternalCacheDir() + "/yonapp_timetable.mht");
                     }
                 });
             } catch (NullPointerException e) {
                 e.printStackTrace();
-            } finally {
-                try {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            timeTableWebView.saveWebArchive(getContext().getExternalCacheDir() + "/yonapp_timetable.mht");
-                        }
-                    });
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }
@@ -278,19 +290,20 @@ public class TimeTableFragment extends FragmentBase {
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
-                // If request is cancelled, the result arrays are empty.
+            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
                     addImageToGallery(timeTableWebView, getContext());
                 } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
+                    new MaterialDialog.Builder(getContext())
+                            .iconRes(R.drawable.ic_error_outline_black_48dp)
+                            .limitIconToDefaultSize()
+                            .title(R.string.screenshot_permission_failure_title_text)
+                            .content(R.string.screenshot_permission_failure_text)
+                            .positiveText(R.string.dialog_ok)
+                            .show();
                 }
-                return;
-            }
+                break;
 
             // other 'case' lines to check for other
             // permissions this app might request
@@ -302,7 +315,7 @@ public class TimeTableFragment extends FragmentBase {
         File path = context.getExternalCacheDir();
         File file = new File(path, "/yonapp_timetable.png");
         webViewAllCapture.onWebViewAllCapture(webView, context.getExternalCacheDir() + "/", "yonapp_timetable.png");
-        Toast.makeText(context, "갤러리에 스크린샷이 저장되었습니다", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, R.string.screenshot_saved_into_gallery, Toast.LENGTH_SHORT).show();
 
         ContentValues values = new ContentValues();
 
@@ -311,5 +324,14 @@ public class TimeTableFragment extends FragmentBase {
         values.put(MediaStore.MediaColumns.DATA, file.getAbsolutePath());
 
         context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (timeTableWebView != null) {
+            timeTableWebView.destroy();
+        }
     }
 }

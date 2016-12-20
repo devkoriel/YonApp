@@ -4,17 +4,8 @@
     android:layout_height="match_parent"
     tools:context="co.koriel.yonapp.fragment.AboutFragment">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:fillViewport="true">
-
         <ListView
             android:id="@+id/about_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-    </ScrollView>
-
 </RelativeLayout>

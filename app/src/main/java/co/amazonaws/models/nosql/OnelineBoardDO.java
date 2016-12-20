@@ -19,6 +19,7 @@ public class OnelineBoardDO implements Serializable {
     private String _writerGcmTokenKey;
     private boolean isNickStatic;
     private boolean isPicture;
+    private boolean isGif;
     private long _Timestamp;
 
     @DynamoDBHashKey(attributeName = "DateAndId")
@@ -83,5 +84,14 @@ public class OnelineBoardDO implements Serializable {
 
     public void setPicture(boolean picture) {
         isPicture = picture;
+    }
+
+    @DynamoDBAttribute(attributeName = "isGif")
+    public boolean isGif() {
+        return isGif;
+    }
+
+    public void setGif(boolean gif) {
+        isGif = gif;
     }
 }

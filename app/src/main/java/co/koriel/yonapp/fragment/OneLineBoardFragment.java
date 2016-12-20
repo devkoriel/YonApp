@@ -2,23 +2,22 @@ package co.koriel.yonapp.fragment;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.preference.PreferenceManager;
 import android.text.InputType;
-import android.view.ContextMenu;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,6 +41,10 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedQueryLi
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -57,16 +60,19 @@ import co.amazonaws.mobile.AWSMobileClient;
 import co.amazonaws.mobile.content.ContentItem;
 import co.amazonaws.mobile.content.ContentProgressListener;
 import co.amazonaws.mobile.content.UserFileManager;
-import co.amazonaws.mobile.util.ImageSelectorUtils;
 import co.amazonaws.models.nosql.OnelineBoardCommentDO;
 import co.amazonaws.models.nosql.OnelineBoardDO;
 import co.amazonaws.models.nosql.OnelineLikeDO;
 import co.amazonaws.models.nosql.OnelineNicknameDO;
 import co.amazonaws.models.nosql.OnelineReportDO;
+import co.koriel.yonapp.MainActivity;
 import co.koriel.yonapp.R;
 import co.koriel.yonapp.db.DataBase;
 import co.koriel.yonapp.fragment.adapter.OneLineBoardAdapter;
 import co.koriel.yonapp.fragment.adapter.OneLineBoardItem;
+import co.koriel.yonapp.helper.ImageFileHelper;
+import co.koriel.yonapp.helper.MathHelper;
+import co.koriel.yonapp.tab.TabPager;
 import co.koriel.yonapp.util.NetworkUtil;
 import co.koriel.yonapp.util.SerializeObject;
 
@@ -82,33 +88,30 @@ public class OneLineBoardFragment extends FragmentBase {
     private final int UPDATE_ALL = -1;
 
     private MaterialDialog onelineWriteDialog;
-    private PostContent postContent;
 
     private boolean isNickStatic;
     private boolean isPicture;
+    private boolean isGif;
     private SharedPreferences prefs;
 
-    private ListView contentListView;
+    private SwipeMenuListView contentListView;
     private OneLineBoardAdapter oneLineBoardAdapter;
     private ArrayList<OnelineBoardDO> contentScanList;
     private ArrayList<OneLineBoardItem> contentArrangedList;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private AdapterView.AdapterContextMenuInfo acmi;
+    private SwipeMenuItem likeItem;
+    private SwipeMenuItem reportItem;
+    private SwipeMenuItem deleteItem;
 
     private DynamoDBMapper dynamoDBMapper;
     private UserFileManager userFileManager;
-
-    private String attachedImagePath;
+    private String imageFilePath;
 
     private final String S3_PREFIX_PUBLIC_IMG_ONELINE = "public/img/oneline";
 
-    private long timeBefore;
-    private String timeBeforeString;
     private long timeLastPost;
     private long timeLastLastPost;
-
-    Parcelable state;
 
     private boolean mLockListView;
     private boolean isEndOfList;
@@ -153,6 +156,30 @@ public class OneLineBoardFragment extends FragmentBase {
                                 OneLineBoardFragment.this.userFileManager = userFileManager;
                             }
                         });
+
+        Drawable likeDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_thumb_up_white_24dp);
+        DrawableCompat.setTint(likeDrawable, ContextCompat.getColor(getContext(), R.color.main_background));
+
+        Drawable reportDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_thumb_down_white_24dp);
+        DrawableCompat.setTint(reportDrawable, ContextCompat.getColor(getContext(), R.color.tab_indicator));
+
+        Drawable deleteDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_delete_white_24dp);
+        DrawableCompat.setTint(deleteDrawable, ContextCompat.getColor(getContext(), R.color.main_background));
+
+        likeItem = new SwipeMenuItem(getContext());
+        likeItem.setBackground(R.color.tab_indicator);
+        likeItem.setIcon(likeDrawable);
+        likeItem.setWidth(MathHelper.dpToPx(80));
+
+        reportItem = new SwipeMenuItem(getContext());
+        reportItem.setBackground(R.color.main_background);
+        reportItem.setIcon(reportDrawable);
+        reportItem.setWidth(MathHelper.dpToPx(80));
+
+        deleteItem = new SwipeMenuItem(getContext());
+        deleteItem.setBackground(R.color.tab_indicator);
+        deleteItem.setIcon(deleteDrawable);
+        deleteItem.setWidth(MathHelper.dpToPx(80));
     }
 
     @Override
@@ -169,6 +196,8 @@ public class OneLineBoardFragment extends FragmentBase {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_write:
+                isPicture = false;
+                isGif = false;
                 onelineWriteDialog.getActionButton(DialogAction.NEUTRAL).setText(R.string.attach_picture);
                 onelineWriteDialog.show();
                 onelineWriteDialog.setPromptCheckBoxChecked(!isNickStatic);
@@ -184,6 +213,7 @@ public class OneLineBoardFragment extends FragmentBase {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_one_line_board, container, false);
+        ((MainActivity) getActivity()).viewPager.setAllowedSwipeDirection(TabPager.SwipeDirection.RIGHT);
 
         TextView toolbarTitle = (TextView) getActivity().findViewById(R.id.toolbarTitle);
         toolbarTitle.setText(R.string.home_menu_oneline);
@@ -196,10 +226,13 @@ public class OneLineBoardFragment extends FragmentBase {
         contentArrangedList = new ArrayList<>();
         oneLineBoardAdapter = new OneLineBoardAdapter();
         View header = getLayoutInflater(savedInstanceState).inflate(R.layout.content_list_header, null, false);
-        contentListView = (ListView) view.findViewById(R.id.oneline_board_list);
+        contentListView = (SwipeMenuListView) view.findViewById(R.id.oneline_board_list);
         contentListView.addHeaderView(header);
         contentListView.setAdapter(oneLineBoardAdapter);
         contentListView.setOnItemClickListener(OnClickListItem);
+        contentListView.setMenuCreator(swipeMenuCreator);
+        contentListView.setSwipeDirection(SwipeMenuListView.DIRECTION_RIGHT);
+        contentListView.setOnMenuItemClickListener(onMenuItemClickListener);
         registerForContextMenu(contentListView);
         contentListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         contentListView.setOnScrollListener(OnScrollChange);
@@ -211,8 +244,8 @@ public class OneLineBoardFragment extends FragmentBase {
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String sContentScanList = SerializeObject.ReadSettings(getContext(), "csl.dat");
-        String sContentArrangedList = SerializeObject.ReadSettings(getContext(), "cal.dat");
+        String sContentScanList = SerializeObject.ReadSettings(getContext(), "content_scan_list.dat");
+        String sContentArrangedList = SerializeObject.ReadSettings(getContext(), "content_arranged_list.dat");
         if (!sContentScanList.equalsIgnoreCase("") && !sContentArrangedList.equalsIgnoreCase("")) {
 
             Object objCsl = SerializeObject.stringToObject(sContentScanList);
@@ -262,7 +295,7 @@ public class OneLineBoardFragment extends FragmentBase {
                     }
                 });
 
-                postContent = new PostContent();
+                PostContent postContent = new PostContent();
                 postContent.execute(input.toString());
 
                 try {
@@ -299,10 +332,9 @@ public class OneLineBoardFragment extends FragmentBase {
                             return;
                         }
 
-                        Intent intent = new Intent();
-                        intent.setType("image/*");
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+                        Intent intent = new Intent(Intent.ACTION_PICK);
+                        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                        startActivityForResult(intent, PICK_IMAGE_REQUEST);
                     } else if (buttonString.equals(getResources().getString(R.string.attach_picture_cancel))) {
                         isPicture = false;
                         imageAttachButton.setText(R.string.attach_picture);
@@ -341,17 +373,33 @@ public class OneLineBoardFragment extends FragmentBase {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
-            isPicture = true;
-
             Uri uri = data.getData();
 
             try {
-                attachedImagePath = ImageSelectorUtils.getFilePathFromUri(getActivity(), uri);
-                onelineWriteDialog.getActionButton(DialogAction.NEUTRAL).setText(R.string.attach_picture_cancel);
-            } catch (IllegalArgumentException e) {
+                imageFilePath = ImageFileHelper.getPath(getContext(), uri);
+
+                if (imageFilePath != null) {
+                    String filenameArray[] = imageFilePath.split("\\.");
+                    String extension = filenameArray[filenameArray.length-1];
+
+                    Log.d(OneLineBoardFragment.class.getSimpleName(), extension);
+
+                    isPicture = true;
+                    if (extension.toLowerCase().equals("gif")) {
+                        isGif = true;
+                    } else {
+                        isGif = false;
+                    }
+
+                    onelineWriteDialog.getActionButton(DialogAction.NEUTRAL).setText(R.string.attach_picture_cancel);
+                } else {
+                    throw new Exception("Image file path is null");
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
 
                 isPicture = false;
+                isGif = false;
 
                 new MaterialDialog.Builder(getContext())
                         .iconRes(R.drawable.ic_error_outline_black_48dp)
@@ -367,21 +415,23 @@ public class OneLineBoardFragment extends FragmentBase {
     @Override
     public void onRequestPermissionsResult(final int requestCode,
                                            final String permissions[], final int[] grantResults) {
-
-        if (requestCode == EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                final Intent intent = ImageSelectorUtils.getImageSelectionIntent();
-                startActivityForResult(intent, 0);
-            } else {
-                new MaterialDialog.Builder(getContext())
-                        .iconRes(R.drawable.ic_error_outline_black_48dp)
-                        .limitIconToDefaultSize()
-                        .title(R.string.content_permission_failure_title_text)
-                        .content(R.string.content_permission_failure_text)
-                        .positiveText(R.string.dialog_ok)
-                        .show();
-            }
+        switch (requestCode) {
+            case EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(Intent.ACTION_PICK);
+                    intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                    startActivityForResult(intent, PICK_IMAGE_REQUEST);
+                } else {
+                    new MaterialDialog.Builder(getContext())
+                            .iconRes(R.drawable.ic_error_outline_black_48dp)
+                            .limitIconToDefaultSize()
+                            .title(R.string.content_permission_failure_title_text)
+                            .content(R.string.content_permission_failure_text)
+                            .positiveText(R.string.dialog_ok)
+                            .show();
+                }
+                break;
         }
     }
 
@@ -451,12 +501,11 @@ public class OneLineBoardFragment extends FragmentBase {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            final File file = new File(attachedImagePath);
-
-                            userFileManager.uploadContent(file, date + "]" + userId, new ContentProgressListener() {
+                            File imageFile = new File(imageFilePath);
+                            userFileManager.uploadContent(imageFile, date + "]" + userId, new ContentProgressListener() {
                                 @Override
                                 public void onSuccess(ContentItem contentItem) {
-
+                                    imageFilePath = null;
                                 }
 
                                 @Override
@@ -466,7 +515,9 @@ public class OneLineBoardFragment extends FragmentBase {
 
                                 @Override
                                 public void onError(String filePath, Exception ex) {
-
+                                    imageFilePath = null;
+                                    isPicture = false;
+                                    isGif = false;
                                 }
                             });
                         }
@@ -488,6 +539,7 @@ public class OneLineBoardFragment extends FragmentBase {
                 onelineToWrite.setIp(ip);
                 onelineToWrite.setNickStatic(isNickStatic);
                 onelineToWrite.setPicture(isPicture);
+                onelineToWrite.setGif(isGif);
 
                 dynamoDBMapper.save(onelineToWrite);
                 return null;
@@ -506,6 +558,168 @@ public class OneLineBoardFragment extends FragmentBase {
         }
     }
 
+    private SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
+        @Override
+        public void create(SwipeMenu menu) {
+            switch (menu.getViewType()) {
+                case 0:
+                    menu.addMenuItem(deleteItem);
+                    break;
+
+                case 1:
+                    menu.addMenuItem(likeItem);
+                    menu.addMenuItem(reportItem);
+                    break;
+            }
+        }
+    };
+
+    private SwipeMenuListView.OnMenuItemClickListener onMenuItemClickListener = new SwipeMenuListView.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(final int position, SwipeMenu menu, int index) {
+            if(!NetworkUtil.isNetworkConnected(getActivity())) {
+                Toast.makeText(getActivity(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            final String userId = AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID();
+            if (userId == null) {
+                Toast.makeText(getActivity(), R.string.error_occured, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            switch (menu.getViewType()) {
+                case 0:
+                    new Thread() {
+                        public void run() {
+                            OnelineBoardDO onelineBoardDO = new OnelineBoardDO();
+                            onelineBoardDO.setDateAndId(contentArrangedList.get(position).getContentDateAndId());
+                            dynamoDBMapper.delete(onelineBoardDO);
+
+                            swipeRefreshLayout.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    swipeRefreshLayout.setRefreshing(true);
+                                }
+                            });
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateContent(contentArrangedList.size(), UPDATE_ALL, REFRESH);
+                                }
+                            });
+                        }
+                    }.start();
+                    break;
+
+                case 1:
+                    if (index == 0) {
+                        new Thread() {
+                            public void run() {
+                                TimeZone tz = TimeZone.getTimeZone("Asia/Seoul");
+                                DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss");
+                                dateFormatter.setTimeZone(tz);
+                                Date today = new Date();
+                                String date = dateFormatter.format(today);
+
+                                OnelineLikeDO likesToFind = new OnelineLikeDO();
+                                likesToFind.setContentDateAndId(contentArrangedList.get(position).getContentDateAndId());
+
+                                Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
+                                expressionAttributeValues.put(":userId", new AttributeValue().withS(userId));
+
+                                DynamoDBQueryExpression queryExpressionLike = new DynamoDBQueryExpression()
+                                        .withIndexName("contentDateAndId-index")
+                                        .withHashKeyValues(likesToFind)
+                                        .withFilterExpression("contains(likeDateAndId, :userId)")
+                                        .withExpressionAttributeValues(expressionAttributeValues)
+                                        .withConsistentRead(false);
+
+                                PaginatedQueryList<OnelineLikeDO> onelineLikeDOs = dynamoDBMapper.query(OnelineLikeDO.class, queryExpressionLike);
+
+                                if (onelineLikeDOs.isEmpty()) {
+                                    OnelineLikeDO onelineLikeDO = new OnelineLikeDO();
+                                    onelineLikeDO.setLikeDateAndId(date + "]" + userId);
+                                    onelineLikeDO.setContentDateAndId(contentArrangedList.get(position).getContentDateAndId());
+                                    onelineLikeDO.setContentTimestamp(contentArrangedList.get(position).getTimestamp());
+                                    dynamoDBMapper.save(onelineLikeDO);
+
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            updateContent(contentArrangedList.size(), position, REFRESH);
+                                            Toast.makeText(getActivity(), R.string.action_like, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } else {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getActivity(), R.string.already_action_like, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            }
+                        }.start();
+                    } else {
+                        new Thread() {
+                            public void run() {
+                                TimeZone tz = TimeZone.getTimeZone("Asia/Seoul");
+                                DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss");
+                                dateFormatter.setTimeZone(tz);
+                                Date today = new Date();
+                                String date = dateFormatter.format(today);
+
+                                OnelineReportDO reportToFind = new OnelineReportDO();
+                                reportToFind.setContentDateAndId(contentArrangedList.get(position).getContentDateAndId());
+
+                                Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
+                                expressionAttributeValues.put(":userId", new AttributeValue().withS(userId));
+
+                                DynamoDBQueryExpression queryExpressionReport = new DynamoDBQueryExpression()
+                                        .withIndexName("contentDateAndId-index")
+                                        .withHashKeyValues(reportToFind)
+                                        .withFilterExpression("contains(reportDateAndId, :userId)")
+                                        .withExpressionAttributeValues(expressionAttributeValues)
+                                        .withConsistentRead(false);
+
+                                PaginatedQueryList<OnelineReportDO> onelineReportDOs = dynamoDBMapper.query(OnelineReportDO.class, queryExpressionReport);
+
+                                if (onelineReportDOs.isEmpty()) {
+                                    OnelineReportDO onelineReportDO = new OnelineReportDO();
+                                    onelineReportDO.setReportDateAndId(date + "]" + userId);
+                                    onelineReportDO.setContentDateAndId(contentArrangedList.get(position).getContentDateAndId());
+                                    onelineReportDO.setContentTimestamp(contentArrangedList.get(position).getTimestamp());
+                                    onelineReportDO.setType(false);
+                                    dynamoDBMapper.save(onelineReportDO);
+
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getActivity(), R.string.action_report, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } else {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getActivity(), R.string.already_action_report, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            }
+                        }.start();
+                    }
+                    break;
+
+                default:
+                    return false;
+            }
+            return false;
+        }
+    };
+
     private AdapterView.OnItemClickListener OnClickListItem = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -521,26 +735,27 @@ public class OneLineBoardFragment extends FragmentBase {
                     try {
                         String sContentScanList = SerializeObject.objectToString(contentScanList);
                         if (sContentScanList != null && !sContentScanList.equalsIgnoreCase("")) {
-                            SerializeObject.WriteSettings(getContext(), sContentScanList, "csl.dat");
+                            SerializeObject.WriteSettings(getContext(), sContentScanList, "content_scan_list.dat");
                         } else {
-                            SerializeObject.WriteSettings(getContext(), "", "csl.dat");
+                            SerializeObject.WriteSettings(getContext(), "", "content_scan_list.dat");
                         }
 
                         String sContentArrangedList = SerializeObject.objectToString(contentArrangedList);
                         if (sContentArrangedList != null && !sContentArrangedList.equalsIgnoreCase("")) {
-                            SerializeObject.WriteSettings(getContext(), sContentArrangedList, "cal.dat");
+                            SerializeObject.WriteSettings(getContext(), sContentArrangedList, "content_arranged_list.dat");
                         } else {
-                            SerializeObject.WriteSettings(getContext(), "", "cal.dat");
+                            SerializeObject.WriteSettings(getContext(), "", "content_arranged_list.dat");
                         }
 
                         Bundle bundle = new Bundle();
                         bundle.putString("id", contentArrangedList.get(position - 1).getId());
                         bundle.putString("ContentDateAndId", contentArrangedList.get(position - 1).getContentDateAndId());
                         bundle.putString("Content", contentArrangedList.get(position - 1).getContent());
-                        bundle.putString("Timestamp", Long.toString(contentArrangedList.get(position - 1).getTimestamp()));
+                        bundle.putLong("Timestamp", contentArrangedList.get(position - 1).getTimestamp());
                         bundle.putString("writerGcmTokenKey", contentArrangedList.get(position - 1).getWriterGcmTokenKey());
-                        bundle.putString("isNickStatic", Boolean.toString(contentArrangedList.get(position - 1).isNickStatic()));
-                        bundle.putString("isPicture", Boolean.toString(contentArrangedList.get(position - 1).isPicture()));
+                        bundle.putBoolean("isNickStatic", contentArrangedList.get(position - 1).isNickStatic());
+                        bundle.putBoolean("isPicture", contentArrangedList.get(position - 1).isPicture());
+                        bundle.putBoolean("isGif", contentArrangedList.get(position - 1).isGif());
 
                         OneLineBoardCommentFragment oneLineBoardCommentFragment = new OneLineBoardCommentFragment();
                         oneLineBoardCommentFragment.setArguments(bundle);
@@ -557,164 +772,6 @@ public class OneLineBoardFragment extends FragmentBase {
             }.start();
         }
     };
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        if (v.getId()==R.id.oneline_board_list) {
-            MenuInflater inflater = getActivity().getMenuInflater();
-            acmi = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            if (contentArrangedList.get(acmi.position - 1).getContentDateAndId().split("]")[1].equals(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID())) {
-                inflater.inflate(R.menu.menu_oneline_my, menu);
-            } else {
-                inflater.inflate(R.menu.menu_oneline, menu);
-            }
-        }
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        if(!NetworkUtil.isNetworkConnected(getActivity())) {
-            Toast.makeText(getActivity(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        final String userId = AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID();
-        if (userId == null) {
-            Toast.makeText(getActivity(), R.string.error_occured, Toast.LENGTH_SHORT).show();
-            return true;
-        }
-
-        switch(item.getItemId()) {
-            case R.id.action_like:
-                new Thread() {
-                    public void run() {
-                        TimeZone tz = TimeZone.getTimeZone("Asia/Seoul");
-                        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss");
-                        dateFormatter.setTimeZone(tz);
-                        Date today = new Date();
-                        String date = dateFormatter.format(today);
-
-                        OnelineLikeDO likesToFind = new OnelineLikeDO();
-                        likesToFind.setContentDateAndId(contentArrangedList.get(acmi.position - 1).getContentDateAndId());
-
-                        Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
-                        expressionAttributeValues.put(":userId", new AttributeValue().withS(userId));
-
-                        DynamoDBQueryExpression queryExpressionLike = new DynamoDBQueryExpression()
-                                .withIndexName("contentDateAndId-index")
-                                .withHashKeyValues(likesToFind)
-                                .withFilterExpression("contains(likeDateAndId, :userId)")
-                                .withExpressionAttributeValues(expressionAttributeValues)
-                                .withConsistentRead(false);
-
-                        PaginatedQueryList<OnelineLikeDO> onelineLikeDOs = dynamoDBMapper.query(OnelineLikeDO.class, queryExpressionLike);
-
-                        if (onelineLikeDOs.isEmpty()) {
-                            OnelineLikeDO onelineLikeDO = new OnelineLikeDO();
-                            onelineLikeDO.setLikeDateAndId(date + "]" + userId);
-                            onelineLikeDO.setContentDateAndId(contentArrangedList.get(acmi.position - 1).getContentDateAndId());
-                            onelineLikeDO.setContentTimestamp(contentArrangedList.get(acmi.position - 1).getTimestamp());
-                            dynamoDBMapper.save(onelineLikeDO);
-
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    updateContent(contentArrangedList.size(), acmi.position - 1, REFRESH);
-                                    Toast.makeText(getActivity(), R.string.action_like, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        } else {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getActivity(), R.string.already_action_like, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    }
-                }.start();
-                return true;
-            case R.id.action_report:
-                new Thread() {
-                    public void run() {
-                        TimeZone tz = TimeZone.getTimeZone("Asia/Seoul");
-                        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss");
-                        dateFormatter.setTimeZone(tz);
-                        Date today = new Date();
-                        String date = dateFormatter.format(today);
-
-                        OnelineReportDO reportToFind = new OnelineReportDO();
-                        reportToFind.setContentDateAndId(contentArrangedList.get(acmi.position - 1).getContentDateAndId());
-
-                        Map<String, AttributeValue> expressionAttributeValues = new HashMap<>();
-                        expressionAttributeValues.put(":userId", new AttributeValue().withS(userId));
-
-                        DynamoDBQueryExpression queryExpressionReport = new DynamoDBQueryExpression()
-                                .withIndexName("contentDateAndId-index")
-                                .withHashKeyValues(reportToFind)
-                                .withFilterExpression("contains(reportDateAndId, :userId)")
-                                .withExpressionAttributeValues(expressionAttributeValues)
-                                .withConsistentRead(false);
-
-                        PaginatedQueryList<OnelineReportDO> onelineReportDOs = dynamoDBMapper.query(OnelineReportDO.class, queryExpressionReport);
-
-                        if (onelineReportDOs.isEmpty()) {
-                            OnelineReportDO onelineReportDO = new OnelineReportDO();
-                            onelineReportDO.setReportDateAndId(date + "]" + userId);
-                            onelineReportDO.setContentDateAndId(contentArrangedList.get(acmi.position - 1).getContentDateAndId());
-                            onelineReportDO.setContentTimestamp(contentArrangedList.get(acmi.position - 1).getTimestamp());
-                            dynamoDBMapper.save(onelineReportDO);
-
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getActivity(), R.string.action_report, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        } else {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getActivity(), R.string.already_action_report, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    }
-                }.start();
-                return true;
-            case R.id.action_delete:
-                new Thread() {
-                    public void run() {
-                        OnelineBoardDO onelineBoardDO = new OnelineBoardDO();
-                        onelineBoardDO.setDateAndId(contentArrangedList.get(acmi.position - 1).getContentDateAndId());
-                        dynamoDBMapper.delete(onelineBoardDO);
-
-                        swipeRefreshLayout.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                swipeRefreshLayout.setRefreshing(true);
-                            }
-                        });
-
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                updateContent(contentArrangedList.size(), UPDATE_ALL, REFRESH);
-                            }
-                        });
-                    }
-                }.start();
-                return true;
-            case R.id.action_copy:
-                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("copied_from_yonapp", contentArrangedList.get(acmi.position - 1).getContent());
-                clipboard.setPrimaryClip(clip);
-                Toast.makeText(getActivity(), R.string.copied_to_clipboard, Toast.LENGTH_SHORT).show();
-            default:
-                return super.onContextItemSelected(item);
-        }
-    }
 
     private SwipeRefreshLayout.OnRefreshListener OnRefreshLayout = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
@@ -834,16 +891,24 @@ public class OneLineBoardFragment extends FragmentBase {
                         }
                     }
 
+                    swipeRefreshLayout.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    });
+
                     final int preSize = contentArrangedList.size();
                     for(int i = 0; i < contentScanList.size(); i++) {
                         OnelineBoardDO onelineBoardDO = contentScanList.get(i);
                         if(onelineBoardDO.getContent() != null) {
-                            timeBefore = (System.currentTimeMillis() / 1000) - onelineBoardDO.getTimestamp();
-                            timeBeforeString = beautifyTime(timeBefore);
+                            long timeBefore = (System.currentTimeMillis() / 1000) - onelineBoardDO.getTimestamp();
+                            String timeBeforeString = beautifyTime(timeBefore);
 
                             final String dateAndId = onelineBoardDO.getDateAndId();
                             final boolean isNickStatic = onelineBoardDO.isNickStatic();
                             final boolean isPicture = onelineBoardDO.isPicture();
+                            final boolean isGif = onelineBoardDO.isGif();
 
                             OneLineBoardItem oneLineBoardItem = new OneLineBoardItem();
                             if (isNickStatic) {
@@ -869,6 +934,7 @@ public class OneLineBoardFragment extends FragmentBase {
                             oneLineBoardItem.setWriterGcmTokenKey(onelineBoardDO.getWriterGcmTokenKey());
                             oneLineBoardItem.setNickStatic(isNickStatic);
                             oneLineBoardItem.setPicture(isPicture);
+                            oneLineBoardItem.setGif(isGif);
 
                             contentArrangedList.add(oneLineBoardItem);
                         }
@@ -880,7 +946,6 @@ public class OneLineBoardFragment extends FragmentBase {
                             oneLineBoardAdapter.clearItems();
                             oneLineBoardAdapter.addAllItems(contentArrangedList);
                             oneLineBoardAdapter.notifyDataSetChanged();
-                            swipeRefreshLayout.setRefreshing(false);
                             mLockListView = false;
                         }
                     });
@@ -913,9 +978,9 @@ public class OneLineBoardFragment extends FragmentBase {
 
                     String sContentArrangedList = SerializeObject.objectToString(contentArrangedList);
                     if (sContentArrangedList != null && !sContentArrangedList.equalsIgnoreCase("")) {
-                        SerializeObject.WriteSettings(getContext(), sContentArrangedList, "cal.dat");
+                        SerializeObject.WriteSettings(getContext(), sContentArrangedList, "content_arranged_list.dat");
                     } else {
-                        SerializeObject.WriteSettings(getContext(), "", "cal.dat");
+                        SerializeObject.WriteSettings(getContext(), "", "content_arranged_list.dat");
                     }
 
                     getActivity().runOnUiThread(new Runnable() {
@@ -1079,7 +1144,6 @@ public class OneLineBoardFragment extends FragmentBase {
 
     @Override
     public void onPause() {
-        state = contentListView.onSaveInstanceState();
         super.onPause();
     }
 
@@ -1094,7 +1158,7 @@ public class OneLineBoardFragment extends FragmentBase {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getContext().deleteFile("csl.dat");
-        getContext().deleteFile("cal.dat");
+        getContext().deleteFile("content_scan_list.dat");
+        getContext().deleteFile("content_arranged_list.dat");
     }
 }
