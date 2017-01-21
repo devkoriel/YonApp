@@ -25,13 +25,13 @@ import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import co.amazonaws.mobile.AWSMobileClient;
+import co.amazonaws.mobile.push.GCMTokenHelper;
 import co.amazonaws.mobile.user.IdentityManager;
 import co.amazonaws.mobile.user.IdentityProvider;
 import co.amazonaws.mobile.user.signin.SignInManager;
 import co.amazonaws.mobile.user.signin.SignInProvider;
 import co.amazonaws.models.nosql.BlackListDO;
 import co.amazonaws.models.nosql.UserInfoDO;
-import co.koriel.yonapp.db.DataBase;
 import co.koriel.yonapp.util.Crypto;
 
 /**
@@ -40,12 +40,8 @@ import co.koriel.yonapp.util.Crypto;
  * initialization operations are performed.
  */
 public class SplashActivity extends Activity {
-    private static final String LOG_TAG = SplashActivity.class.getSimpleName();
-
     private final CountDownLatch timeoutLatch = new CountDownLatch(1);
     private SignInManager signInManager;
-
-    private DynamoDBMapper dynamoDBMapper;
 
     /**
      * SignInResultsHandler handles the results from sign-in for a previously signed in user.
@@ -53,37 +49,27 @@ public class SplashActivity extends Activity {
     private class SignInResultsHandler implements IdentityManager.SignInResultsHandler {
         @Override
         public void onSuccess(final IdentityProvider provider) {
-            dynamoDBMapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-
-            Crypto.androidId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
             // The sign-in manager is no longer needed once signed in.
             SignInManager.dispose();
 
             new Thread() {
                 public void run() {
-                    DataBase.userInfo.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
-                     if (DataBase.userInfo.getStudentId() == null || DataBase.userInfo.getStudentPasswd() == null) {
-                         DataBase.userInfo = dynamoDBMapper.load(UserInfoDO.class, AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
-                         try {
-                             Crypto.decryptPbkdf2(DataBase.userInfo.getStudentPasswd());
-                         } catch (Exception e) {
-                             AWSMobileClient.defaultMobileClient().getIdentityManager().signOut();
-                             goSignIn();
-                             runOnUiThread(new Runnable() {
-                                 public void run() {
-                                     Toast.makeText(SplashActivity.this, R.string.please_login_again, Toast.LENGTH_SHORT).show();
-                                 }
-                             });
-                             interrupt();
-                         }
-                     }
+                    try {
+                        DynamoDBMapper dynamoDBMapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
 
-                    if (!isInterrupted()) {
-                        BlackListDO blackList = dynamoDBMapper.load(BlackListDO.class, DataBase.userInfo.getStudentId());
+                        UserInfoDO userInfo = new UserInfoDO();
+                        userInfo.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+                        userInfo = dynamoDBMapper.load(UserInfoDO.class, AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+
+                        // Throws exception when password doesn't match or exist.
+                        Crypto.androidId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+                        Crypto.decryptPbkdf2(userInfo.getStudentPasswd());
+
+                        BlackListDO blackList = dynamoDBMapper.load(BlackListDO.class, userInfo.getStudentId());
 
                         if (blackList != null) {
-                            dynamoDBMapper.delete(DataBase.userInfo);
+                            dynamoDBMapper.delete(userInfo);
                             AWSMobileClient.defaultMobileClient().getIdentityManager().signOut();
                             goSignIn();
 
@@ -94,7 +80,8 @@ public class SplashActivity extends Activity {
                                 }
                             });
                         } else {
-                            dynamoDBMapper.save(DataBase.userInfo);
+                            userInfo.setGcmTokenKey(getSharedPreferences(GCMTokenHelper.class.getName(), MODE_PRIVATE).getString("deviceToken", ""));
+                            dynamoDBMapper.save(userInfo);
                             AWSMobileClient.defaultMobileClient()
                                     .getIdentityManager()
                                     .loadUserInfoAndImage(provider, new Runnable() {
@@ -104,6 +91,14 @@ public class SplashActivity extends Activity {
                                         }
                                     });
                         }
+                    } catch (Exception e) {
+                        AWSMobileClient.defaultMobileClient().getIdentityManager().signOut();
+                        goSignIn();
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(SplashActivity.this, R.string.please_login_again, Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 }
             }.start();

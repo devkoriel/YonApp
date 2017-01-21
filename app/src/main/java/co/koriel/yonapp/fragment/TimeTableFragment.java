@@ -35,8 +35,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.io.File;
 
+import co.amazonaws.mobile.AWSMobileClient;
+import co.amazonaws.models.nosql.UserInfoDO;
 import co.koriel.yonapp.R;
-import co.koriel.yonapp.db.DataBase;
 import co.koriel.yonapp.util.Crypto;
 import co.koriel.yonapp.util.NetworkUtil;
 import co.koriel.yonapp.util.NonLeakingWebView;
@@ -132,8 +133,13 @@ public class TimeTableFragment extends FragmentBase {
         new Thread() {
             public void run() {
                 try {
-                    final String js = "javascript:try { document.getElementById('username').value='" + DataBase.userInfo.getStudentId() + "';" +
-                            "document.getElementById('password').value='" + Crypto.decryptPbkdf2(DataBase.userInfo.getStudentPasswd()) + "';" +
+                    UserInfoDO userInfo = new UserInfoDO();
+                    userInfo.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+
+                    userInfo = AWSMobileClient.defaultMobileClient().getDynamoDBMapper().load(UserInfoDO.class, AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+
+                    final String js = "javascript:try { document.getElementById('username').value='" + userInfo.getStudentId() + "';" +
+                            "document.getElementById('password').value='" + Crypto.decryptPbkdf2(userInfo.getStudentPasswd()) + "';" +
                             "(function(){document.getElementById('loginbtn').click();})() } catch (exception) {}";
 
                     final String js2 = "javascript:try { document.getElementById('mobile-header').remove();" +
@@ -315,6 +321,7 @@ public class TimeTableFragment extends FragmentBase {
         File path = context.getExternalCacheDir();
         File file = new File(path, "/yonapp_timetable.png");
         webViewAllCapture.onWebViewAllCapture(webView, context.getExternalCacheDir() + "/", "yonapp_timetable.png");
+
         Toast.makeText(context, R.string.screenshot_saved_into_gallery, Toast.LENGTH_SHORT).show();
 
         ContentValues values = new ContentValues();

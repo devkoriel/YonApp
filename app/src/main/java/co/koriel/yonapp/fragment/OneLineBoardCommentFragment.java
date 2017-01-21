@@ -1,6 +1,7 @@
 package co.koriel.yonapp.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -28,7 +29,6 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedQueryList;
@@ -44,6 +44,11 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.net.URL;
 import java.text.DateFormat;
@@ -64,6 +69,7 @@ import co.koriel.yonapp.MainActivity;
 import co.koriel.yonapp.R;
 import co.koriel.yonapp.fragment.adapter.OneLineBoardCommentAdapter;
 import co.koriel.yonapp.fragment.adapter.OneLineBoardCommentItem;
+import co.koriel.yonapp.fragment.viewer.PictureViewerActivity;
 import co.koriel.yonapp.helper.MathHelper;
 import co.koriel.yonapp.tab.TabPager;
 import co.koriel.yonapp.util.NetworkUtil;
@@ -72,6 +78,7 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
     private final String S3_PREFIX_PUBLIC_IMG_ONELINE = "public/img/oneline";
 
     private DynamoDBMapper dynamoDBMapper;
+    private MainActivity mainActivity;
 
     private SharedPreferences prefs;
 
@@ -79,6 +86,7 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
     private TextView contentTime;
     private TextView contentView;
     private ImageView contentImageView;
+    private AVLoadingIndicatorView contentAVIView;
     private ImageView imageHeader;
     private TextView attachHeader;
     private TextView likeHeader;
@@ -112,6 +120,9 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mainActivity = (MainActivity) getActivity();
+
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         Drawable reportDrawable = ContextCompat.getDrawable(getContext(), R.drawable.ic_thumb_down_white_24dp);
@@ -134,9 +145,9 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ((MainActivity) getActivity()).viewPager.setAllowedSwipeDirection(TabPager.SwipeDirection.RIGHT);
+        mainActivity.viewPager.setAllowedSwipeDirection(TabPager.SwipeDirection.RIGHT);
         dynamoDBMapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-        TextView toolbarTitle = (TextView) getActivity().findViewById(R.id.toolbarTitle);
+        TextView toolbarTitle = (TextView) mainActivity.findViewById(R.id.toolbarTitle);
         toolbarTitle.setText(R.string.home_menu_oneline);
         return inflater.inflate(R.layout.fragment_one_line_board_comment, container, false);
     }
@@ -151,6 +162,7 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
         contentTime = (TextView) header.findViewById(R.id.comment_content_time);
         contentView = (TextView) header.findViewById(R.id.comment_content);
         contentImageView = (ImageView) header.findViewById(R.id.comment_img);
+        contentAVIView = (AVLoadingIndicatorView) header.findViewById(R.id.comment_avi);
         imageHeader = (ImageView) header.findViewById(R.id.image_attach);
         attachHeader = (TextView) header.findViewById(R.id.text_picture_attached);
         likeHeader = (TextView) header.findViewById(R.id.like_count);
@@ -179,14 +191,14 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
                         OnelineNicknameDO nickname = dynamoDBMapper.load(OnelineNicknameDO.class, userId);
 
                         if (nickname != null) {
-                            getActivity().runOnUiThread(new Runnable() {
+                            mainActivity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     checkBoxAnonymous.setChecked(!(isNickStatic = true));
                                 }
                             });
                         } else {
-                            getActivity().runOnUiThread(new Runnable() {
+                            mainActivity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     checkBoxAnonymous.setChecked(!(isNickStatic = false));
@@ -206,24 +218,18 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    if(!NetworkUtil.isNetworkConnected(getActivity())) {
-                        Toast.makeText(getActivity(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
+                    if(!NetworkUtil.isNetworkConnected(mainActivity)) {
+                        Toast.makeText(getContext(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
                         return true;
                     } else if (comment.getText().toString().matches("")) {
-                        Toast.makeText(getActivity(), R.string.please_write_comment, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.please_write_comment, Toast.LENGTH_SHORT).show();
                         return true;
                     } else {
-                        swipeRefreshLayout.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                swipeRefreshLayout.setRefreshing(true);
-                            }
-                        });
                         PostComment postComment = new PostComment();
                         postComment.execute(comment.getText().toString());
                         comment.setText("");
-                        InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                        InputMethodManager inputManager = (InputMethodManager) mainActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        inputManager.hideSoftInputFromWindow(mainActivity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                     }
                     return true;
                 }
@@ -231,26 +237,20 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
             }
         });
 
-        Button postButton = (Button) getActivity().findViewById(R.id.oneline_board_comment_post_button);
+        Button postButton = (Button) mainActivity.findViewById(R.id.oneline_board_comment_post_button);
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!NetworkUtil.isNetworkConnected(getActivity())) {
-                    Toast.makeText(getActivity(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
+                if(!NetworkUtil.isNetworkConnected(mainActivity)) {
+                    Toast.makeText(getContext(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
                 } else if (comment.getText().toString().matches("")) {
-                    Toast.makeText(getActivity(), R.string.please_write_comment, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.please_write_comment, Toast.LENGTH_SHORT).show();
                 } else {
-                    swipeRefreshLayout.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            swipeRefreshLayout.setRefreshing(true);
-                        }
-                    });
                     PostComment postComment = new PostComment();
                     postComment.execute(comment.getText().toString());
                     comment.setText("");
-                    InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    InputMethodManager inputManager = (InputMethodManager) mainActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputManager.hideSoftInputFromWindow(mainActivity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 }
             }
         });
@@ -270,12 +270,7 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
         commentListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         commentListView.setOnScrollListener(OnScrollChange);
 
-        swipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(true);
-            }
-        });
+        swipeRefreshLayout.setRefreshing(true);
         updateComment(true);
     }
 
@@ -284,7 +279,7 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
             OnelineNicknameDO nickname = dynamoDBMapper.load(OnelineNicknameDO.class, AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
 
             if (nickname == null) {
-                getActivity().runOnUiThread(new Runnable() {
+                mainActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         checkBoxAnonymous.setChecked(true);
@@ -325,14 +320,14 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
                             OnelineNicknameDO nickname = dynamoDBMapper.load(OnelineNicknameDO.class, userId);
 
                             if (nickname != null) {
-                                getActivity().runOnUiThread(new Runnable() {
+                                mainActivity.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         checkBoxAnonymous.setChecked(!(isNickStatic = true));
                                     }
                                 });
                             } else {
-                                getActivity().runOnUiThread(new Runnable() {
+                                mainActivity.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         checkBoxAnonymous.setChecked(!(isNickStatic = false));
@@ -356,10 +351,11 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            swipeRefreshLayout.setRefreshing(true);
 
             userId = AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID();
             if (userId == null) {
-                Toast.makeText(getActivity(), R.string.error_occured, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.error_occured, Toast.LENGTH_SHORT).show();
                 cancel(true);
             }
         }
@@ -423,14 +419,14 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
     private SwipeMenuListView.OnMenuItemClickListener onMenuItemClickListener = new SwipeMenuListView.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(final int position, SwipeMenu menu, int index) {
-            if(!NetworkUtil.isNetworkConnected(getActivity())) {
-                Toast.makeText(getActivity(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
+            if(!NetworkUtil.isNetworkConnected(mainActivity)) {
+                Toast.makeText(getContext(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
                 return false;
             }
 
             final String userId = AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID();
             if (userId == null) {
-                Toast.makeText(getActivity(), R.string.error_occured, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.error_occured, Toast.LENGTH_SHORT).show();
                 return false;
             }
 
@@ -442,16 +438,10 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
                             onelineBoardCommentDO.setCommentDateAndId(commentArrangedList.get(position).getCommentDateAndId());
                             dynamoDBMapper.delete(onelineBoardCommentDO);
 
-                            swipeRefreshLayout.post(new Runnable() {
+                            mainActivity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     swipeRefreshLayout.setRefreshing(true);
-                                }
-                            });
-
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
                                     updateComment(false);
                                 }
                             });
@@ -491,17 +481,17 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
                                 onelineReportDO.setType(true);
                                 dynamoDBMapper.save(onelineReportDO);
 
-                                getActivity().runOnUiThread(new Runnable() {
+                                mainActivity.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(getActivity(), R.string.action_report, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), R.string.action_report, Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             } else {
-                                getActivity().runOnUiThread(new Runnable() {
+                                mainActivity.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(getActivity(), R.string.already_action_report, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), R.string.already_action_report, Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
@@ -546,9 +536,9 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
 
     private void updateComment(final boolean isFirst) {
         try {
-            if(!NetworkUtil.isNetworkConnected(getActivity())) {
+            if(!NetworkUtil.isNetworkConnected(mainActivity)) {
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(getActivity(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -570,9 +560,8 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
                     if (getImageThread.getState() == Thread.State.NEW) getImageThread.start();
                     imageHeader.setVisibility(View.VISIBLE);
                     attachHeader.setVisibility(View.VISIBLE);
-                } else {
-                    imageHeader.setVisibility(View.INVISIBLE);
-                    attachHeader.setVisibility(View.INVISIBLE);
+                    contentAVIView.setVisibility(View.VISIBLE);
+                    contentAVIView.show();
                 }
             }
 
@@ -590,30 +579,65 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
             final URL presignedUrl = s3.generatePresignedUrl(AWSConfiguration.AMAZON_S3_USER_FILES_BUCKET, S3_PREFIX_PUBLIC_IMG_ONELINE + "/" + ContentDateAndId,
                     new Date(new Date().getTime() + 60 * 60 * 1000));
 
-            final float density = getContext().getResources().getDisplayMetrics().density;
-            final int x = (int) (640 * density);
-            final int y = (int) (360 * density);
-
             try {
                 if (isContentGif) {
-                    getActivity().runOnUiThread(new Runnable() {
+                    contentImageView.post(new Runnable() {
                         @Override
                         public void run() {
                             Glide.with(getContext())
                                     .load(presignedUrl.toString())
                                     .asGif()
                                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                                    .override(x, y)
+                                    .listener(new RequestListener<String, GifDrawable>() {
+                                        @Override
+                                        public boolean onException(Exception e, String model, Target<GifDrawable> target, boolean isFirstResource) {
+                                            return false;
+                                        }
+
+                                        @Override
+                                        public boolean onResourceReady(final GifDrawable resource, String model, Target<GifDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                            contentAVIView.hide();
+                                            contentAVIView.setVisibility(View.GONE);
+
+                                            contentImageView.setVisibility(View.VISIBLE);
+
+                                            return false;
+                                        }
+                                    })
                                     .into(contentImageView);
                         }
                     });
                 } else {
-                    getActivity().runOnUiThread(new Runnable() {
+                    contentImageView.post(new Runnable() {
                         @Override
                         public void run() {
                             Glide.with(getContext())
                                     .load(presignedUrl.toString())
-                                    .override(x, y)
+                                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                                    .listener(new RequestListener<String, GlideDrawable>() {
+                                        @Override
+                                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                            return false;
+                                        }
+
+                                        @Override
+                                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                            contentAVIView.hide();
+                                            contentAVIView.setVisibility(View.GONE);
+
+                                            contentImageView.setVisibility(View.VISIBLE);
+                                            contentImageView.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    Intent intent = new Intent(getContext(), PictureViewerActivity.class);
+                                                    intent.putExtra("url", presignedUrl.toString());
+                                                    startActivity(intent);
+                                                }
+                                            });
+
+                                            return false;
+                                        }
+                                    })
                                     .into(contentImageView);
                         }
                     });
@@ -643,7 +667,7 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
                         likeHeader.setText(String.valueOf(likes.size()));
                     }
                 });
-            } catch (NullPointerException|AmazonClientException|IllegalStateException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -668,7 +692,7 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
 
                 final PaginatedQueryList<OnelineBoardCommentDO> comments = dynamoDBMapper.query(OnelineBoardCommentDO.class, queryExpressionComment);
 
-                swipeRefreshLayout.post(new Runnable() {
+                mainActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         swipeRefreshLayout.setRefreshing(false);
@@ -707,7 +731,7 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
                         commentArrangedList.add(oneLineBoardCommentItem);
                     }
                 }
-                getActivity().runOnUiThread(new Runnable() {
+                commentListView.post(new Runnable() {
                     @Override
                     public void run() {
                         commentHeader.setText(String.valueOf(comments.size()));
@@ -716,7 +740,7 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
                         oneLineBoardCommentAdapter.notifyDataSetChanged();
                     }
                 });
-            } catch (NullPointerException|AmazonClientException|IllegalStateException|IndexOutOfBoundsException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -756,14 +780,14 @@ public class OneLineBoardCommentFragment extends FragmentBase implements Compoun
                     updateCommentThread.join();
                 }
 
-                getActivity().runOnUiThread(new Runnable() {
+                commentListView.post(new Runnable() {
                     @Override
                     public void run() {
                         ((OneLineBoardCommentItem) oneLineBoardCommentAdapter.getItem(position)).setId(nickname);
                         oneLineBoardCommentAdapter.notifyDataSetChanged();
                     }
                 });
-            } catch (NullPointerException|AmazonClientException|IllegalStateException|IndexOutOfBoundsException|InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

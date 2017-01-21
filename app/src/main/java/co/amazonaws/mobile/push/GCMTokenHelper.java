@@ -10,9 +10,6 @@ import com.google.android.gms.iid.InstanceID;
 import java.util.HashSet;
 import java.util.Set;
 
-import co.amazonaws.mobile.AWSMobileClient;
-import co.koriel.yonapp.db.DataBase;
-
 /** The GCMTokenHelper registers the app on the device with Google Cloud Messaging (GCM) */
 public class GCMTokenHelper {
 
@@ -76,9 +73,6 @@ public class GCMTokenHelper {
         // GCM throws a NullPointerException in some failure cases.
         try {
             newDeviceToken = instanceID.getToken(gcmSenderID, GoogleCloudMessaging.INSTANCE_ID_SCOPE);
-            DataBase.userInfo.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
-            DataBase.userInfo.setGcmToken("activated");
-            DataBase.userInfo.setGcmTokenKey(newDeviceToken);
         } catch (final Exception re) {
             for (GCMTokenUpdateObserver observer : updateObservers) {
                 observer.onGCMTokenUpdateFailed(re);

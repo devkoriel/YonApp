@@ -3,21 +3,30 @@
 
     <item
         is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/9.8.00/jars/classes.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.0.1/jars/libs/internal_impl-25.0.1.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="9dae58326f6f6a515022468cce56dd04ec3b9fdb">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-gcm-9.8.00_5b7c6af36735a939ba7c5dc55d91a505343af655/classes.dex" />
+        revision="25.0.1"
+        sha1="3af8cc51ef7088e56f132780da8c0bd858b6a6ad">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-25.0.1_a4a79a6f3867fa2c5d60380ce2728388ca02c70f/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-iid/9.8.00/jars/classes.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/25.0.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="85299bf1924dde0200109a58033c5ef84ecb6991">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-iid-9.8.00_0aea307fdbc982fff5185d99ad7384b00d225b07/classes.dex" />
+        revision="25.0.1"
+        sha1="f7ac4b327fdb9e2ee386f5adc46164927658de4b">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-25.0.1_1bbf732e0c15606842396b72ba3ee88acf46dee7/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.afollestad.material-dialogs/commons/0.9.1.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="5b398ff8f4e91cf9ef306241b78667870b9c3a06">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.afollestad.material-dialogs-commons-0.9.1.0_a915daad3d6a86de970f55529e08286f7c06ec2c/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -30,318 +39,12 @@
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.0.0/jars/libs/internal_impl-24.0.0.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.0.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="fcaf463e10e69c1923ccf1edeba3b4196d239e00">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.0.0_68c6ffd85e698836bb09108204854f7d794154b3/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-23.4.0_c492862e5c0d206bc829de9212fad9222c0c5bf6/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-core/2.2.18/802a5fa1642253476592c2ee55930578e499fe63/aws-android-sdk-core-2.2.18.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="802a5fa1642253476592c2ee55930578e499fe63">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-core-2.2.18_868a4ad62fc5d2e170de4f90e6ff23067b7ec954/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.google.firebase/firebase-analytics-impl/9.8.00/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="190a642ba16d1421296a4d794606279b80039c59">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-analytics-impl-9.8.00_b812387cc8d86ea46413aab8875bf0f27b0061c7/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.github.d-max/spots-dialog/0.7/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="bf94678214d9ab43a8deb5df90d0b3e6d619ff1e">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.github.d-max-spots-dialog-0.7_8daff0c32d7a168e378c57628d3dfe8a1ac4c56b/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.android.support/multidex/1.0.1/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="78ea232052df889856dcb7b7b542707c89bb3bfb">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-multidex-1.0.1_4eccb28d8cfe0c861f72cc27ccd04bfa508c730d/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.6.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="1c1afa0ab2a8197a5da1b36c4167a9e479cb74d9">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.facebook.android-facebook-android-sdk-4.6.0_0d66a443b7a24c760e772cbb0f46645e0911bad6/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.4.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="ec75036c3c52e451d0cde50a5aedaf5fd32354a0">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-23.4.0_0385faae12b4e8acd264f17b9d1237f2de4c21bd/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="1e9b963ea6ae71fbaf7f4dd4afc6e2dc1b5ca320">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_60e146d13a40056b4e7ea70531583a58ac2b9c91/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.0.0/jars/libs/internal_impl-24.0.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="fcaf463e10e69c1923ccf1edeba3b4196d239e00">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.0.0_014417f884130206c7adcc2cc6a23dd2c913a10c/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/design/23.4.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="5326d9a850d491714fef8cbfaa9ea3416f0bf0d2">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-23.4.0_352f8b4bf46556697ac5bcf416a44e91527451bf/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="0296bcbe17aec94aa8c41e424c279725c7f482c1">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_e32a58abc09840e10120696b8d60d2471aaddc96/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/devlight.io/navigationtabbar/1.2.5/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="dce3b09be94e30554913f3e3e537b3517478bfd7">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/devlight.io-navigationtabbar-1.2.5_81cfcedcddc064293449992007af7c52ec816d14/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-23.4.0_794efb514531c26274b87506679f1ff7b150233c/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-auth-base/9.8.00/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="a1ed98e01bd58976d80c062fd0ea2968a1ff68a1">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-auth-base-9.8.00_f7912fd30009427ae9f4d49d90f2ae7945a32f90/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/org.jsoup/jsoup/1.10.1/645f1ad2f6f4cbad1cde4c483eae71e4051be6ef/jsoup-1.10.1.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="645f1ad2f6f4cbad1cde4c483eae71e4051be6ef">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/jsoup-1.10.1_59e628f67141213b0aec9bac9848f7c595a191b6/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.4.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="ec75036c3c52e451d0cde50a5aedaf5fd32354a0">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-23.4.0_1ad170f24cf74c3aac3b7f8c0bff3b9988de1df0/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.4.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="c2c594cace5d83a3227b2b6e658ecbfd586d3ed9">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-23.4.0_2646837c61c6599d25824501be6a5bd927b84c3f/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/9.8.00/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="3daa7a9c9009fd386872a84c177a76979bdcafd6">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-plus-9.8.00_1766f20eb385258e08f1c426e9f16be10ec375cb/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.flyco.dialog/FlycoDialog_Lib/1.3.2/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="df48f74b021b90bfdd5b5ca21935cf9453c282f0">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.flyco.dialog-FlycoDialog_Lib-1.3.2_d3187247105e1fb6ff3e547475786fc7a2c457cf/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.1.25/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="d56bc7c46e51e5a555c4c27d402c54f0c383e8fd">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.kakao.sdk-util-1.1.25_43b11ea9678c0103a794b24441ec3c1e985bf270/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-lambda/2.2.18/59a0a65641b5c730bc6056e75467a9afcbf9c009/aws-android-sdk-lambda-2.2.18.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="59a0a65641b5c730bc6056e75467a9afcbf9c009">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-lambda-2.2.18_a1933abbb96d9738e5fb8484ade491ebcd862736/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-tasks/9.8.00/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="bf2e1838e4428616c1aa26edf43de72b5b99bf84">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-tasks-9.8.00_2afe3b8fc599f1ad2e63b65ceb0f79e9fe5bc0b0/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-ddb/2.2.18/88caede5170508d7f3a7d1297eab570d9f80c26c/aws-android-sdk-ddb-2.2.18.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="88caede5170508d7f3a7d1297eab570d9f80c26c">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-ddb-2.2.18_5aa17e4c267eaab8cceb177c1f005f6613856023/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.google.firebase/firebase-common/9.8.00/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="c61641e333fa88da21758bab8cc28ee16604b05f">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-common-9.8.00_b9a716f5e06bc59190ae78b090bd10ba919812ca/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.4.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="de4db3785756bfb0915a9f59a9b3f2fea7407be4">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-23.4.0_8f503e521228f8244c9665a7b7b8e3af7ad94681/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.4.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="c2c594cace5d83a3227b2b6e658ecbfd586d3ed9">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-23.4.0_f418770a80a50eff8ebfcd72270bbe51102e102a/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.firebase/firebase-iid/9.8.00/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="6b6f292b8b951dcf2ecf2b20853e3eabc7d65c48">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-iid-9.8.00_c1ac67c20b8545f7788ec04f05ecb554edffab43/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.firebase/firebase-common/9.8.00/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="c61641e333fa88da21758bab8cc28ee16604b05f">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-common-9.8.00_4ad2934f016b1f380198ffa17536e9617e07a9cd/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.flyco.dialog/FlycoDialog_Lib/1.3.2/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="df48f74b021b90bfdd5b5ca21935cf9453c282f0">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.flyco.dialog-FlycoDialog_Lib-1.3.2_b9b913cce30f8356e8b9f308ebdfa847cb8dcbf2/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.firebase/firebase-analytics/9.8.00/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="9ff04cc3470178a44512624036751a803418c2ca">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-analytics-9.8.00_51a0be8bb3f302160d910c4f93fb8d1104e35619/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-iid/9.8.00/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="85299bf1924dde0200109a58033c5ef84ecb6991">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-iid-9.8.00_b35aab5c576ea1228c95a1f610ee69ba14736fd9/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-ddb-mapper/2.2.18/afef7014288ac5d34e518f4ee82f32545d2115d/aws-android-sdk-ddb-mapper-2.2.18.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="0afef7014288ac5d34e518f4ee82f32545d2115d">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-ddb-mapper-2.2.18_09cfe27c10f715c7313f4750bf4f964f05074b65/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.github.d-max/spots-dialog/0.7/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="bf94678214d9ab43a8deb5df90d0b3e6d619ff1e">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.github.d-max-spots-dialog-0.7_eb891f75be2634e793febd4afe547933501d5047/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-auth/9.8.00/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="ca851be26ff89f5b32cc222cee98139fb3fac830">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-auth-9.8.00_f4234ff214bc878c0cb3539cbf6274b81cf851c6/classes.dex" />
+        revision="25.0.1"
+        sha1="00d4c8eebf2b681073c72a26bd0849549e51c7cb">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-25.0.1_03683817e45edc848b8c527f70989f870f275032/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -354,39 +57,120 @@
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-tasks/9.8.00/jars/classes.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-tasks/10.0.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="bf2e1838e4428616c1aa26edf43de72b5b99bf84">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-tasks-9.8.00_c995ffcff7823baf02c3b60511c6c88eb423648a/classes.dex" />
+        revision="25.0.1"
+        sha1="6addaba208e21c6da776d0ca75b6b23a6ccd5499">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-tasks-10.0.1_f2be09d6b135aab8457509be742367e21f333a7d/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.0.0/jars/classes.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="2f7e6e2dad1bccaf68a8820820adc6c0d5b96d37">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-24.0.0_1399419b95c5d82d05a86759dca5b5966774f439/classes.dex" />
+        revision="25.0.1"
+        sha1="6a1479afe9f1b3645e1cd9a87318976893472818">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-25.0.1_42cb691a9d6e0a8a6f9aee32a982dde0be9da3f0/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/9.8.00/jars/classes.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.kakao.sdk/util/1.1.25/jars/classes.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="3daa7a9c9009fd386872a84c177a76979bdcafd6">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-plus-9.8.00_a98576579223da0181fb8e9e3cbd640b13837420/classes.dex" />
+        revision="25.0.1"
+        sha1="d56bc7c46e51e5a555c4c27d402c54f0c383e8fd">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.kakao.sdk-util-1.1.25_4d498652af4deaf940c97c80a5c9f0bad0e26be0/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-mobileanalytics/2.2.18/a06f95d65ef06a969735fc75c08f7551bb2d86af/aws-android-sdk-mobileanalytics-2.2.18.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.0.1/jars/libs/internal_impl-25.0.1.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="a06f95d65ef06a969735fc75c08f7551bb2d86af">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-mobileanalytics-2.2.18_c27fe9473ace4a97c51af1b881cc82f767a3b7c4/classes.dex" />
+        revision="25.0.1"
+        sha1="c0bd6ffb002a85b5e7cad29f8558d1cc59539679">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-25.0.1_83f02616d23d41bdd48060a9ce9d5a059399191d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.firebase/firebase-analytics-impl/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="6116e0e7069de7fc259aac8e08b84f32c2038231">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-analytics-impl-10.0.1_b082648c1c7b52066a7b0859b0dcb6ce0f2c14a4/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/support-fragment/25.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="26c6eef571592c91f29e56fda0bac73321de0c92">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-25.0.1_6feb15a2b722655e2cae8fe04efbc324178d0b9f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/25.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="b24e1c688744078e1fa833ffadf696794761bbe5">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-25.0.1_9f9dd302fd41662276bee30ad450c8391ee8d23b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/25.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="772bed2d992b67b9d0327f766cc95cd63031dcd3">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-25.0.1_79b15489384ee3bd0c88678a768267fde10e33b9/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.firebase/firebase-iid/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="486371f97baad8e607f332f20fee1d3dd00a731a">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-iid-10.0.1_e9d133f0c17734d20b45066334c0e9c84e1ecebe/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.wang.avi/library/2.1.3/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="e699699fae0092703de1d02b217f43803d0f7e0a">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.wang.avi-library-2.1.3_b7caa0025d3792d6e78c2841ee8fa4b1f8be1c7a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-mobileanalytics/2.3.6/b3bd0bedb025e41d26d228b83464d3a36695d9da/aws-android-sdk-mobileanalytics-2.3.6.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="b3bd0bedb025e41d26d228b83464d3a36695d9da">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-mobileanalytics-2.3.6_f1f4af529dabfd36c0714fb633853e718739d617/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.takisoft.fix/preference-v7/25.0.1.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="633643588a572deb831c940072862030aec5fc60">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.takisoft.fix-preference-v7-25.0.1.0_edc3f898bc37f9a266b5f493555eef72ef734a53/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.afollestad.material-dialogs/core/0.9.1.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="16795a75616fe3ba9df9ae4af09202145e3a26dc">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.afollestad.material-dialogs-core-0.9.1.0_40cce7baef22c1b6598c6315feb68abb0b4d61e1/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -399,93 +183,219 @@
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.firebase/firebase-analytics-impl/9.8.00/jars/classes.jar"
+        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-core/2.3.6/adba8555b910c686c9bd9b273e943132ccad55e9/aws-android-sdk-core-2.3.6.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="190a642ba16d1421296a4d794606279b80039c59">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-analytics-impl-9.8.00_b5d5e16c24685c3af966cb3674e2d58fa63c0f58/classes.dex" />
+        revision="25.0.1"
+        sha1="adba8555b910c686c9bd9b273e943132ccad55e9">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-core-2.3.6_3a098df9698a41ea3045a9ff9560072fe935a152/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-sns/2.2.18/2a873badd3e1a08e1b2660f09fe0188218431ad7/aws-android-sdk-sns-2.2.18.jar"
+        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-cognito/2.3.6/afdb8b02612c5f7b7009aa5490f048884875a6bc/aws-android-sdk-cognito-2.3.6.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="2a873badd3e1a08e1b2660f09fe0188218431ad7">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-sns-2.2.18_d5595888f08f6502c642e716e647b292ad65e682/classes.dex" />
+        revision="25.0.1"
+        sha1="afdb8b02612c5f7b7009aa5490f048884875a6bc">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-cognito-2.3.6_794fa977c9a3e83bab0c89d666c12d5fe1bd9c1b/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/24.0.0/support-annotations-24.0.0.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="2943c74db6d4346ab8c6531adac91fa05c137c40">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-24.0.0_d21411b55f231c682a32cf7e3171247f7ef5cc93/classes.dex" />
+        revision="25.0.1"
+        sha1="ab418772789ce2014e0da08083f949da95ce5701">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_ff550e603698c305471a04da20c8caed3d0d5de5/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-auth-base/9.8.00/jars/classes.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/me.zhanghai.android.materialprogressbar/library/1.3.0/jars/classes.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="a1ed98e01bd58976d80c062fd0ea2968a1ff68a1">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-auth-base-9.8.00_d81bfc3ae48af5e1d52a2dea8e317ef7acb4a71f/classes.dex" />
+        revision="25.0.1"
+        sha1="a846ddbf5bf88dee5f89d4dffe22c864f576d9b0">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/me.zhanghai.android.materialprogressbar-library-1.3.0_d8b460595c8c29d849bdadb711ea0d7cc5eef03b/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.google.firebase/firebase-iid/9.8.00/jars/classes.jar"
+        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.github.bumptech.glide/glide/3.7.0/9e9eeaf9948ee4d6c3ab354e8dc14368f16994a4/glide-3.7.0.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="6b6f292b8b951dcf2ecf2b20853e3eabc7d65c48">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-iid-9.8.00_ce9bf95b1ba294896bb9b8b89d6bdf07ede5470e/classes.dex" />
+        revision="25.0.1"
+        sha1="9e9eeaf9948ee4d6c3ab354e8dc14368f16994a4">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/glide-3.7.0_0ccb38b267afa1098c78eb370d820d181a38c151/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-cognito/2.2.18/c4bf9dca3b2cbf00f5a3c7c95d4b69f4f14094dd/aws-android-sdk-cognito-2.2.18.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.firebase/firebase-analytics/10.0.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="c4bf9dca3b2cbf00f5a3c7c95d4b69f4f14094dd">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-cognito-2.2.18_a2405005b957cf40554541839d061de80217ba34/classes.dex" />
+        revision="25.0.1"
+        sha1="433f4d6aa5f21f19552afe0e6c5eff0fedba73ad">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-analytics-10.0.1_de32d3a034b502c7743c16e71b97c7a9a72699e0/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.4.0/jars/classes.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/10.0.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="de4db3785756bfb0915a9f59a9b3f2fea7407be4">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-23.4.0_b524a75d3561e754e6f67ef492d67d7584f71840/classes.dex" />
+        revision="25.0.1"
+        sha1="c14f0c89f28cf782e42581ab0aba5f63af39b3d2">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-plus-10.0.1_1ac7ecf59ac055af8e959e1607aed37d80fe67bc/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.android.support/design/23.4.0/jars/classes.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.flyco.dialog/FlycoDialog_Lib/1.3.2/jars/classes.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="5326d9a850d491714fef8cbfaa9ea3416f0bf0d2">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-23.4.0_5029c7072bf66a1720a5a8e833b636ed1e548718/classes.dex" />
+        revision="25.0.1"
+        sha1="df48f74b021b90bfdd5b5ca21935cf9453c282f0">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.flyco.dialog-FlycoDialog_Lib-1.3.2_d3187247105e1fb6ff3e547475786fc7a2c457cf/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-auth/9.8.00/jars/classes.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/id.zelory/compressor/1.0.4/jars/classes.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="ca851be26ff89f5b32cc222cee98139fb3fac830">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-auth-9.8.00_53ca88d3280c738fa92685a4f293ce92d0519c3b/classes.dex" />
+        revision="25.0.1"
+        sha1="3a724d5d031884220bae4a255f6d2763cd0ebdc4">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/id.zelory-compressor-1.0.4_1846a7908d8236203e0b4ec53d6d0f17539ca902/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-sqs/2.2.18/53e8f5e7568abaf88fa07ade36ea97bd8427769d/aws-android-sdk-sqs-2.2.18.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/multidex/1.0.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="53e8f5e7568abaf88fa07ade36ea97bd8427769d">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-sqs-2.2.18_d25878afb7dbf23ca8d7508ed66b150c816fc0ae/classes.dex" />
+        revision="25.0.1"
+        sha1="78ea232052df889856dcb7b7b542707c89bb3bfb">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-multidex-1.0.1_81051f37a469d31940fceb4b59725976732a928f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/support-v4/25.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-25.0.1_27762ea46e6a361f935fac2bfb0aacef5b91b284/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-sqs/2.3.6/9bfde5df3e15c2feea34aa62cfce1801308940fd/aws-android-sdk-sqs-2.3.6.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="9bfde5df3e15c2feea34aa62cfce1801308940fd">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-sqs-2.3.6_7b3a8051d2ada9376e90b7d8c1c9982a666c0dd3/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-ddb-mapper/2.3.6/14127d172f1eb88573d902c061d02a960b8577d0/aws-android-sdk-ddb-mapper-2.3.6.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="14127d172f1eb88573d902c061d02a960b8577d0">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-ddb-mapper-2.3.6_b9399ed690d4423f0ba5956d2e98fb6dd60b54e0/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.github.chrisbanes/PhotoView/1.3.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="a6b765967c8091ebb45f2c02972a2fa9cba5dd87">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.github.chrisbanes-PhotoView-1.3.1_1319d005ec141ff8cd37593775f362cdb5e369de/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.firebase/firebase-common/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="eb0d830e3eabb9deb9ec44869cf7ac7ea1ad794c">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-common-10.0.1_84a5acf4893d049be9d421c6fb0f0a660305e1a5/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/preference-v7/25.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="9bcc5d07e3c05d87798e602ad1e6d2a28ce0782d">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-preference-v7-25.0.1_520e718a4f1bbbff2679d068d162e7df89ba2143/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.kakao.sdk/kakaolink/1.1.25/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="bdd19ee9f2687f3f1f294e0ca2392dba595f3def">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.kakao.sdk-kakaolink-1.1.25_011bb0582f6b90108ca61ff451febbe625afe5a5/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/support-v13/25.0.0/jars/libs/internal_impl-25.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="67355078cd30daae43f62ba47a4663ee6edb976e">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-25.0.0_b85de266cdf17c666199b5f0566f769cca7d582c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/25.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="297d4bcf6ed4e747a1bf7d0d094a2d911a8d3a8e">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-25.0.1_648e19735883561f01d0c561f0ec0c6c2fa6d022/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/support-compat/25.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="51eba4a4dd73044f90a9d58dd7ca34adbebfcf4e">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-25.0.1_5c6d8f46727217df19b3156ea20d98d091b7cd5f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/usr/local/android-studio/gradle/m2repository/com/google/code/gson/gson/2.2.4/gson-2.2.4.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="a60a5e993c98c864010053cb901b7eab25306568">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/gson-2.2.4_8cd7e65f7612a53d9b4b375eec76c9b6857fc72c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-android/1.2.0/6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd/bolts-android-1.2.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/bolts-android-1.2.0_f2855a53aa174bec38cfd256699802d838b2bf43/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/25.0.1/jars/libs/internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="c5b7145fb34779b6639147b8f2f8dd77c0db771b">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-25.0.1_5019b412018355eaee68f568fbd28487ae68eb20/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/design/25.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="3b236883e0df6002cabb01ce57d00a5b1e5de610">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-25.0.1_412713ecea5b6a304e6fc7be09ef598ea345ae9d/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -498,6 +408,24 @@
     </item>
     <item
         is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="1e3fd91a788e2ee886e5ddf386bf89ce0c42792f">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_763768791c3244bf18253e404d642c37106c31e9/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/org.jsoup/jsoup/1.10.1/645f1ad2f6f4cbad1cde4c483eae71e4051be6ef/jsoup-1.10.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="645f1ad2f6f4cbad1cde4c483eae71e4051be6ef">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/jsoup-1.10.1_59e628f67141213b0aec9bac9848f7c595a191b6/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.parse.bolts/bolts-android/1.2.0/6ee2953ccf51ce72b6d548c30c4633b99eb4f9dd/bolts-android-1.2.0.jar"
         jumboMode="true"
         optimize="true"
@@ -507,30 +435,84 @@
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/jars/classes.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/10.0.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="7e92aadd0697922316d1395c1887a23aebec640a">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-base-9.8.00_f2120e56bc104cf6b5519b2428d9e867f5b6bd34/classes.dex" />
+        revision="25.0.1"
+        sha1="8308ed003522a2ee8958311afcc4cfd0470377cd">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-gcm-10.0.1_847a2759cf640034af2695e13de7e3bf7da9199d/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/9.8.00/jars/classes.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.flyco.dialog/FlycoDialog_Lib/1.3.2/jars/classes.jar"
         jumboMode="true"
         optimize="true"
         revision="23.0.1"
-        sha1="9dae58326f6f6a515022468cce56dd04ec3b9fdb">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-gcm-9.8.00_fe845e06954d909bbc86403237537fbc6d37593c/classes.dex" />
+        sha1="df48f74b021b90bfdd5b5ca21935cf9453c282f0">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.flyco.dialog-FlycoDialog_Lib-1.3.2_d3187247105e1fb6ff3e547475786fc7a2c457cf/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.google.firebase/firebase-analytics/9.8.00/jars/classes.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.baoyz.swipemenulistview/library/1.3.0/jars/classes.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="9ff04cc3470178a44512624036751a803418c2ca">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-analytics-9.8.00_0e4c106f23802608fd72c50791c49d1b9b3b81fa/classes.dex" />
+        revision="25.0.1"
+        sha1="8ec8378e8d7aa3104f60823e6350f2728d3609ba">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.baoyz.swipemenulistview-library-1.3.0_1fd4fe67a62a23926d452fe1921a38602ccc4bcc/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/25.0.1/support-annotations-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="a09194311f8f89c3e6db09d79f50897a889d615e">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-25.0.1_db25b977058be4f4fee417065fdc836d6556e6aa/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/org.jsoup/jsoup/1.10.1/645f1ad2f6f4cbad1cde4c483eae71e4051be6ef/jsoup-1.10.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="645f1ad2f6f4cbad1cde4c483eae71e4051be6ef">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/jsoup-1.10.1_59e628f67141213b0aec9bac9848f7c595a191b6/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-s3/2.3.6/1bbbc3e46200fc9e626ab44973954ab5cb57599c/aws-android-sdk-s3-2.3.6.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="1bbbc3e46200fc9e626ab44973954ab5cb57599c">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-s3-2.3.6_38442df54a60ff0122d871a5ee73ea112a8b0d52/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/transition/25.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="c1b6ab157e8e12cb08b9ee82bb5e3c5d22632eb3">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-transition-25.0.1_a0ff2c41c7f46daf37faddf50b20318a2d0818ec/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-ddb/2.3.6/7766d0e30d164bde8a20d58e9dacab88d178f07a/aws-android-sdk-ddb-2.3.6.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="7766d0e30d164bde8a20d58e9dacab88d178f07a">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-ddb-2.3.6_4dfe50e86d6254a33b42a6efa6f9a193e1d4ddaa/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/io.reactivex/rxjava/1.1.6/2586312cd2b8a511e4c6236736f5a039fc0f2273/rxjava-1.1.6.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="2586312cd2b8a511e4c6236736f5a039fc0f2273">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/rxjava-1.1.6_f8bd3eb4d69827afdedcc4e23d1a9e2c2980f868/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -543,48 +525,48 @@
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/9.8.00/jars/classes.jar"
+        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-lambda/2.3.6/e86cfe8a87d43cddcdb9574f298c65b127376ca6/aws-android-sdk-lambda-2.3.6.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="9f6d236bac26d02b410e4ee186ba517ace5ee661">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-basement-9.8.00_81ac29758cfee5882bf03385e7a6e10e87d3b2b4/classes.dex" />
+        revision="25.0.1"
+        sha1="e86cfe8a87d43cddcdb9574f298c65b127376ca6">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-lambda-2.3.6_79b74e2df4e54a02f0aa75d686d2e29062061ac6/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.kakao.sdk/kakaolink/1.1.25/jars/classes.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/10.0.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="bdd19ee9f2687f3f1f294e0ca2392dba595f3def">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.kakao.sdk-kakaolink-1.1.25_cf2bebcec003b45a53f1749a9ac4a1869d24fbd1/classes.dex" />
+        revision="25.0.1"
+        sha1="756f6297eef79784f5e356dcd4f39865028b2bd0">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-basement-10.0.1_1fd6cf16abb09f88ceeb9c1e1b20a52cb930f208/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/9.8.00/jars/classes.jar"
+        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-sns/2.3.6/7e9bd733fbdd706047317b1765389676f15165f6/aws-android-sdk-sns-2.3.6.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="9f6d236bac26d02b410e4ee186ba517ace5ee661">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-basement-9.8.00_1c434aeb50b52ad61bf7cfa42477e4a2cb754372/classes.dex" />
+        revision="25.0.1"
+        sha1="7e9bd733fbdd706047317b1765389676f15165f6">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-sns-2.3.6_1380c94eb55d303690457cadd32260a0291b179f/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.0.0/jars/classes.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/25.0.1/jars/libs/internal_impl-25.0.1.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="2f7e6e2dad1bccaf68a8820820adc6c0d5b96d37">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-24.0.0_70429cbcf1d15e4c424cd5f24bf38a89417114a2/classes.dex" />
+        revision="25.0.1"
+        sha1="f83b00041ecfba705603fec40363416c7de69719">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-25.0.1_a9d729d2441dceea92f968fa83d5097dc922f0cd/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/files/YonApp/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.8.00/jars/classes.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-auth-base/10.0.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="7e92aadd0697922316d1395c1887a23aebec640a">
-        <dex dex="/home/daniel/files/YonApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-base-9.8.00_4650ff7f3795765bda9e8bf3310b84975983c90a/classes.dex" />
+        revision="25.0.1"
+        sha1="e96c6974cf924e7ee3b230e6847d5731423388c9">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-auth-base-10.0.1_05cb1965b246ebdc404d8408d731c01841140c30/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -597,12 +579,39 @@
     </item>
     <item
         is-multidex="true"
-        jar="/home/daniel/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-s3/2.2.18/2b3576bbfdb287d7f1f3ec5f17ccfce41fb0d96/aws-android-sdk-s3-2.2.18.jar"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/preference-v14/25.0.1/jars/classes.jar"
         jumboMode="true"
         optimize="true"
-        revision="23.0.1"
-        sha1="02b3576bbfdb287d7f1f3ec5f17ccfce41fb0d96">
-        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-s3-2.2.18_57df7c023e77c3c5acfa8f8bce41fe945da999bb/classes.dex" />
+        revision="25.0.1"
+        sha1="6cdbe967aa2b693a0a1f6859091794601c087e5b">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-preference-v14-25.0.1_12a0ba3e3c932b3ee75cea5449618ae56f0a2196/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.0.1/jars/libs/internal_impl-25.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="e5343c9d19cb19ff55f6b268c7f3fe8c9d224f6f">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-25.0.1_760734ff075794d0b97394fcac970e1b8e517066/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/support-v13/25.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="6ac094121e75b4b87432beb9305d70c68ec6dcab">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v13-25.0.0_4b59028f74919f9b7951f4a4e07e79a5fe00671a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.facebook.android/facebook-android-sdk/4.6.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="1c1afa0ab2a8197a5da1b36c4167a9e479cb74d9">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.facebook.android-facebook-android-sdk-4.6.0_49d3e0417083b165ef2da81c80f95f75008c3fe9/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -612,6 +621,42 @@
         revision="23.0.1"
         sha1="8310c170f433d640a0626a9d1887acf8af80c6c2">
         <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_763768791c3244bf18253e404d642c37106c31e9/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-auth/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="e2185aff89caeb337b1ffc36d5e525d8318e7cfe">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-auth-10.0.1_9349833033cdc67de34a25e91e9cdfb863a4684b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="bc7e99e8d0fc279a05aa91378530f467ad62d443">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-ui-25.0.1_784da1c017c5305760e7023c6ca9998076ee274d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-iid/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="6bb5d347ebc0c6ef3c83a905222a688da5d2f7b4">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-iid-10.0.1_2a368caf0dff4d8b8de85a4f896a872684d5b0dc/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="25438f55fc6d906a0e72f30b21487541430ede43">
+        <dex dex="/home/daniel/AndroidStudioProjects/연앱/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-base-10.0.1_2675a196b1af9414148a6a326dddd4b9442b806c/classes.dex" />
     </item>
 
 </items>

@@ -33,13 +33,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 
 import co.amazonaws.mobile.AWSMobileClient;
+import co.amazonaws.mobile.push.GCMTokenHelper;
 import co.amazonaws.mobile.user.IdentityManager;
 import co.amazonaws.mobile.user.IdentityProvider;
 import co.amazonaws.mobile.user.signin.FacebookSignInProvider;
 import co.amazonaws.mobile.user.signin.GoogleSignInProvider;
 import co.amazonaws.mobile.user.signin.SignInManager;
 import co.amazonaws.models.nosql.BlackListDO;
-import co.koriel.yonapp.db.DataBase;
+import co.amazonaws.models.nosql.UserInfoDO;
 import co.koriel.yonapp.util.Crypto;
 import co.koriel.yonapp.util.NetworkUtil;
 import co.koriel.yonapp.util.NonLeakingWebView;
@@ -63,7 +64,7 @@ public class SignInActivity extends Activity implements View.OnClickListener{
     public EditText studentPasswdEditText;
 
     private DynamoDBMapper dynamoDBMapper;
-    private BlackListDO blackList;
+    private UserInfoDO userInfo;
 
     private int sLength;
 
@@ -79,38 +80,43 @@ public class SignInActivity extends Activity implements View.OnClickListener{
         @Override
         public void onSuccess(final IdentityProvider provider) {
 
-            if(isBlackList(DataBase.userInfo.getStudentId())) {
-                AWSMobileClient.defaultMobileClient().getIdentityManager().signOut();
-                Toast.makeText(SignInActivity.this, R.string.blocked_user, Toast.LENGTH_LONG).show();
-            } else {
+            // The sign-in manager is no longer needed once signed in.
+            SignInManager.dispose();
 
-                Log.d(LOG_TAG, String.format("User sign-in with %s succeeded",
-                        provider.getDisplayName()));
+            new Thread() {
+                public void run() {
+                    BlackListDO blackList = dynamoDBMapper.load(BlackListDO.class, userInfo.getStudentId());
 
-                // The sign-in manager is no longer needed once signed in.
-                SignInManager.dispose();
+                    if (blackList != null) {
+                        AWSMobileClient.defaultMobileClient().getIdentityManager().signOut();
 
-                // Load user name and image.
-                AWSMobileClient.defaultMobileClient()
-                        .getIdentityManager().loadUserInfoAndImage(provider, new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(LOG_TAG, "Launching Main Activity...");
-                        startActivity(new Intent(SignInActivity.this, MainActivity.class)
-                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                        // finish should always be called on the main thread.
-                        finish();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(SignInActivity.this, R.string.blocked_user, Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    } else {
+                        userInfo.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+                        userInfo.setGcmToken("activated");
+                        userInfo.setGcmTokenKey(getSharedPreferences(GCMTokenHelper.class.getName(), MODE_PRIVATE).getString("deviceToken", ""));
+                        dynamoDBMapper.save(userInfo);
+
+                        // Load user name and image.
+                        AWSMobileClient.defaultMobileClient()
+                                .getIdentityManager().loadUserInfoAndImage(provider, new Runnable() {
+                            @Override
+                            public void run() {
+                                startActivity(new Intent(SignInActivity.this, MainActivity.class)
+                                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+
+                                // finish should always be called on the main thread.
+                                finish();
+                            }
+                        });
                     }
-                });
-
-                new Thread() {
-                    public void run() {
-                        Log.d(LOG_TAG, "Saving UserId to Database...");
-                        DataBase.userInfo.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
-                        dynamoDBMapper.save(DataBase.userInfo);
-                    }
-                }.start();
-            }
+                }
+            }.start();
         }
 
         /**
@@ -150,6 +156,7 @@ public class SignInActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.activity_sign_in);
 
         dynamoDBMapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
+        userInfo = new UserInfoDO();
 
         Button yscecAuthButton = (Button) findViewById(R.id.yscec_auth_button);
         studentIdEditText = (EditText) findViewById(R.id.student_id_edittext);
@@ -305,6 +312,7 @@ public class SignInActivity extends Activity implements View.OnClickListener{
         pDialog = new MaterialDialog.Builder(this)
                 .title(R.string.signin_auth)
                 .content(R.string.please_wait)
+                .cancelable(false)
                 .progress(true, 0)
                 .progressIndeterminateStyle(true)
                 .show();
@@ -344,8 +352,8 @@ public class SignInActivity extends Activity implements View.OnClickListener{
                             YscecHelper.isAuthenticated = true;
                             String encryptedPasswd = Crypto.encrypt(studentPasswdEditText.getText().toString());
 
-                            DataBase.userInfo.setStudentId(studentIdEditText.getText().toString());
-                            DataBase.userInfo.setStudentPasswd(encryptedPasswd);
+                            userInfo.setStudentId(studentIdEditText.getText().toString());
+                            userInfo.setStudentPasswd(encryptedPasswd);
 
                             try {
                                 runOnUiThread(new Runnable() {
@@ -418,29 +426,6 @@ public class SignInActivity extends Activity implements View.OnClickListener{
             });
 
             YscecHelper.isAuthenticated = false;
-        }
-    }
-
-    public boolean isBlackList(final String studentId) {
-        dynamoDBMapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-
-        Thread thread = new Thread() {
-            public void run() {
-                blackList = dynamoDBMapper.load(BlackListDO.class, studentId);
-            }
-        };
-
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        if (blackList != null) {
-            return true;
-        } else {
-            return false;
         }
     }
 

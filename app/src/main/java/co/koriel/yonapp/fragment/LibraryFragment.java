@@ -123,7 +123,7 @@ public class LibraryFragment extends FragmentBase {
         protected void onPreExecute() {
             if(!NetworkUtil.isNetworkConnected(getActivity())) {
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(getActivity(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
                 cancel(true);
             }
 
@@ -196,13 +196,13 @@ public class LibraryFragment extends FragmentBase {
                                 swipeRefreshLayout.setRefreshing(false);
                             }
                         });
-                    } catch (NullPointerException | IndexOutOfBoundsException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             }.start();
         } else {
-            Toast.makeText(getActivity(), R.string.sync_library_seat_fail, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.sync_library_seat_fail, Toast.LENGTH_SHORT).show();
         }
     }
 }

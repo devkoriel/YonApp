@@ -17,6 +17,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMappingException;
+import com.amazonaws.services.cognitosync.model.NotAuthorizedException;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -29,8 +32,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
+import co.amazonaws.mobile.AWSMobileClient;
+import co.amazonaws.models.nosql.UserInfoDO;
 import co.koriel.yonapp.R;
-import co.koriel.yonapp.db.DataBase;
 import co.koriel.yonapp.fragment.adapter.NoticeAdapter;
 import co.koriel.yonapp.fragment.adapter.NoticeItem;
 import co.koriel.yonapp.util.Crypto;
@@ -163,8 +167,13 @@ public class NoticeFragment extends FragmentBase {
             @Override
             public void run() {
                 try {
-                    final String js = "javascript:try { document.getElementById('username').value='" + DataBase.userInfo.getStudentId() + "';" +
-                            "document.getElementById('password').value='" + Crypto.decryptPbkdf2(DataBase.userInfo.getStudentPasswd()) + "';" +
+                    UserInfoDO userInfo = new UserInfoDO();
+                    userInfo.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+
+                    userInfo = AWSMobileClient.defaultMobileClient().getDynamoDBMapper().load(UserInfoDO.class, AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+
+                    final String js = "javascript:try { document.getElementById('username').value='" + userInfo.getStudentId() + "';" +
+                            "document.getElementById('password').value='" + Crypto.decryptPbkdf2(userInfo.getStudentPasswd()) + "';" +
                             "(function(){document.getElementById('loginbtn').click();})()} catch (exception) {}" +
                             "finally {window.HTMLOUT.showHTML(document.getElementsByClassName('board-list-area')[0].innerHTML);}";
 
@@ -215,6 +224,9 @@ public class NoticeFragment extends FragmentBase {
                             swipeRefreshLayoutEmpty.setRefreshing(false);
                         }
                     });
+                } catch (NotAuthorizedException | DynamoDBMappingException e) {
+                    e.printStackTrace();
+                    // TODO: Go to SignInActivity with signout.
                 }
             }
         }).start();

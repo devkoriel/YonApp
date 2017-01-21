@@ -32,8 +32,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import co.amazonaws.mobile.AWSMobileClient;
+import co.amazonaws.models.nosql.UserInfoDO;
 import co.koriel.yonapp.R;
-import co.koriel.yonapp.db.DataBase;
 import co.koriel.yonapp.util.Crypto;
 import co.koriel.yonapp.util.NonLeakingWebView;
 
@@ -183,9 +184,18 @@ public class NoticeContentFragment extends FragmentBase {
                     js = "javascript: window.HTMLOUT.showHTML(document.getElementById('page-content').innerHTML);";
                 }
                 else if (url.equals("http://yscec.yonsei.ac.kr/login/index.php")) {
-                    js = "javascript: document.getElementById('username').value='" + DataBase.userInfo.getStudentId() + "';" +
-                            "document.getElementById('password').value='" + Crypto.decryptPbkdf2(DataBase.userInfo.getStudentPasswd()) + "';" +
-                            "(function(){document.getElementById('loginbtn').click();})()";
+                    try {
+                        UserInfoDO userInfo = new UserInfoDO();
+                        userInfo.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+
+                        userInfo = AWSMobileClient.defaultMobileClient().getDynamoDBMapper().load(UserInfoDO.class, AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+
+                        js = "javascript: document.getElementById('username').value='" + userInfo.getStudentId() + "';" +
+                                "document.getElementById('password').value='" + Crypto.decryptPbkdf2(userInfo.getStudentPasswd()) + "';" +
+                                "(function(){document.getElementById('loginbtn').click();})()";
+                    } catch (NullPointerException e) {
+                        // TODO: Go to SignInActivity with signout.
+                    }
                 }
 
                 if (Build.VERSION.SDK_INT >= 19) {

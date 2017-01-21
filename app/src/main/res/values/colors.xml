@@ -9,6 +9,7 @@
 
     <color name="tab_indicator">#002366</color>
     <color name="like_indicator">#002366</color>
+    <color name="avi_indicator">#002366</color>
     <color name="black_overlay">#66000000</color>
     <color name="nav_drawer_background">#FFFFFF</color>
     <color name="nav_drawer_top_background">#CCCCCC</color>

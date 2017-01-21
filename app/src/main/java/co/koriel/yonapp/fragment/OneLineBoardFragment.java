@@ -2,6 +2,7 @@ package co.koriel.yonapp.fragment;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -60,6 +61,7 @@ import co.amazonaws.mobile.AWSMobileClient;
 import co.amazonaws.mobile.content.ContentItem;
 import co.amazonaws.mobile.content.ContentProgressListener;
 import co.amazonaws.mobile.content.UserFileManager;
+import co.amazonaws.mobile.push.GCMTokenHelper;
 import co.amazonaws.models.nosql.OnelineBoardCommentDO;
 import co.amazonaws.models.nosql.OnelineBoardDO;
 import co.amazonaws.models.nosql.OnelineLikeDO;
@@ -67,7 +69,6 @@ import co.amazonaws.models.nosql.OnelineNicknameDO;
 import co.amazonaws.models.nosql.OnelineReportDO;
 import co.koriel.yonapp.MainActivity;
 import co.koriel.yonapp.R;
-import co.koriel.yonapp.db.DataBase;
 import co.koriel.yonapp.fragment.adapter.OneLineBoardAdapter;
 import co.koriel.yonapp.fragment.adapter.OneLineBoardItem;
 import co.koriel.yonapp.helper.ImageFileHelper;
@@ -75,11 +76,10 @@ import co.koriel.yonapp.helper.MathHelper;
 import co.koriel.yonapp.tab.TabPager;
 import co.koriel.yonapp.util.NetworkUtil;
 import co.koriel.yonapp.util.SerializeObject;
+import id.zelory.compressor.Compressor;
 
 public class OneLineBoardFragment extends FragmentBase {
     private final int RESULTS_LIMIT = 20;
-    private final int DAY_SECONDS = 86400000;
-    private final String INITIAL_POST_DATE = "2016-11-16";
     private static final int EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 93;
     private static final int PICK_IMAGE_REQUEST = 1;
 
@@ -87,12 +87,14 @@ public class OneLineBoardFragment extends FragmentBase {
     private final boolean APPEND = false;
     private final int UPDATE_ALL = -1;
 
+    private MainActivity mainActivity;
     private MaterialDialog onelineWriteDialog;
 
     private boolean isNickStatic;
     private boolean isPicture;
     private boolean isGif;
-    private SharedPreferences prefs;
+    private SharedPreferences sharedPreferencesSettings;
+    private SharedPreferences sharedPreferencesToken;
 
     private SwipeMenuListView contentListView;
     private OneLineBoardAdapter oneLineBoardAdapter;
@@ -108,8 +110,6 @@ public class OneLineBoardFragment extends FragmentBase {
     private UserFileManager userFileManager;
     private String imageFilePath;
 
-    private final String S3_PREFIX_PUBLIC_IMG_ONELINE = "public/img/oneline";
-
     private long timeLastPost;
     private long timeLastLastPost;
 
@@ -123,11 +123,15 @@ public class OneLineBoardFragment extends FragmentBase {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mainActivity = (MainActivity) getActivity();
+
         setHasOptionsMenu(true);
-        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        sharedPreferencesSettings = PreferenceManager.getDefaultSharedPreferences(getContext());
+        sharedPreferencesToken = getContext().getSharedPreferences(GCMTokenHelper.class.getName(), Context.MODE_PRIVATE);
         mLockListView = false;
 
-        isNickStatic = !prefs.getBoolean("oneline_anonymous", true);
+        isNickStatic = !sharedPreferencesSettings.getBoolean("oneline_anonymous", true);
         isPicture = false;
         onelineWriteDialog = new MaterialDialog.Builder(getContext())
                 .title(R.string.oneline_input)
@@ -144,7 +148,7 @@ public class OneLineBoardFragment extends FragmentBase {
                 .build();
 
         AWSMobileClient.defaultMobileClient()
-                .createUserFileManager(AWSConfiguration.AMAZON_S3_USER_FILES_BUCKET, S3_PREFIX_PUBLIC_IMG_ONELINE, AWSConfiguration.AMAZON_S3_USER_FILES_BUCKET_REGION,
+                .createUserFileManager(AWSConfiguration.AMAZON_S3_USER_FILES_BUCKET, "public/img/oneline", AWSConfiguration.AMAZON_S3_USER_FILES_BUCKET_REGION,
                         new UserFileManager.BuilderResultHandler() {
                             @Override
                             public void onComplete(final UserFileManager userFileManager) {
@@ -213,9 +217,9 @@ public class OneLineBoardFragment extends FragmentBase {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_one_line_board, container, false);
-        ((MainActivity) getActivity()).viewPager.setAllowedSwipeDirection(TabPager.SwipeDirection.RIGHT);
+        mainActivity.viewPager.setAllowedSwipeDirection(TabPager.SwipeDirection.RIGHT);
 
-        TextView toolbarTitle = (TextView) getActivity().findViewById(R.id.toolbarTitle);
+        TextView toolbarTitle = (TextView) mainActivity.findViewById(R.id.toolbarTitle);
         toolbarTitle.setText(R.string.home_menu_oneline);
         dynamoDBMapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
 
@@ -264,12 +268,7 @@ public class OneLineBoardFragment extends FragmentBase {
             oneLineBoardAdapter.addAllItems(contentArrangedList);
             oneLineBoardAdapter.notifyDataSetChanged();
         } else {
-            swipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(true);
-                }
-            });
+            swipeRefreshLayout.setRefreshing(true);
             updateContent(RESULTS_LIMIT, UPDATE_ALL, REFRESH);
         }
     }
@@ -277,7 +276,7 @@ public class OneLineBoardFragment extends FragmentBase {
     CompoundButton.OnCheckedChangeListener onelineWriteDialogOnCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-            prefs.edit().putBoolean("oneline_anonymous", b).apply();
+            sharedPreferencesSettings.edit().putBoolean("oneline_anonymous", b).apply();
             if (isNickStatic = !b) new HasNickname().start();
         }
     };
@@ -285,16 +284,9 @@ public class OneLineBoardFragment extends FragmentBase {
     MaterialDialog.InputCallback onelineWriteDialogInputCallback = new MaterialDialog.InputCallback() {
         @Override
         public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-            if(!NetworkUtil.isNetworkConnected(getActivity())) {
-                Toast.makeText(getActivity(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
+            if(!NetworkUtil.isNetworkConnected(mainActivity)) {
+                Toast.makeText(getContext(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
             } else {
-                swipeRefreshLayout.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(true);
-                    }
-                });
-
                 PostContent postContent = new PostContent();
                 postContent.execute(input.toString());
 
@@ -320,7 +312,7 @@ public class OneLineBoardFragment extends FragmentBase {
                     final String buttonString = imageAttachButton.getText().toString();
 
                     if (buttonString.equals(getResources().getString(R.string.attach_picture))) {
-                        final Activity activity = getActivity();
+                        final Activity activity = mainActivity;
                         if (activity == null) {
                             return;
                         }
@@ -442,7 +434,7 @@ public class OneLineBoardFragment extends FragmentBase {
             if (nickname == null) {
                 isNickStatic = false;
 
-                getActivity().runOnUiThread(new Runnable() {
+                mainActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         onelineWriteDialog.setPromptCheckBoxChecked(true);
@@ -472,17 +464,18 @@ public class OneLineBoardFragment extends FragmentBase {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            swipeRefreshLayout.setRefreshing(true);
 
             userId = AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID();
             if (userId == null) {
-                Toast.makeText(getActivity(), R.string.error_occured, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.error_occured, Toast.LENGTH_SHORT).show();
                 cancel(true);
             }
 
             if (timeLastLastPost == 0 && timeLastPost != 0) timeLastLastPost = System.currentTimeMillis() - timeLastPost;
             else if ((timeLastLastPost + java.lang.System.currentTimeMillis() - timeLastPost) / 2 < 5000) {
                 timeLastLastPost = System.currentTimeMillis() - timeLastPost;
-                Toast.makeText(getActivity(), R.string.warn_too_often, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.warn_too_often, Toast.LENGTH_SHORT).show();
                 swipeRefreshLayout.setRefreshing(false);
                 cancel(true);
             }
@@ -501,7 +494,13 @@ public class OneLineBoardFragment extends FragmentBase {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            File imageFile = new File(imageFilePath);
+                            File imageFile;
+                            if (!isGif) {
+                                imageFile = Compressor.getDefault(getContext()).compressToFile(new File(imageFilePath));
+                            } else {
+                                imageFile = new File(imageFilePath);
+                            }
+
                             userFileManager.uploadContent(imageFile, date + "]" + userId, new ContentProgressListener() {
                                 @Override
                                 public void onSuccess(ContentItem contentItem) {
@@ -535,7 +534,7 @@ public class OneLineBoardFragment extends FragmentBase {
                 onelineToWrite.setDate(date2);
                 onelineToWrite.setTimestamp(java.lang.System.currentTimeMillis() / 1000);
                 onelineToWrite.setContent(params[0]);
-                onelineToWrite.setWriterGcmTokenKey(DataBase.userInfo.getGcmTokenKey());
+                onelineToWrite.setWriterGcmTokenKey(sharedPreferencesToken.getString("deviceToken", ""));
                 onelineToWrite.setIp(ip);
                 onelineToWrite.setNickStatic(isNickStatic);
                 onelineToWrite.setPicture(isPicture);
@@ -577,14 +576,14 @@ public class OneLineBoardFragment extends FragmentBase {
     private SwipeMenuListView.OnMenuItemClickListener onMenuItemClickListener = new SwipeMenuListView.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(final int position, SwipeMenu menu, int index) {
-            if(!NetworkUtil.isNetworkConnected(getActivity())) {
-                Toast.makeText(getActivity(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
+            if(!NetworkUtil.isNetworkConnected(mainActivity)) {
+                Toast.makeText(getContext(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
                 return false;
             }
 
             final String userId = AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID();
             if (userId == null) {
-                Toast.makeText(getActivity(), R.string.error_occured, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.error_occured, Toast.LENGTH_SHORT).show();
                 return false;
             }
 
@@ -596,16 +595,10 @@ public class OneLineBoardFragment extends FragmentBase {
                             onelineBoardDO.setDateAndId(contentArrangedList.get(position).getContentDateAndId());
                             dynamoDBMapper.delete(onelineBoardDO);
 
-                            swipeRefreshLayout.post(new Runnable() {
+                            mainActivity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     swipeRefreshLayout.setRefreshing(true);
-                                }
-                            });
-
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
                                     updateContent(contentArrangedList.size(), UPDATE_ALL, REFRESH);
                                 }
                             });
@@ -645,18 +638,18 @@ public class OneLineBoardFragment extends FragmentBase {
                                     onelineLikeDO.setContentTimestamp(contentArrangedList.get(position).getTimestamp());
                                     dynamoDBMapper.save(onelineLikeDO);
 
-                                    getActivity().runOnUiThread(new Runnable() {
+                                    mainActivity.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             updateContent(contentArrangedList.size(), position, REFRESH);
-                                            Toast.makeText(getActivity(), R.string.action_like, Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), R.string.action_like, Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 } else {
-                                    getActivity().runOnUiThread(new Runnable() {
+                                    mainActivity.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Toast.makeText(getActivity(), R.string.already_action_like, Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), R.string.already_action_like, Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
@@ -694,17 +687,17 @@ public class OneLineBoardFragment extends FragmentBase {
                                     onelineReportDO.setType(false);
                                     dynamoDBMapper.save(onelineReportDO);
 
-                                    getActivity().runOnUiThread(new Runnable() {
+                                    mainActivity.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Toast.makeText(getActivity(), R.string.action_report, Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), R.string.action_report, Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 } else {
-                                    getActivity().runOnUiThread(new Runnable() {
+                                    mainActivity.runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Toast.makeText(getActivity(), R.string.already_action_report, Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), R.string.already_action_report, Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
@@ -725,8 +718,8 @@ public class OneLineBoardFragment extends FragmentBase {
         public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
             if (position == 0) return;
 
-            if(!NetworkUtil.isNetworkConnected(getActivity())) {
-                Toast.makeText(getActivity(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
+            if(!NetworkUtil.isNetworkConnected(mainActivity)) {
+                Toast.makeText(getContext(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -811,9 +804,9 @@ public class OneLineBoardFragment extends FragmentBase {
         mLockListView = true;
 
         try {
-            if(!NetworkUtil.isNetworkConnected(getActivity())) {
+            if(!NetworkUtil.isNetworkConnected(mainActivity)) {
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(getActivity(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.please_connect_internet, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -883,15 +876,15 @@ public class OneLineBoardFragment extends FragmentBase {
 
                         contentScanList.addAll(dynamoDBMapper.queryPage(OnelineBoardDO.class, queryExpression).getResults());
 
-                        dayCount += DAY_SECONDS;
+                        dayCount += 86400000;
 
-                        if (date.equals(INITIAL_POST_DATE)) {
+                        if (date.equals("2016-11-16")) {
                             isEndOfList = true;
                             break;
                         }
                     }
 
-                    swipeRefreshLayout.post(new Runnable() {
+                    mainActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             swipeRefreshLayout.setRefreshing(false);
@@ -940,7 +933,7 @@ public class OneLineBoardFragment extends FragmentBase {
                         }
                     }
 
-                    getActivity().runOnUiThread(new Runnable() {
+                    contentListView.post(new Runnable() {
                         @Override
                         public void run() {
                             oneLineBoardAdapter.clearItems();
@@ -983,7 +976,7 @@ public class OneLineBoardFragment extends FragmentBase {
                         SerializeObject.WriteSettings(getContext(), "", "content_arranged_list.dat");
                     }
 
-                    getActivity().runOnUiThread(new Runnable() {
+                    contentListView.post(new Runnable() {
                         @Override
                         public void run() {
                             oneLineBoardAdapter.removeItem(position);
@@ -1025,7 +1018,7 @@ public class OneLineBoardFragment extends FragmentBase {
                     updateContentThread.join();
                 }
 
-                getActivity().runOnUiThread(new Runnable() {
+                contentListView.post(new Runnable() {
                     @Override
                     public void run() {
                         try {
@@ -1036,7 +1029,7 @@ public class OneLineBoardFragment extends FragmentBase {
                         }
                     }
                 });
-            } catch (NullPointerException|AmazonClientException|IllegalStateException|IndexOutOfBoundsException|InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -1070,7 +1063,7 @@ public class OneLineBoardFragment extends FragmentBase {
                     updateContentThread.join();
                 }
 
-                getActivity().runOnUiThread(new Runnable() {
+                contentListView.post(new Runnable() {
                     @Override
                     public void run() {
                         try {
@@ -1081,7 +1074,7 @@ public class OneLineBoardFragment extends FragmentBase {
                         }
                     }
                 });
-            } catch (NullPointerException|AmazonClientException|IllegalStateException|IndexOutOfBoundsException|InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -1115,7 +1108,7 @@ public class OneLineBoardFragment extends FragmentBase {
                     updateContentThread.join();
                 }
 
-                getActivity().runOnUiThread(new Runnable() {
+                contentListView.post(new Runnable() {
                     @Override
                     public void run() {
                         try {
@@ -1126,7 +1119,7 @@ public class OneLineBoardFragment extends FragmentBase {
                         }
                     }
                 });
-            } catch (NullPointerException|AmazonClientException|IllegalStateException|IndexOutOfBoundsException|InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
